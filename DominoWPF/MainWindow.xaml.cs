@@ -1,0 +1,183 @@
+﻿using System.Data.Common;
+using System.Reflection;
+using System.Text;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace DominoWPF
+{
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
+    public partial class MainWindow : Window
+    {
+        Random rand = new Random();
+        int selectedCardLeftValue = 0;
+        int selectedCardRightValue = 0;
+        Button currentButton = null;
+        Button lastButton = null;
+
+        public MainWindow()
+        {
+            InitializeComponent();
+            LoadButton(Player1CardStackPanel, true);
+            LoadButton(Player3CardStackPanel, true);
+
+            LoadButton(Player2CardStackPanel, false);
+            LoadButton(Player4CardStackPanel, false);
+            ChangeWindowSize();
+        }
+
+        public void ChangeWindowSize()
+        {
+            this.Width = 816;
+            this.Height = 465;
+        }
+
+        public void LoadButton(StackPanel stackPanel, bool isHorizontal)
+        {
+            for(int i = 1; i < 8; i++)
+            {
+                Button newButton = new();
+                newButton.Content = $"{rand.Next(0, i + 1)} | {rand.Next(0, 6)}";
+                newButton.Click += (sender, EventArgs) => { GetButtonValue(sender, EventArgs, newButton); };
+                newButton.Width = 75;
+                newButton.Height = 25;
+                newButton.FontSize = 16;
+                newButton.HorizontalAlignment = HorizontalAlignment.Center;
+                newButton.VerticalAlignment = VerticalAlignment.Center;
+                newButton.Margin = new Thickness(10, 0, 0, 0);
+                stackPanel.Children.Add(newButton);
+                if (!isHorizontal)
+                {
+                    newButton.Margin = new Thickness(0, 10, 0, 0);
+                }
+            }
+        }
+
+        public void RotateButton(Button button)
+        {
+            RotateTransform rt = new RotateTransform(90);
+            button.RenderTransform = rt;
+        }
+
+        public void GetButtonValue(object sender, RoutedEventArgs e, Button button)
+        {
+            string value = button.Content.ToString();
+            int leftValue = 0;
+            int rightValue = 0;
+
+            if (int.TryParse(value[0].ToString(), out leftValue))
+            {
+                selectedCardLeftValue = leftValue;
+            }
+            
+            if (int.TryParse(value[4].ToString(), out rightValue))
+            {
+                selectedCardRightValue = rightValue;
+            }
+
+            lastButton = currentButton;
+            currentButton = button;
+
+            currentButton.IsEnabled = false;
+
+            if (lastButton != null) lastButton.IsEnabled = true;
+
+            //MessageBox.Show($"{selectedCardLeftValue} | {selectedCardRightValue}");
+        }
+
+        public void InsertIntoBoard(object sender, RoutedEventArgs e, int value)
+        {
+            // MessageBox.Show($"Hello World: {value}");
+            //ContentInsert(rand.Next(0, value+1), rand.Next(0, 6));
+        }
+
+        private void PlaceLeftButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentButton != null)
+            {
+                ContentInsert(selectedCardLeftValue, selectedCardRightValue, true);
+                RemoveButton();
+            }
+            else MessageBox.Show("Please select a card first!");
+        }
+
+        private void PlaceRightButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (currentButton != null)
+            {
+                ContentInsert(selectedCardLeftValue, selectedCardRightValue, false);
+                RemoveButton();
+            }
+            else MessageBox.Show("Please select a card first!");
+        }
+
+        public void ContentInsert(int value1, int value2, bool isLeft)
+        {
+            Button newButton = new();
+            newButton.Content = $"{value1} : {value2}";
+            newButton.Width = 39.6233333333333;
+            newButton.Height = 19.96;
+            newButton.FontSize = 12;
+            newButton.IsEnabled = false;
+            StackPanelManager(newButton, isLeft);
+        }
+
+        public void StackPanelManager(Button button, bool isLeft)
+        {
+            int layerBottomCount = LayerBottomStackPanel.Children.Count;
+            int layerRightCount = LayerRightStackPanel.Children.Count;
+            int layerTopCount = LayerTopStackPanel.Children.Count;
+            int layerLeftCount = LayerLeftStackPanel.Children.Count;
+
+            if (layerBottomCount == 8 && layerRightCount != 8 && layerTopCount != 8)
+            {
+                LayerBottomStackPanel.Margin = new Thickness(0, 150, 0, 0);
+                
+                if (isLeft) LayerRightStackPanel.Children.Insert(0, button);
+                else LayerRightStackPanel.Children.Add(button);
+            }
+            else if (layerBottomCount == 8 && layerRightCount == 8 && layerTopCount != 8)
+            {
+                if (isLeft) LayerTopStackPanel.Children.Insert(0, button);
+                else LayerTopStackPanel.Children.Add(button);
+            }
+            else if (layerBottomCount == 8 && layerRightCount == 8 && layerTopCount == 8)
+            {
+                if (isLeft) LayerLeftStackPanel.Children.Insert(0, button);
+                else LayerLeftStackPanel.Children.Add(button);
+            }
+            else
+            {
+                if (isLeft) LayerBottomStackPanel.Children.Insert(0, button);
+                else LayerBottomStackPanel.Children.Add(button);
+            }
+        }
+
+        public void RemoveButton()
+        {
+            StackPanel parent = (StackPanel)currentButton.Parent;
+
+            int index = parent.Children.IndexOf(currentButton);
+            MessageBox.Show(index.ToString());
+
+            parent.Children.RemoveAt(index);
+
+            currentButton = null;
+            lastButton = null;
+        }
+
+        public void GetPlayable()
+        {
+
+        }
+    }
+}

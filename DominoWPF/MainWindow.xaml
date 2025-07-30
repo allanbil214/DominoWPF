@@ -1,0 +1,31 @@
+﻿<Window x:Name="WindowMain" x:Class="DominoWPF.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DominoWPF"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800" MinWidth="800" MinHeight="450" ResizeMode="CanMinimize">
+    <Grid x:Name="MainGrid" Margin="0,0,0,434">
+        <Grid x:Name="Player1HandGrid" Margin="83,0,88,-434" Background="#FFFFFDC7" VerticalAlignment="Bottom" Height="67">
+            <StackPanel RenderTransformOrigin="0.5,0.5" Orientation="Horizontal" x:Name="Player1CardStackPanel" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+        <Grid x:Name="Player2HandGrid" Margin="0,0,0,-435" HorizontalAlignment="Right" Width="88" Background="#FFFFFDC7">
+            <StackPanel RenderTransformOrigin="0.5,0.5" Orientation="Vertical" x:Name="Player2CardStackPanel" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+        <Grid x:Name="Player4HandGrid" Margin="0,0,0,-435" HorizontalAlignment="Left" Width="83" Background="#FFFFFDC7">
+            <StackPanel RenderTransformOrigin="0.5,0.5" Orientation="Vertical" x:Name="Player4CardStackPanel" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+        <Grid x:Name="Player3HandGrid" Margin="83,0,88,-434" Background="#FFFFFDC7" VerticalAlignment="Top" Height="67">
+            <StackPanel RenderTransformOrigin="0.5,0.5" Orientation="Horizontal" x:Name="Player3CardStackPanel" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        </Grid>
+        <Grid x:Name="ContentGrid" Background="#FFBCFF86" Margin="83,67,88,-367">
+            <StackPanel x:Name="LayerBottomStackPanel" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,150,0,0"/>
+            <StackPanel x:Name="LayerRightStackPanel" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="277,0,0,85"/>
+            <StackPanel x:Name="LayerTopStackPanel" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,35,156,0" FlowDirection="RightToLeft"/>
+            <StackPanel x:Name="LayerLeftStackPanel" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,55,433,0"/>
+            <Button x:Name="PlaceLeftButton" HorizontalAlignment="Left" Margin="10,260,0,0" VerticalAlignment="Top" Height="30" Width="79" Content="Place Left" Click="PlaceLeftButton_Click"/>
+            <Button x:Name="PlaceRightButton" Content="Place Right" Margin="540,260,10,10" Click="PlaceRightButton_Click" />
+        </Grid>
+    </Grid>
+</Window>

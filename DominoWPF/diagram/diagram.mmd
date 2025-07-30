@@ -1,0 +1,117 @@
+classDiagram
+class Game {
+    -List~IPlayer~ _players
+    -IDiscardTiles discardTile 
+    -ICard card
+    -Dictionary <.IPlayer,List<.ICard>> _hand
+    -int _currentPlayerIndex
+    -List~ICard~ _deck
+    +Action~ICard~ OnStart
+    +Action OnScore
+    +Game(List~IPlayer~ players)
+    +StartGame() void
+
+    %% new func
+    +GetCurrentPlayer() : void
+    +GetPlayerHand(IPlayer player) : IPlayer
+    +GetDiscardTile() : IDiscardPile
+    +InitializeDeck() : List<ICard>
+    +ShuffleDeck() : void
+    +InitializeHands() : void
+    %% end new fun
+
+    +AddCard(ICard card) void
+    +IsDoubleValue() void : boolean
+    +IsEmpty() boolean
+    +DetermineStartingPlayer() IPlayer
+    +NextTurn() void
+    +HasPlayableCard(IDiscardTiles discardTile) boolean
+    +FindPlayableCard(IDiscardTiles discardTile) ICard
+    +PlayCard(IPlayer player , ICard card , string potionCard) boolean
+    +RotateValue()  void 
+    +PlaceCard(ICard card, string potionCard) boolean  
+    +RemoveCard(ICard card) boolean
+    +CheckWinCondition() boolean
+    +AddScore(int points) void
+    +CalculateScore() int
+    +EndGame() void
+}
+
+class Player {
+    -string _name
+    -int _score
+    +Player(string name)
+    +GetScore() int
+    +SetScore(int score) void
+    +SetName(string name) void
+}
+
+class Card {
+    -int _leftValueCard
+    -int _rightValueCard
+    +Card(int _leftValueCard , int _rightValueCard)
+    +GetLeftValueCard() int
+    +SetLeftValueCard(int value) void
+    +GetRightValueCard() int
+    +SetRightValueCard(int value) void
+    +GetOtherValueCard(int value) int
+    +ToString() string
+}
+
+%% class Hand {
+%%     -List~ICard~ _card
+%%     +GetCards(): List~ICard~
+    
+%% }
+
+class DiscardTile {
+    -List~ICard~ _playedDominoes 
+    -int _leftValueDiscardTile
+    -int _rightValueDiscardTile
+    +GetLeftValueDiscardTile() int
+    +SetLeftValueDiscardTile(int value) void
+    +GetRightValueDiscardTile() int
+    +SetRightValueDiscardTile(int value) void
+    +GetPlayedCards() List~ICard~
+    +SetPlayedCards(List~ICard~ card) void
+}
+
+class IDiscardTile {
+    <<interface>>
+    +GetLeftValueDiscardTile() int
+    +SetLeftValueDiscardTile(int value) void
+    +GetRightValueDiscardTile() int
+    +SetRightValueDiscardTile(int value) void
+    +GetPlayedCards() List~ICard~
+    +SetPlayedCards(List~ICard~ card) void
+
+}
+class IPlayer {
+    <<interface>>
+    +GetScore() int
+    +SetScore(int score) void
+}
+class ICard {
+    <<interface>>
+    +GetLeftValueCard() int
+    +SetLeftValueCard(int value) void
+    +GetRightValueCard() int
+    +SetRightValueCard(int value) void
+    +GetOtherValueCard(int value) int
+}
+%%implementasi
+DiscardTile <-- IDiscardTile
+Player <-- IPlayer
+Card <-- ICard
+%%assosiation
+DiscardTile --* ICard
+IDiscardTile --> ICard
+Game --* IPlayer
+Game --* IDiscardTile
+Game --* ICard
+Player --*ICard
+%% Game "1" -- "*" IPlayer : contains
+%% Game "1" -- "1" Board : uses
+%% Player "1" -- "1" Hand : has
+%% Hand "1" -- "*" Card : contains
+%% Board "1" -- "*" Card : displays
