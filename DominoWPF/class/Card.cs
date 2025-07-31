@@ -7,8 +7,8 @@ namespace DominoWPF
 
         public Card(int leftValueCard, int rightValueCard)
         {
-            leftValueCard = _leftValueCard;
-            rightValueCard = _rightValueCard;
+            _leftValueCard = leftValueCard;
+            _rightValueCard = rightValueCard;
         }
 
         public int GetLeftValueCard()
