@@ -7,7 +7,7 @@ namespace DominoWPF
 
         public Player(string name)
         {
-            name = _name;
+            _name = name;
         }
 
         public int GetScore()

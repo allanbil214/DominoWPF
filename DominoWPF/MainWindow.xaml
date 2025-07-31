@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DominoWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" MinWidth="800" MinHeight="450" ResizeMode="CanMinimize">
+        Title="MainWindow" Height="450" Width="800" MinWidth="800" MinHeight="450" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
     <Grid x:Name="MainGrid" Margin="0,0,0,434">
         <Grid x:Name="Player1HandGrid" Margin="83,0,88,-434" Background="#FFFFFDC7" VerticalAlignment="Bottom" Height="67">
             <StackPanel RenderTransformOrigin="0.5,0.5" Orientation="Horizontal" x:Name="Player1CardStackPanel" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -26,6 +26,37 @@
             <StackPanel x:Name="LayerLeftStackPanel" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,55,433,0"/>
             <Button x:Name="PlaceLeftButton" HorizontalAlignment="Left" Margin="10,260,0,0" VerticalAlignment="Top" Height="30" Width="79" Content="Place Left" Click="PlaceLeftButton_Click"/>
             <Button x:Name="PlaceRightButton" Content="Place Right" Margin="540,260,10,10" Click="PlaceRightButton_Click" />
+            <Label x:Name="player1NameLabel" Content="Label" HorizontalAlignment="Center" Margin="0,262,0,0" VerticalAlignment="Top" FontSize="18"/>
+            <Label x:Name="player3NameLabel" Content="Label" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="18" RenderTransformOrigin="0.5,0.5">
+                <Label.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="0"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Label.RenderTransform>
+            </Label>
+            <Label x:Name="player2NameLabel" Content="Label" HorizontalAlignment="Left" Margin="578,126,0,0" VerticalAlignment="Top" FontSize="18" RenderTransformOrigin="0.5,0.5">
+                <Label.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Label.RenderTransform>
+            </Label>
+            <Label x:Name="player4NameLabel" Content="Label" HorizontalAlignment="Left" Margin="-9,125,0,0" VerticalAlignment="Top" FontSize="18" RenderTransformOrigin="0.5,0.5">
+                <Label.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Label.RenderTransform>
+            </Label>
         </Grid>
     </Grid>
 </Window>

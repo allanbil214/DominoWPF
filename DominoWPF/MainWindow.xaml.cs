@@ -7,6 +7,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -23,16 +24,137 @@ namespace DominoWPF
         int selectedCardRightValue = 0;
         Button currentButton = null;
         Button lastButton = null;
+        List<IPlayer> players = [];
+        GameController game = null;
+        int playerTurn = 0;
 
         public MainWindow()
         {
             InitializeComponent();
+
             LoadButton(Player1CardStackPanel, true);
             LoadButton(Player3CardStackPanel, true);
 
             LoadButton(Player2CardStackPanel, false);
             LoadButton(Player4CardStackPanel, false);
+            
             ChangeWindowSize();
+
+            LoadStartup();
+        }
+
+        public void LoadStartup()
+        {
+            this.Effect = new BlurEffect();
+
+            StartupWindow startup = new();
+            startup.ShowDialog();
+
+            List<string> playerNames = [startup.player1TextBox.Text,
+            startup.player2TextBox.Text, startup.player3TextBox.Text, startup.player4TextBox.Text];
+
+            Startup_GetNames(playerNames);
+            InitPlayer();
+            ChangePlayerTurn();
+
+            this.Effect = null;
+        }
+
+        public void InitPlayer()
+        {
+            player1NameLabel.Content = players[0].GetName();
+            player2NameLabel.Content = players[1].GetName();
+            player3NameLabel.Content = players[2].GetName();
+            player4NameLabel.Content = players[3].GetName();
+
+            game = new GameController(players);
+
+            //MessageBox.Show($"{players[0].GetName()} {players[1].GetName()} {players[2].GetName()} {players[3].GetName()}");
+        }
+
+        public void ChangePlayerTurn()
+        {
+            game.NextTurn();
+            switch (playerTurn)
+            {
+                case 0:
+                    Player1HandGrid.IsEnabled = true;
+                    Player2HandGrid.IsEnabled = false;
+                    Player3HandGrid.IsEnabled = false;
+                    Player4HandGrid.IsEnabled = false;
+
+                    PlaceLeftButton.Margin = new Thickness(10, 260, 0, 0);
+                    PlaceRightButton.Margin = new Thickness(540, 260, 10, 10);
+
+
+                    PlaceLeftButton.RenderTransformOrigin = new Point(0.5, 0.5);
+                    PlaceLeftButton.RenderTransform = new RotateTransform(0);
+                    PlaceRightButton.RenderTransformOrigin = new Point(0.5, 0.5);
+                    PlaceRightButton.RenderTransform = new RotateTransform(0);
+
+                    break;
+
+                case 1:
+                    Player1HandGrid.IsEnabled = false;
+                    Player2HandGrid.IsEnabled = true;
+                    Player3HandGrid.IsEnabled = false;
+                    Player4HandGrid.IsEnabled = false;
+
+                    PlaceLeftButton.Margin = new Thickness(549, 236, 0, 0);
+                    PlaceRightButton.Margin = new Thickness(550, 43, 0, 226);
+
+                    PlaceLeftButton.RenderTransformOrigin = new Point(0.5, 0.5);
+                    PlaceLeftButton.RenderTransform = new RotateTransform(-90);
+                    PlaceRightButton.RenderTransformOrigin = new Point(0.5, 0.5);
+                    PlaceRightButton.RenderTransform = new RotateTransform(-90);
+                    break;
+
+                case 2:
+                    Player1HandGrid.IsEnabled = false;
+                    Player2HandGrid.IsEnabled = false;
+                    Player3HandGrid.IsEnabled = true;
+                    Player4HandGrid.IsEnabled = false;
+
+                    PlaceLeftButton.Margin = new Thickness(540, 10, 0, 0);
+                    PlaceRightButton.Margin = new Thickness(10, 10, 540, 260);
+
+                    PlaceLeftButton.RenderTransformOrigin = new Point(0.5, 0.5);
+                    PlaceLeftButton.RenderTransform = new RotateTransform(0);
+                    PlaceRightButton.RenderTransformOrigin = new Point(0.5, 0.5);
+                    PlaceRightButton.RenderTransform = new RotateTransform(0);
+                    break;
+                
+                case 3:
+                    Player1HandGrid.IsEnabled = false;
+                    Player2HandGrid.IsEnabled = false;
+                    Player3HandGrid.IsEnabled = false;
+                    Player4HandGrid.IsEnabled = true;
+
+                    PlaceLeftButton.Margin = new Thickness(-2, 36, 0, 0);
+                    PlaceRightButton.Margin = new Thickness(-3, 233, 553, 36);
+
+                    PlaceLeftButton.RenderTransformOrigin = new Point(0.5, 0.5);
+                    PlaceLeftButton.RenderTransform = new RotateTransform(90);
+                    PlaceRightButton.RenderTransformOrigin = new Point(0.5, 0.5);
+                    PlaceRightButton.RenderTransform = new RotateTransform(90);
+                    break;
+            }
+            playerTurn += 1;
+            if (playerTurn > 3) playerTurn = 0;
+            MessageBox.Show(playerTurn.ToString());
+        }
+
+        public void Startup_GetNames(List<string> names)
+        {
+            Player player1 = new Player(names[0]);
+            Player player2 = new Player(names[1]);
+            Player player3 = new Player(names[2]);
+            Player player4 = new Player(names[3]);
+
+            players.Add(player1);
+            players.Add(player2);
+            players.Add(player3);
+            players.Add(player4);
         }
 
         public void ChangeWindowSize()
@@ -94,18 +216,14 @@ namespace DominoWPF
             //MessageBox.Show($"{selectedCardLeftValue} | {selectedCardRightValue}");
         }
 
-        public void InsertIntoBoard(object sender, RoutedEventArgs e, int value)
-        {
-            // MessageBox.Show($"Hello World: {value}");
-            //ContentInsert(rand.Next(0, value+1), rand.Next(0, 6));
-        }
-
         private void PlaceLeftButton_Click(object sender, RoutedEventArgs e)
         {
             if (currentButton != null)
             {
                 ContentInsert(selectedCardLeftValue, selectedCardRightValue, true);
                 RemoveButton();
+
+                ChangePlayerTurn();
             }
             else MessageBox.Show("Please select a card first!");
         }
@@ -116,6 +234,8 @@ namespace DominoWPF
             {
                 ContentInsert(selectedCardLeftValue, selectedCardRightValue, false);
                 RemoveButton();
+
+                ChangePlayerTurn();
             }
             else MessageBox.Show("Please select a card first!");
         }

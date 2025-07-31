@@ -1,4 +1,5 @@
 using System;
+using System.Numerics;
 
 namespace DominoWPF
 {
@@ -27,7 +28,9 @@ namespace DominoWPF
 
         public void StartGame()
         {
-
+            var startingPlayer = DetermineStartingPlayer();
+            _currentPlayerIndex = _players.IndexOf(startingPlayer);
+            OnStart?.Invoke(null);
         }
 
         // new func not in class diagram
@@ -186,39 +189,112 @@ namespace DominoWPF
             return null;
         }
 
-        public bool PlayCard(IPlayer player, ICard card, string potionCard)
+        public bool PlayCard(IPlayer player, ICard card, string positionCard)
         {
-            return true;
+            if (!_hand[player].Contains(card)) return false;
+            return PlaceCard(card, positionCard);
         }
 
         public void RotateValue()
         {
-
+            int temp = 0;
+            if (card != null) 
+            { 
+                temp = card.GetLeftValueCard();
+                card.SetLeftValueCard(card.GetRightValueCard());
+                card.SetRightValueCard(temp);
+            }
         }
 
-        public bool PlaceCard(ICard card, string potionCard)
+        public bool PlaceCard(ICard card, string positionCard)
         {
-            return true;
-        }
+            var playedCard = _discardTile.GetPlayedCards();
 
+            if (playedCard == null)
+            {
+                playedCard.Add(card);
+                _discardTile.SetLeftValueDiscardPile(card.GetLeftValueCard());
+                _discardTile.SetRightValueDiscardPile(card.GetRightValueCard());
+                return true;
+            }
+
+            int leftValue = _discardTile.GetLeftValueDiscardTile();
+            int rightValue = _discardTile.GetRightValueDiscardTile();
+
+            if(positionCard.ToLower() == "left")
+            {
+                if(card.GetRightValueCard() == leftValue)
+                {
+                    playedCard.Insert(0, card);
+                    _discardTile.SetLeftValueDiscardPile(card.GetLeftValueCard());
+                    return true;
+                }
+                else if(card.GetLeftValueCard() == leftValue)
+                {
+                    RotateValue();
+                    playedCard.Insert(0, card);
+                    _discardTile.SetLeftValueDiscardPile(card.GetLeftValueCard());
+                    return true;
+                }
+            }
+            else if(positionCard.ToLower() == "right")
+            {
+                if(card.GetRightValueCard() == rightValue)
+                {
+                    RotateValue();
+                    playedCard.Insert(0, card);
+                    _discardTile.SetLeftValueDiscardPile(card.GetLeftValueCard());
+                    return true;
+                }
+                else if(card.GetLeftValueCard() == rightValue)
+                {
+                    playedCard.Insert(0, card);
+                    _discardTile.SetLeftValueDiscardPile(card.GetLeftValueCard());
+                    return true;
+                }
+            }
+
+                return false;
+        }
+        public bool RemoveCard(ICard card)
+        {
+            var currentPlayer = _players[_currentPlayerIndex];
+            return _hand[currentPlayer].Remove(card);
+        }
         public bool CheckWinCondition()
         {
-            return false;
+            var currentPlayer = _players[_currentPlayerIndex];
+            return _hand[currentPlayer].Count == 0;
         }
 
         public void AddScore(int points)
         {
-
+            var currentPlayer = _players[_currentPlayerIndex];
+            currentPlayer.SetScore(currentPlayer.GetScore() + points);
+            OnScore?.Invoke();
         }
 
         public int CalculateScore()
         {
-            return 0;
+            int totalScore = 0;
+            foreach (var player in _players)
+            {
+                if(player != _players[_currentPlayerIndex])
+                {
+                    foreach (var card in _hand[player])
+                    {
+                        totalScore += card.GetRightValueCard() + card.GetLeftValueCard();
+                    }
+                }
+            }
+            return totalScore;
         }
 
         public void EndGame()
         {
-
+            var winner = _players[_currentPlayerIndex];
+            int points = CalculateScore();
+            AddScore(points);
         }
     }
 }
