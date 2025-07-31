@@ -80,7 +80,7 @@ namespace DominoWPF
             //MessageBox.Show($"{players[0].GetName()} {players[1].GetName()} {players[2].GetName()} {players[3].GetName()}");
         }
 
-        public void ChangePlayerTurn()
+        public void ChangePlayerTurn() // todo refactor this monstrocity
         {
             game.NextTurn();
             switch (playerTurn)
@@ -259,32 +259,31 @@ namespace DominoWPF
 
         public void StackPanelManager(Button button, bool isLeft)
         {
-            int layerBottomCount = LayerBottomStackPanel.Children.Count;
-            int layerRightCount = LayerRightStackPanel.Children.Count;
-            int layerTopCount = LayerTopStackPanel.Children.Count;
-            int layerLeftCount = LayerLeftStackPanel.Children.Count;
+            const int maxPerStack = 8;
 
-            if (layerBottomCount == 8 && layerRightCount != 8 && layerTopCount != 8)
+            var stackOrder = new List<StackPanel> {
+                LayerBottomStackPanel,
+                LayerRightStackPanel,
+                LayerTopStackPanel,
+                LayerLeftStackPanel
+            };
+
+            foreach (var stack in stackOrder)
             {
-                LayerBottomStackPanel.Margin = new Thickness(0, 150, 0, 0);
-                
-                if (isLeft) LayerRightStackPanel.Children.Insert(0, button);
-                else LayerRightStackPanel.Children.Add(button);
-            }
-            else if (layerBottomCount == 8 && layerRightCount == 8 && layerTopCount != 8)
-            {
-                if (isLeft) LayerTopStackPanel.Children.Insert(0, button);
-                else LayerTopStackPanel.Children.Add(button);
-            }
-            else if (layerBottomCount == 8 && layerRightCount == 8 && layerTopCount == 8)
-            {
-                if (isLeft) LayerLeftStackPanel.Children.Insert(0, button);
-                else LayerLeftStackPanel.Children.Add(button);
-            }
-            else
-            {
-                if (isLeft) LayerBottomStackPanel.Children.Insert(0, button);
-                else LayerBottomStackPanel.Children.Add(button);
+                if (stack.Children.Count < maxPerStack)
+                {
+                    if (isLeft)
+                        stack.Children.Insert(0, button);
+                    else
+                        stack.Children.Add(button);
+
+                    if (stack == LayerBottomStackPanel && stack.Children.Count == maxPerStack)
+                    {
+                        stack.Margin = new Thickness(0, 150, 0, 0);
+                    }
+
+                    break;
+                }
             }
         }
 
