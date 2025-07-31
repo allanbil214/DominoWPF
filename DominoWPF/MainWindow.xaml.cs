@@ -62,10 +62,18 @@ namespace DominoWPF
 
         public void InitPlayer()
         {
-            player1NameLabel.Content = players[0].GetName();
-            player2NameLabel.Content = players[1].GetName();
-            player3NameLabel.Content = players[2].GetName();
-            player4NameLabel.Content = players[3].GetName();
+            List<Label> playerNameLabels = new List<Label>
+            {
+                player1NameLabel,
+                player2NameLabel,
+                player3NameLabel,
+                player4NameLabel
+            };
+
+            for (int i = 0; i < players.Count && i < playerNameLabels.Count; i++)
+            {
+                playerNameLabels[i].Content = players[i].GetName();
+            }
 
             game = new GameController(players);
 
@@ -141,21 +149,19 @@ namespace DominoWPF
             }
             playerTurn += 1;
             if (playerTurn > 3) playerTurn = 0;
-            MessageBox.Show(playerTurn.ToString());
+            //MessageBox.Show(playerTurn.ToString());
         }
 
         public void Startup_GetNames(List<string> names)
         {
-            Player player1 = new Player(names[0]);
-            Player player2 = new Player(names[1]);
-            Player player3 = new Player(names[2]);
-            Player player4 = new Player(names[3]);
+            int maxPlayers = Math.Min(names.Count, 4);
 
-            players.Add(player1);
-            players.Add(player2);
-            players.Add(player3);
-            players.Add(player4);
+            for (int i = 0; i < maxPlayers; i++)
+            {
+                players.Add(new Player(names[i]));
+            }
         }
+
 
         public void ChangeWindowSize()
         {
