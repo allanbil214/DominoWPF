@@ -5,8 +5,8 @@ namespace DominoWPF
         int GetLeftValueDiscardTile();
         int GetRightValueDiscardTile();
         List<ICard> GetPlayedCards();
-        void SetLeftValueDiscardPile(int value);
-        void SetRightValueDiscardPile(int value);
+        void SetLeftValueDiscardTile(int value);
+        void SetRightValueDiscardTile(int value);
         void SetPlayedCards(List<ICard> cards);
     }
 }

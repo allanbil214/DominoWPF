@@ -2,7 +2,7 @@ namespace DominoWPF
 {
     public class DiscardTile : IDiscardTile
     {
-        List<ICard> _playedDominos;
+        List<ICard> _playedDominos = new List<ICard>();
         int _leftValueDiscardTile;
         int _rightValueDiscardTile;
 
@@ -24,11 +24,11 @@ namespace DominoWPF
         {
             return _playedDominos;
         }
-        public void SetLeftValueDiscardPile(int value)
+        public void SetLeftValueDiscardTile(int value)
         {
             _leftValueDiscardTile = value;
         }
-        public void SetRightValueDiscardPile(int value)
+        public void SetRightValueDiscardTile(int value)
         {
             _rightValueDiscardTile = value;
         }
