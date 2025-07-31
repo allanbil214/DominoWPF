@@ -37,7 +37,7 @@ namespace DominoWPF
 
             LoadButton(Player2CardStackPanel, false);
             LoadButton(Player4CardStackPanel, false);
-            
+
             ChangeWindowSize();
 
             LoadStartup();
@@ -131,7 +131,7 @@ namespace DominoWPF
                     PlaceRightButton.RenderTransformOrigin = new Point(0.5, 0.5);
                     PlaceRightButton.RenderTransform = new RotateTransform(0);
                     break;
-                
+
                 case 3:
                     Player1HandGrid.IsEnabled = false;
                     Player2HandGrid.IsEnabled = false;
@@ -171,7 +171,7 @@ namespace DominoWPF
 
         public void LoadButton(StackPanel stackPanel, bool isHorizontal)
         {
-            for(int i = 1; i < 8; i++)
+            for (int i = 1; i < 8; i++)
             {
                 Button newButton = new();
                 newButton.Content = $"{rand.Next(0, i + 1)} | {rand.Next(0, 6)}";
@@ -206,7 +206,7 @@ namespace DominoWPF
             {
                 selectedCardLeftValue = leftValue;
             }
-            
+
             if (int.TryParse(value[4].ToString(), out rightValue))
             {
                 selectedCardRightValue = rightValue;

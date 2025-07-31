@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using System.Windows;
 
 namespace DominoWPF
 {
@@ -34,6 +35,11 @@ namespace DominoWPF
         }
 
         // new func not in class diagram
+
+        public int GetCurrentPlayerIndex()
+        {
+            return _currentPlayerIndex;
+        }
 
         public IPlayer GetCurrentPlayer()
         {
@@ -143,7 +149,7 @@ namespace DominoWPF
 
         public void NextTurn()
         {
-            _currentPlayerIndex = _currentPlayerIndex + 1;
+            _currentPlayerIndex = (_currentPlayerIndex + 1) % _players.Count;
         }
 
         public bool HasPlayableCard(IDiscardTile discardTile)
@@ -271,7 +277,11 @@ namespace DominoWPF
         public bool CheckWinCondition()
         {
             var currentPlayer = _players[_currentPlayerIndex];
-            return _hand[currentPlayer].Count == 0;
+            if (_hand.ContainsKey(currentPlayer))
+            {
+                return _hand[currentPlayer].Count == 0;
+            }
+            return false;
         }
 
         public void AddScore(int points)
