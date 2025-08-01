@@ -20,6 +20,7 @@ namespace DominoWPF
     public partial class MainWindow : Window
     {
         Random rand = new Random();
+        ICard selectedCard = null;
         int selectedCardLeftValue = 0;
         int selectedCardRightValue = 0;
         Button currentButton = null;
@@ -32,16 +33,17 @@ namespace DominoWPF
         {
             InitializeComponent();
 
-            LoadButton(Player1CardStackPanel, true);
-            LoadButton(Player3CardStackPanel, true);
-
-            LoadButton(Player2CardStackPanel, false);
-            LoadButton(Player4CardStackPanel, false);
-
             ChangeWindowSize();
 
             LoadStartup();
         }
+
+        public void ChangeWindowSize()
+        {
+            this.Width += 16;
+            this.Height += 15;
+        }
+
 
         public void LoadStartup()
         {
@@ -54,13 +56,14 @@ namespace DominoWPF
             startup.player2TextBox.Text, startup.player3TextBox.Text, startup.player4TextBox.Text];
 
             Startup_GetNames(playerNames);
-            InitPlayer();
+            InitGame();
+            LoadPlayerCards();
             ChangePlayerTurn();
 
             this.Effect = null;
         }
 
-        public void InitPlayer()
+        public void InitGame()
         {
             List<Label> playerNameLabels = new List<Label>
             {
@@ -76,8 +79,91 @@ namespace DominoWPF
             }
 
             game = new GameController(players);
+            game.InitDeck();
+            game.ShuffleDeck();
+            game.InitHand();
 
             //MessageBox.Show($"{players[0].GetName()} {players[1].GetName()} {players[2].GetName()} {players[3].GetName()}");
+        }
+        public void Startup_GetNames(List<string> names)
+        {
+            int maxPlayers = Math.Min(names.Count, 4);
+
+            for (int i = 0; i < maxPlayers; i++)
+            {
+                players.Add(new Player(names[i]));
+            }
+        }
+
+        public void LoadPlayerCards()
+        {
+            Player1CardStackPanel.Children.Clear();
+            Player2CardStackPanel.Children.Clear();
+            Player3CardStackPanel.Children.Clear();
+            Player4CardStackPanel.Children.Clear();
+
+            LoadButton(Player1CardStackPanel, players[0], true);
+            LoadButton(Player3CardStackPanel, players[2], true);
+            LoadButton(Player2CardStackPanel, players[1], false);
+            LoadButton(Player4CardStackPanel, players[3], false);
+        }
+
+        public string GetBrailleFace(int number)
+        {
+
+            string[] brailleDice = {
+                "\u2800", // empty
+                "\u2802", // 1: ⠂
+                "\u2805", // 2: ⠅
+                "\u2807", // 3: ⠇
+                "\u282D", // 4: ⠭
+                "\u283B", // 5: ⠻
+                "\u283F"  // 6: ⠿
+            };
+
+            return brailleDice[number];
+        }
+
+        public void LoadButton(StackPanel stackPanel, IPlayer player, bool isHorizontal)
+        {
+            var playerHand = game.GetPlayerHand(player);
+
+            foreach (var card in playerHand)
+            {
+                Button newButton = new();
+                newButton.Content = $"{(card.GetLeftValueCard())} │ {(card.GetRightValueCard())}";
+                newButton.Click += (sender, EventArgs) => { GetButtonValue(sender, EventArgs, newButton, card); };
+                newButton.Width = 75;
+                newButton.Height = 25;
+                newButton.FontSize = 16;
+                newButton.HorizontalAlignment = HorizontalAlignment.Center;
+                newButton.VerticalAlignment = VerticalAlignment.Center;
+                newButton.Margin = new Thickness(10, 0, 0, 0);
+
+                newButton.IsEnabled = IsPlayableCard(card);
+
+                stackPanel.Children.Add(newButton);
+                if (!isHorizontal)
+                {
+                    newButton.Margin = new Thickness(0, 10, 0, 0);
+                }
+
+                //MessageBox.Show($"{GetBrailleFace(card.GetLeftValueCard())} {card.GetLeftValueCard()} │ " +
+                //    $"{GetBrailleFace(card.GetRightValueCard())} {card.GetRightValueCard()}");
+            }
+        }
+
+        public bool IsPlayableCard(ICard card)
+        {
+            var discardTile = game.GetDiscardTile();
+
+            if (discardTile.GetPlayedCards().Count == 0) return true;
+
+            int leftValue = discardTile.GetLeftValueDiscardTile();
+            int rightValue = discardTile.GetRightValueDiscardTile();
+
+            return (card.GetLeftValueCard() == leftValue || card.GetLeftValueCard() == rightValue ||
+                card.GetRightValueCard() == rightValue || card.GetRightValueCard() == leftValue);
         }
 
         public void ChangePlayerTurn() // todo refactor this monstrocity
@@ -100,6 +186,8 @@ namespace DominoWPF
                     PlaceRightButton.RenderTransformOrigin = new Point(0.5, 0.5);
                     PlaceRightButton.RenderTransform = new RotateTransform(0);
 
+                    UpdateCardAvailability(Player1CardStackPanel);
+
                     break;
 
                 case 1:
@@ -115,6 +203,9 @@ namespace DominoWPF
                     PlaceLeftButton.RenderTransform = new RotateTransform(-90);
                     PlaceRightButton.RenderTransformOrigin = new Point(0.5, 0.5);
                     PlaceRightButton.RenderTransform = new RotateTransform(-90);
+
+                    UpdateCardAvailability(Player2CardStackPanel);
+
                     break;
 
                 case 2:
@@ -130,6 +221,9 @@ namespace DominoWPF
                     PlaceLeftButton.RenderTransform = new RotateTransform(0);
                     PlaceRightButton.RenderTransformOrigin = new Point(0.5, 0.5);
                     PlaceRightButton.RenderTransform = new RotateTransform(0);
+
+                    UpdateCardAvailability(Player3CardStackPanel);
+
                     break;
 
                 case 3:
@@ -145,49 +239,56 @@ namespace DominoWPF
                     PlaceLeftButton.RenderTransform = new RotateTransform(90);
                     PlaceRightButton.RenderTransformOrigin = new Point(0.5, 0.5);
                     PlaceRightButton.RenderTransform = new RotateTransform(90);
+
+                    UpdateCardAvailability(Player4CardStackPanel);
+
                     break;
             }
-            playerTurn += 1;
-            if (playerTurn > 3) playerTurn = 0;
+
+            var discardTile = game.GetDiscardTile();
+            if (!game.HasPlayableCard(discardTile))
+            {
+                MessageBox.Show($"{game.GetCurrentPlayer().GetName()} has no playable cards! Skipping turn.");
+                NextTurn();
+            }
             //MessageBox.Show(playerTurn.ToString());
         }
 
-        public void Startup_GetNames(List<string> names)
+        public void UpdateCardAvailability(StackPanel stackPanel)
         {
-            int maxPlayers = Math.Min(names.Count, 4);
+            var currentPlayer = game.GetCurrentPlayer();
+            var playerHand = game.GetPlayerHand(currentPlayer);
 
-            for (int i = 0; i < maxPlayers; i++)
+            for(int i = 0; i < stackPanel.Children.Count && i < playerHand.Count; i++)
             {
-                players.Add(new Player(names[i]));
-            }
-        }
-
-
-        public void ChangeWindowSize()
-        {
-            this.Width = 816;
-            this.Height = 465;
-        }
-
-        public void LoadButton(StackPanel stackPanel, bool isHorizontal)
-        {
-            for (int i = 1; i < 8; i++)
-            {
-                Button newButton = new();
-                newButton.Content = $"{rand.Next(0, i + 1)} | {rand.Next(0, 6)}";
-                newButton.Click += (sender, EventArgs) => { GetButtonValue(sender, EventArgs, newButton); };
-                newButton.Width = 75;
-                newButton.Height = 25;
-                newButton.FontSize = 16;
-                newButton.HorizontalAlignment = HorizontalAlignment.Center;
-                newButton.VerticalAlignment = VerticalAlignment.Center;
-                newButton.Margin = new Thickness(10, 0, 0, 0);
-                stackPanel.Children.Add(newButton);
-                if (!isHorizontal)
+                if(stackPanel.Children[i] is Button button)
                 {
-                    newButton.Margin = new Thickness(0, 10, 0, 0);
+                    var card = playerHand[i];
+                    button.IsEnabled = IsPlayableCard(card);
                 }
             }
+        }
+
+        public void NextTurn()
+        {
+            selectedCard = null;
+            currentButton = null;
+            if(lastButton != null)
+            {
+                lastButton.IsEnabled = true;
+                lastButton = null;
+            }
+
+            game.NextTurn();
+            playerTurn = game.GetCurrentPlayerIndex();
+
+            if (game.CheckWinCondition())
+            {
+                MessageBox.Show($"{game.GetCurrentPlayer().GetName()} wins!");
+                game.EndGame();
+                return;
+            }
+            ChangePlayerTurn();
         }
 
         public void RotateButton(Button button)
@@ -196,60 +297,72 @@ namespace DominoWPF
             button.RenderTransform = rt;
         }
 
-        public void GetButtonValue(object sender, RoutedEventArgs e, Button button)
+        public void GetButtonValue(object sender, RoutedEventArgs e, Button button, ICard card)
         {
-            string value = button.Content.ToString();
-            int leftValue = 0;
-            int rightValue = 0;
-
-            if (int.TryParse(value[0].ToString(), out leftValue))
-            {
-                selectedCardLeftValue = leftValue;
-            }
-
-            if (int.TryParse(value[4].ToString(), out rightValue))
-            {
-                selectedCardRightValue = rightValue;
-            }
-
+            selectedCard = card;
             lastButton = currentButton;
             currentButton = button;
 
             currentButton.IsEnabled = false;
 
             if (lastButton != null) lastButton.IsEnabled = true;
-
-            //MessageBox.Show($"{selectedCardLeftValue} | {selectedCardRightValue}");
         }
 
         private void PlaceLeftButton_Click(object sender, RoutedEventArgs e)
         {
-            if (currentButton != null)
+            if (selectedCard != null && currentButton != null)
             {
-                ContentInsert(selectedCardLeftValue, selectedCardRightValue, true);
-                RemoveButton();
+                var currentPlayer = game.GetCurrentPlayer();
 
-                ChangePlayerTurn();
+                if(game.PlayCard(currentPlayer, selectedCard, "left"))
+                {
+                    ContentInsert(selectedCard.GetLeftValueCard(), selectedCard.GetRightValueCard(), true);
+                    game.RemoveCard(selectedCard);
+                    RemoveButton();
+                    NextTurn();
+                }
+                else
+                {
+                    MessageBox.Show("Cannot place card on the left side!");
+                    currentButton.IsEnabled = true;
+                    currentButton = null;
+                }
             }
             else MessageBox.Show("Please select a card first!");
         }
 
         private void PlaceRightButton_Click(object sender, RoutedEventArgs e)
         {
-            if (currentButton != null)
+            if (selectedCard != null && currentButton != null)
             {
-                ContentInsert(selectedCardLeftValue, selectedCardRightValue, false);
-                RemoveButton();
+                var currentPlayer = game.GetCurrentPlayer();
 
-                ChangePlayerTurn();
+                MessageBox.Show($"{currentPlayer.GetName()} {selectedCard.GetLeftValueCard} {selectedCard.GetRightValueCard}");
+
+                if (game.PlayCard(currentPlayer, selectedCard, "right"))
+                {
+                    ContentInsert(selectedCard.GetLeftValueCard(), selectedCard.GetRightValueCard(), false);
+                    game.RemoveCard(selectedCard);
+                    RemoveButton();
+                    NextTurn();
+                }
+                else
+                {
+                    MessageBox.Show("Cannot place card on the right side!");
+                    currentButton.IsEnabled = true;
+                    currentButton = null;
+                }
             }
-            else MessageBox.Show("Please select a card first!");
+            else
+            {
+                MessageBox.Show("Please select a card first!");
+            }
         }
 
         public void ContentInsert(int value1, int value2, bool isLeft)
         {
             Button newButton = new();
-            newButton.Content = $"{value1} : {value2}";
+            newButton.Content = $"{(value1)} : {(value2)}";
             newButton.Width = 39.6233333333333;
             newButton.Height = 19.96;
             newButton.FontSize = 12;
@@ -289,20 +402,13 @@ namespace DominoWPF
 
         public void RemoveButton()
         {
-            StackPanel parent = (StackPanel)currentButton.Parent;
-
-            int index = parent.Children.IndexOf(currentButton);
-            MessageBox.Show(index.ToString());
-
-            parent.Children.RemoveAt(index);
-
-            currentButton = null;
-            lastButton = null;
-        }
-
-        public void GetPlayable()
-        {
-
+            if (currentButton != null)
+            {
+                StackPanel parent = (StackPanel)currentButton.Parent;
+                parent.Children.Remove(currentButton);
+                currentButton = null;
+                lastButton = null;
+            }
         }
     }
 }

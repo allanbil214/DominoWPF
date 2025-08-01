@@ -25,6 +25,8 @@ namespace DominoWPF
             InitializeComponent();
 
             InitPlayerNumber();
+
+            //GetBrailles();
         }
 
         public void InitPlayerNumber()
@@ -61,6 +63,16 @@ namespace DominoWPF
         {
             closeMainWindow = false;
             this.Close();
+        }
+
+        public void GetBrailles()
+        {
+            for (int codepoint = 0x2800; codepoint <= 0x28FF; codepoint++)
+            {
+                char brailleChar = (char)codepoint;
+                string hex = $"U+{codepoint:X4}";
+                MessageBox.Show($"{hex} {brailleChar}");
+            }
         }
     }
 }
