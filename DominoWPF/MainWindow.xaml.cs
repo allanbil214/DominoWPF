@@ -49,7 +49,6 @@ namespace DominoWPF
 
             if (result != true)
             {
-                // User closed the window, so close the app
                 this.Close();
                 return;
             }
@@ -262,7 +261,7 @@ namespace DominoWPF
                 card.GetRightValueCard() == rightValue || card.GetRightValueCard() == leftValue);
         }
 
-        public void ChangePlayerTurn() // todo refactor this monstrocity
+        public void ChangePlayerTurn()
         {
             var discardTile = game.GetDiscardTile();
             int skipCount = 0;
@@ -307,7 +306,6 @@ namespace DominoWPF
         }
         private void SetPlayerTurnUI(int currentIndex)
         {
-            // Disable all player grids first
             Player1HandGrid.IsEnabled = false;
             Player2HandGrid.IsEnabled = false;
             Player3HandGrid.IsEnabled = false;
