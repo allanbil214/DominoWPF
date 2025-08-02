@@ -104,6 +104,52 @@ namespace DominoWPF
             }
         }
 
+        public void ResetRound()
+        {
+            _deck.Clear();
+            _hand.Clear();
+            _discardTile = new DiscardTile();
+            _currentPlayerIndex = 0;
+        }
+
+        public void SetCurrentPlayer(IPlayer player)
+        {
+            _currentPlayerIndex = _players.IndexOf(player);
+        }
+
+        public void HandleBlockedGame()
+        {
+            Dictionary<IPlayer, int> handValues = new Dictionary<IPlayer, int>();
+
+            foreach (var player in _players)
+            {
+                int handValue = 0;
+                if (_hand.ContainsKey(player))
+                {
+                    foreach (var card in _hand[player])
+                    {
+                        handValue += card.GetLeftValueCard() + card.GetRightValueCard();
+                    }
+                }
+                handValues.Add(player, handValue);
+            }
+
+            var winner = handValues.OrderBy(x => x.Value).First().Key;
+            _currentPlayerIndex = _players.IndexOf(winner);
+
+            int totalOpponentPoints = 0;
+            foreach (var kvp in handValues)
+            {
+                if (kvp.Key != winner)
+                {
+                    totalOpponentPoints += kvp.Value;
+                }
+            }
+
+            winner.SetScore(winner.GetScore() + totalOpponentPoints);
+            OnScore?.Invoke();
+        }
+
         // end of new func not in class diagram
 
         public void AddCard(ICard card)
@@ -234,19 +280,19 @@ namespace DominoWPF
             int leftValue = _discardTile.GetLeftValueDiscardTile();
             int rightValue = _discardTile.GetRightValueDiscardTile();
 
-            if(positionCard.ToLower() == "left")
+            if (positionCard.ToLower() == "left")
             {
-                if(card.GetRightValueCard() == leftValue)
+                if (card.GetRightValueCard() == leftValue)
                 {
                     playedCard.Insert(0, card);
                     _discardTile.SetLeftValueDiscardTile(card.GetLeftValueCard());
                     return true;
                 }
-                else if(card.GetLeftValueCard() == leftValue)
+                else if (card.GetLeftValueCard() == leftValue)
                 {
-                    RotateValue();
-                    playedCard.Insert(0, card);
-                    _discardTile.SetLeftValueDiscardTile(card.GetLeftValueCard());
+                    ICard rotatedCard = new Card(card.GetRightValueCard(), card.GetLeftValueCard());
+                    playedCard.Insert(0, rotatedCard);
+                    _discardTile.SetLeftValueDiscardTile(rotatedCard.GetLeftValueCard());
                     return true;
                 }
             }
@@ -260,15 +306,16 @@ namespace DominoWPF
                 }
                 else if (card.GetRightValueCard() == rightValue)
                 {
-                    RotateValue();
-                    playedCard.Add(card);
-                    _discardTile.SetRightValueDiscardTile(card.GetRightValueCard());
+                    ICard rotatedCard = new Card(card.GetRightValueCard(), card.GetLeftValueCard());
+                    playedCard.Add(rotatedCard);
+                    _discardTile.SetRightValueDiscardTile(rotatedCard.GetRightValueCard());
                     return true;
                 }
             }
 
             return false;
         }
+
         public bool RemoveCard(ICard card)
         {
             var currentPlayer = _players[_currentPlayerIndex];

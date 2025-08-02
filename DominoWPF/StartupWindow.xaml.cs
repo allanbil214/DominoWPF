@@ -61,18 +61,19 @@ namespace DominoWPF
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            int selectedPlayers = playerNumberComboBox.SelectedIndex + 2;
+
+            if (string.IsNullOrWhiteSpace(player1TextBox.Text) ||
+                string.IsNullOrWhiteSpace(player2TextBox.Text) ||
+                (selectedPlayers >= 3 && string.IsNullOrWhiteSpace(player3TextBox.Text)) ||
+                (selectedPlayers >= 4 && string.IsNullOrWhiteSpace(player4TextBox.Text)))
+            {
+                MessageBox.Show("Please enter all player names before continuing.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             closeMainWindow = false;
             this.Close();
-        }
-
-        public void GetBrailles()
-        {
-            for (int codepoint = 0x2800; codepoint <= 0x28FF; codepoint++)
-            {
-                char brailleChar = (char)codepoint;
-                string hex = $"U+{codepoint:X4}";
-                MessageBox.Show($"{hex} {brailleChar}");
-            }
         }
     }
 }

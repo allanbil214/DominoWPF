@@ -26,18 +26,9 @@
             <StackPanel x:Name="LayerLeftStackPanel" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,55,433,0"/>
             <Button x:Name="PlaceLeftButton" HorizontalAlignment="Left" Margin="10,260,0,0" VerticalAlignment="Top" Height="30" Width="79" Content="Place Left" Click="PlaceLeftButton_Click"/>
             <Button x:Name="PlaceRightButton" Content="Place Right" Margin="540,260,10,10" Click="PlaceRightButton_Click" />
-            <Label x:Name="player1NameLabel" Content="Label" HorizontalAlignment="Center" Margin="0,262,0,0" VerticalAlignment="Top" FontSize="18"/>
-            <Label x:Name="player3NameLabel" Content="Label" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="18" RenderTransformOrigin="0.5,0.5">
-                <Label.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="0"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Label.RenderTransform>
-            </Label>
-            <Label x:Name="player2NameLabel" Content="Label" HorizontalAlignment="Left" Margin="578,126,0,0" VerticalAlignment="Top" FontSize="18" RenderTransformOrigin="0.5,0.5">
+            <Label x:Name="player1NameLabel" Content="Label" HorizontalAlignment="Left" Margin="263,260,0,0" VerticalAlignment="Top" FontSize="18"/>
+            <Label x:Name="player1ScoreLabel" Content="Label" HorizontalAlignment="Left" Margin="319,260,0,0" VerticalAlignment="Top" FontSize="18"/>
+            <Label x:Name="player2NameLabel" Content="Label" HorizontalAlignment="Left" Margin="578,161,0,0" VerticalAlignment="Top" FontSize="18" RenderTransformOrigin="0.5,0.5">
                 <Label.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
@@ -47,13 +38,53 @@
                     </TransformGroup>
                 </Label.RenderTransform>
             </Label>
-            <Label x:Name="player4NameLabel" Content="Label" HorizontalAlignment="Left" Margin="-9,125,0,0" VerticalAlignment="Top" FontSize="18" RenderTransformOrigin="0.5,0.5">
+            <Label x:Name="player2ScoreLabel" Content="Label" HorizontalAlignment="Left" Margin="578,106,0,0" VerticalAlignment="Top" FontSize="18" RenderTransformOrigin="0.5,0.5">
+                <Label.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="-90"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Label.RenderTransform>
+            </Label>
+            <Label x:Name="player3NameLabel" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" RenderTransformOrigin="0.5,0.5" Margin="263,0,0,0">
+                <Label.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="0"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Label.RenderTransform>
+            </Label>
+            <Label x:Name="player3ScoreLabel" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" RenderTransformOrigin="0.5,0.5" Margin="314,0,0,0">
+                <Label.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="0"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Label.RenderTransform>
+            </Label>
+            <Label x:Name="player4NameLabel" Content="Label" HorizontalAlignment="Left" Margin="-9,110,0,0" VerticalAlignment="Top" FontSize="18" RenderTransformOrigin="0.5,0.5">
                 <Label.RenderTransform>
                     <TransformGroup>
                         <ScaleTransform/>
                         <SkewTransform/>
                         <RotateTransform Angle="90"/>
                         <TranslateTransform/>
+                    </TransformGroup>
+                </Label.RenderTransform>
+            </Label>
+            <Label x:Name="player4ScoreLabel" Content="Label" HorizontalAlignment="Left" Margin="-9,162,0,0" VerticalAlignment="Top" FontSize="18" RenderTransformOrigin="0.226,0.548">
+                <Label.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="90"/>
+                        <TranslateTransform X="12.618" Y="-15.875"/>
                     </TransformGroup>
                 </Label.RenderTransform>
             </Label>
