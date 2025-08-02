@@ -48,13 +48,13 @@ namespace DominoWPF
 
         public List<ICard> GetPlayerHand(IPlayer player)
         {
-            if(_hand.ContainsKey(player))
+            if (_hand.TryGetValue(player, out var cards))
             {
-                return _hand[player];
+                return cards;
             }
             else
             {
-                return new List<ICard> { };
+                return new List<ICard>();
             }
         }
 
@@ -159,7 +159,7 @@ namespace DominoWPF
 
         public bool IsDoubleValue()
         {
-            if(card != null)
+            if (card != null)
             {
                 return card.GetLeftValueCard() == card.GetRightValueCard();
             }
@@ -198,12 +198,19 @@ namespace DominoWPF
             _currentPlayerIndex = (_currentPlayerIndex + 1) % _players.Count;
         }
 
+        // Consolidated playable card checking logic
         public bool HasPlayableCard(IDiscardTile discardTile)
         {
             var currentPlayer = _players[_currentPlayerIndex];
-            var currentHand = _hand[currentPlayer];
+            return HasPlayableCard(discardTile, currentPlayer);
+        }
 
-            if(discardTile.GetPlayedCards().Count == 0)
+        // Overloaded method for flexibility
+        public bool HasPlayableCard(IDiscardTile discardTile, IPlayer player)
+        {
+            var currentHand = GetPlayerHand(player);
+
+            if (discardTile.GetPlayedCards().Count == 0)
             {
                 return (currentHand.Count > 0);
             }
@@ -211,55 +218,41 @@ namespace DominoWPF
             int leftValue = discardTile.GetLeftValueDiscardTile();
             int rightValue = discardTile.GetRightValueDiscardTile();
 
-            foreach (var card in currentHand) 
-            {
-                if(card.GetLeftValueCard() == leftValue || card.GetLeftValueCard() == rightValue ||
-                    card.GetRightValueCard() == rightValue || card.GetRightValueCard() == leftValue)
-                {
-                    return true;
-                }
-            }
-
-            return false;
+            return currentHand.Any(card =>
+                card.GetLeftValueCard() == leftValue || card.GetLeftValueCard() == rightValue ||
+                card.GetRightValueCard() == rightValue || card.GetRightValueCard() == leftValue);
         }
 
         public ICard FindPlayableCard(IDiscardTile discardTile)
         {
             var currentPlayer = _players[_currentPlayerIndex];
-            var currentHand = _hand[currentPlayer];
+            var currentHand = GetPlayerHand(currentPlayer);
 
             if (discardTile.GetPlayedCards().Count == 0)
             {
-                return (currentHand.FirstOrDefault());
+                return currentHand.FirstOrDefault();
             }
 
             int leftValue = discardTile.GetLeftValueDiscardTile();
             int rightValue = discardTile.GetRightValueDiscardTile();
 
-            foreach (var card in currentHand)
-            {
-                if (card.GetLeftValueCard() == leftValue || card.GetLeftValueCard() == rightValue ||
-                    card.GetRightValueCard() == rightValue || card.GetRightValueCard() == leftValue)
-                {
-                    return card;
-                }
-            }
-
-            return null;
+            return currentHand.FirstOrDefault(card =>
+                card.GetLeftValueCard() == leftValue || card.GetLeftValueCard() == rightValue ||
+                card.GetRightValueCard() == rightValue || card.GetRightValueCard() == leftValue);
         }
 
         public bool PlayCard(IPlayer player, ICard card, string positionCard)
         {
-            if (!_hand[player].Contains(card)) return false;
+            var playerHand = GetPlayerHand(player);
+            if (!playerHand.Contains(card)) return false;
             return PlaceCard(card, positionCard);
         }
 
         public void RotateValue()
         {
-            int temp = 0;
-            if (card != null) 
-            { 
-                temp = card.GetLeftValueCard();
+            if (card != null)
+            {
+                int temp = card.GetLeftValueCard();
                 card.SetLeftValueCard(card.GetRightValueCard());
                 card.SetRightValueCard(temp);
             }
@@ -319,16 +312,15 @@ namespace DominoWPF
         public bool RemoveCard(ICard card)
         {
             var currentPlayer = _players[_currentPlayerIndex];
-            return _hand[currentPlayer].Remove(card);
+            var playerHand = GetPlayerHand(currentPlayer);
+            return playerHand.Remove(card);
         }
+
         public bool CheckWinCondition()
         {
             var currentPlayer = _players[_currentPlayerIndex];
-            if (_hand.ContainsKey(currentPlayer))
-            {
-                return _hand[currentPlayer].Count == 0;
-            }
-            return false;
+            var playerHand = GetPlayerHand(currentPlayer);
+            return playerHand.Count == 0;
         }
 
         public void AddScore(int points)
@@ -343,9 +335,10 @@ namespace DominoWPF
             int totalScore = 0;
             foreach (var player in _players)
             {
-                if(player != _players[_currentPlayerIndex])
+                if (player != _players[_currentPlayerIndex])
                 {
-                    foreach (var card in _hand[player])
+                    var playerHand = GetPlayerHand(player);
+                    foreach (var card in playerHand)
                     {
                         totalScore += card.GetRightValueCard() + card.GetLeftValueCard();
                     }

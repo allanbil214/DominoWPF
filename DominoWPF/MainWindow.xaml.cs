@@ -25,14 +25,12 @@ namespace DominoWPF
         Button lastButton = null;
         List<IPlayer> players = [];
         GameController game = null;
-        int maxScore = 20;
+        int maxScore = 150;
 
         public MainWindow()
         {
             InitializeComponent();
-
             ChangeWindowSize();
-
             LoadStartup();
         }
 
@@ -42,18 +40,30 @@ namespace DominoWPF
             this.Height += 15;
         }
 
-
         public void LoadStartup()
         {
             this.Effect = new BlurEffect();
 
             StartupWindow startup = new();
-            startup.ShowDialog();
+            bool? result = startup.ShowDialog();
 
-            List<string> playerNames = [startup.player1TextBox.Text,
-            startup.player2TextBox.Text, startup.player3TextBox.Text, startup.player4TextBox.Text];
+            if (result != true)
+            {
+                // User closed the window, so close the app
+                this.Close();
+                return;
+            }
 
-            Startup_GetNames(playerNames);
+            List<string> playerNames = new List<string>
+            {
+                startup.player1TextBox.Text,
+                startup.player2TextBox.Text,
+                startup.player3TextBox.Text,
+                startup.player4TextBox.Text
+            };
+
+            InitMaxScore(int.Parse(startup.maxScoreTextBox.Text));
+            InitPlayers(playerNames);
             InitGame();
             LoadPlayerCards();
             ChangePlayerTurn();
@@ -63,12 +73,28 @@ namespace DominoWPF
 
         public void InitGame()
         {
+            InitializePlayerLabels();
+
+            if (game == null)
+            {
+                game = new GameController(players);
+                game.OnScore += UpdateScoreDisplay;
+            }
+
+            StartNewRound();
+            UpdateScoreDisplay();
+        }
+
+        private void InitMaxScore(int value)
+        {
+            maxScore = value;
+        }
+
+        private void InitializePlayerLabels()
+        {
             List<Label> playerNameLabels = new List<Label>
             {
-                player1NameLabel,
-                player2NameLabel,
-                player3NameLabel,
-                player4NameLabel
+                player1NameLabel, player2NameLabel, player3NameLabel, player4NameLabel
             };
 
             foreach (var label in playerNameLabels)
@@ -77,22 +103,12 @@ namespace DominoWPF
                 label.Visibility = Visibility.Hidden;
             }
 
-            for (int i = 0; i < players.Count && i < playerNameLabels.Count; i++)
+            for (int i = 0; i < Math.Min(players.Count, playerNameLabels.Count); i++)
             {
                 playerNameLabels[i].Content = players[i].GetName();
                 playerNameLabels[i].Visibility = Visibility.Visible;
             }
-
-            if (game == null)
-            {
-                game = new GameController(players);
-                game.OnScore += UpdateScoreDisplay;
-            }
-    
-            StartNewRound();
-            UpdateScoreDisplay();
         }
-
         public void ResetGame()
         {
             players.Clear();
@@ -101,38 +117,41 @@ namespace DominoWPF
             currentButton = null;
             lastButton = null;
 
-            Player1CardStackPanel.Children.Clear();
-            Player2CardStackPanel.Children.Clear();
-            Player3CardStackPanel.Children.Clear();
-            Player4CardStackPanel.Children.Clear();
-
-            LayerBottomStackPanel.Children.Clear();
-            LayerRightStackPanel.Children.Clear();
-            LayerTopStackPanel.Children.Clear();
-            LayerLeftStackPanel.Children.Clear();
-
-            LayerBottomStackPanel.Margin = new Thickness(0, 150, 0, 0);
+            ClearAllPlayerCards();
+            ClearGameBoard();
 
             LoadStartup();
         }
 
-        public void StartNewRound()
+        private void ClearAllPlayerCards()
+        {
+            Player1CardStackPanel.Children.Clear();
+            Player2CardStackPanel.Children.Clear();
+            Player3CardStackPanel.Children.Clear();
+            Player4CardStackPanel.Children.Clear();
+        }
+
+        private void ClearGameBoard()
         {
             LayerBottomStackPanel.Children.Clear();
             LayerRightStackPanel.Children.Clear();
             LayerTopStackPanel.Children.Clear();
             LayerLeftStackPanel.Children.Clear();
-    
             LayerBottomStackPanel.Margin = new Thickness(0, 150, 0, 0);
-    
+        }
+
+        public void StartNewRound()
+        {
+            ClearGameBoard();
+
             game.ResetRound();
             game.InitDeck();
             game.ShuffleDeck();
             game.InitHand();
-    
+
             var startingPlayer = game.DetermineStartingPlayer();
             game.SetCurrentPlayer(startingPlayer);
-    
+
             LoadPlayerCards();
             ChangePlayerTurn();
         }
@@ -152,32 +171,29 @@ namespace DominoWPF
                 scoreLabels[i].Content = $"Score: {players[i].GetScore()}";
                 scoreLabels[i].Visibility = Visibility.Visible;
             }
-    
+
             for (int i = players.Count; i < scoreLabels.Count; i++)
             {
                 scoreLabels[i].Visibility = Visibility.Hidden;
             }
         }
 
-        public void Startup_GetNames(List<string> names)
+        public void InitPlayers(List<string> names)
         {
-            int maxPlayers = Math.Min(names.Count, 4);
+            players.Clear(); 
 
-            for (int i = 0; i < maxPlayers; i++)
+            foreach (string name in names.Take(4)) 
             {
-                if (!string.IsNullOrWhiteSpace(names[i]))
+                if (!string.IsNullOrWhiteSpace(name))
                 {
-                    players.Add(new Player(names[i]));
+                    players.Add(new Player(name.Trim()));
                 }
             }
         }
 
         public void LoadPlayerCards()
         {
-            Player1CardStackPanel.Children.Clear();
-            Player2CardStackPanel.Children.Clear();
-            Player3CardStackPanel.Children.Clear();
-            Player4CardStackPanel.Children.Clear();
+            ClearAllPlayerCards();
 
             if (players.Count > 0) LoadButton(Player1CardStackPanel, players[0], true);
             if (players.Count > 1) LoadButton(Player2CardStackPanel, players[1], false);
@@ -207,27 +223,30 @@ namespace DominoWPF
 
             foreach (var card in playerHand)
             {
-                Button newButton = new();
-                newButton.Content = $"{(card.GetLeftValueCard())} │ {(card.GetRightValueCard())}";
+                Button newButton = CreateDominoButton(card, IsPlayableCard(card));
                 newButton.Click += (sender, EventArgs) => { GetButtonValue(sender, EventArgs, newButton, card); };
-                newButton.Width = 75;
-                newButton.Height = 25;
-                newButton.FontSize = 16;
-                newButton.HorizontalAlignment = HorizontalAlignment.Center;
-                newButton.VerticalAlignment = VerticalAlignment.Center;
-                newButton.Margin = new Thickness(10, 0, 0, 0);
-
-                newButton.IsEnabled = IsPlayableCard(card);
 
                 stackPanel.Children.Add(newButton);
                 if (!isHorizontal)
                 {
                     newButton.Margin = new Thickness(0, 10, 0, 0);
                 }
-
-                //MessageBox.Show($"{GetBrailleFace(card.GetLeftValueCard())} {card.GetLeftValueCard()} │ " +
-                //    $"{GetBrailleFace(card.GetRightValueCard())} {card.GetRightValueCard()}");
             }
+        }
+
+        private Button CreateDominoButton(ICard card, bool isEnabled)
+        {
+            return new Button
+            {
+                Content = $"{card.GetLeftValueCard()} │ {card.GetRightValueCard()}",
+                Width = 75,
+                Height = 25,
+                FontSize = 16,
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center,
+                Margin = new Thickness(10, 0, 0, 0),
+                IsEnabled = isEnabled
+            };
         }
 
         public bool IsPlayableCard(ICard card)
@@ -284,22 +303,21 @@ namespace DominoWPF
                 currentIndex = game.GetCurrentPlayerIndex();
             }
 
+            SetPlayerTurnUI(currentIndex);
+        }
+        private void SetPlayerTurnUI(int currentIndex)
+        {
+            // Disable all player grids first
+            Player1HandGrid.IsEnabled = false;
+            Player2HandGrid.IsEnabled = false;
+            Player3HandGrid.IsEnabled = false;
+            Player4HandGrid.IsEnabled = false;
+
             switch (currentIndex)
             {
                 case 0:
                     Player1HandGrid.IsEnabled = true;
-                    Player2HandGrid.IsEnabled = false;
-                    Player3HandGrid.IsEnabled = false;
-                    Player4HandGrid.IsEnabled = false;
-
-                    PlaceLeftButton.Margin = new Thickness(10, 260, 0, 0);
-                    PlaceRightButton.Margin = new Thickness(540, 260, 10, 10);
-
-                    PlaceLeftButton.RenderTransformOrigin = new Point(0.5, 0.5);
-                    PlaceLeftButton.RenderTransform = new RotateTransform(0);
-                    PlaceRightButton.RenderTransformOrigin = new Point(0.5, 0.5);
-                    PlaceRightButton.RenderTransform = new RotateTransform(0);
-
+                    SetButtonPositions(10, 260, 540, 260, 0, 0);
                     UpdateCardAvailability(Player1CardStackPanel);
                     break;
 
@@ -310,19 +328,8 @@ namespace DominoWPF
                         ChangePlayerTurn();
                         return;
                     }
-                    Player1HandGrid.IsEnabled = false;
                     Player2HandGrid.IsEnabled = true;
-                    Player3HandGrid.IsEnabled = false;
-                    Player4HandGrid.IsEnabled = false;
-
-                    PlaceLeftButton.Margin = new Thickness(549, 236, 0, 0);
-                    PlaceRightButton.Margin = new Thickness(550, 43, 0, 226);
-
-                    PlaceLeftButton.RenderTransformOrigin = new Point(0.5, 0.5);
-                    PlaceLeftButton.RenderTransform = new RotateTransform(-90);
-                    PlaceRightButton.RenderTransformOrigin = new Point(0.5, 0.5);
-                    PlaceRightButton.RenderTransform = new RotateTransform(-90);
-
+                    SetButtonPositions(549, 236, 550, 43, -90, -90);
                     UpdateCardAvailability(Player2CardStackPanel);
                     break;
 
@@ -333,19 +340,8 @@ namespace DominoWPF
                         ChangePlayerTurn();
                         return;
                     }
-                    Player1HandGrid.IsEnabled = false;
-                    Player2HandGrid.IsEnabled = false;
                     Player3HandGrid.IsEnabled = true;
-                    Player4HandGrid.IsEnabled = false;
-
-                    PlaceLeftButton.Margin = new Thickness(540, 10, 0, 0);
-                    PlaceRightButton.Margin = new Thickness(10, 10, 540, 260);
-
-                    PlaceLeftButton.RenderTransformOrigin = new Point(0.5, 0.5);
-                    PlaceLeftButton.RenderTransform = new RotateTransform(0);
-                    PlaceRightButton.RenderTransformOrigin = new Point(0.5, 0.5);
-                    PlaceRightButton.RenderTransform = new RotateTransform(0);
-
+                    SetButtonPositions(540, 10, 10, 10, 0, 0);
                     UpdateCardAvailability(Player3CardStackPanel);
                     break;
 
@@ -356,41 +352,50 @@ namespace DominoWPF
                         ChangePlayerTurn();
                         return;
                     }
-                    Player1HandGrid.IsEnabled = false;
-                    Player2HandGrid.IsEnabled = false;
-                    Player3HandGrid.IsEnabled = false;
                     Player4HandGrid.IsEnabled = true;
-
-                    PlaceLeftButton.Margin = new Thickness(-2, 36, 0, 0);
-                    PlaceRightButton.Margin = new Thickness(-3, 233, 553, 36);
-
-                    PlaceLeftButton.RenderTransformOrigin = new Point(0.5, 0.5);
-                    PlaceLeftButton.RenderTransform = new RotateTransform(90);
-                    PlaceRightButton.RenderTransformOrigin = new Point(0.5, 0.5);
-                    PlaceRightButton.RenderTransform = new RotateTransform(90);
-
+                    SetButtonPositions(-2, 36, -3, 233, 90, 90);
                     UpdateCardAvailability(Player4CardStackPanel);
                     break;
             }
         }
 
+        private void SetButtonPositions(int leftX, int leftY, int rightX, int rightY, int leftRotation, int rightRotation)
+        {
+            PlaceLeftButton.Margin = new Thickness(leftX, leftY, 0, 0);
+            PlaceRightButton.Margin = new Thickness(rightX, rightY, rightX == 10 ? 540 : (rightX == -3 ? 553 : 10), rightY == 260 ? 10 : (rightY == 43 ? 226 : (rightY == 10 ? 260 : 36)));
+
+            PlaceLeftButton.RenderTransformOrigin = new Point(0.5, 0.5);
+            PlaceLeftButton.RenderTransform = new RotateTransform(leftRotation);
+            PlaceRightButton.RenderTransformOrigin = new Point(0.5, 0.5);
+            PlaceRightButton.RenderTransform = new RotateTransform(rightRotation);
+        }
 
         public void UpdateCardAvailability(StackPanel stackPanel)
         {
             var currentPlayer = game.GetCurrentPlayer();
             var playerHand = game.GetPlayerHand(currentPlayer);
 
-            for(int i = 0; i < stackPanel.Children.Count && i < playerHand.Count; i++)
+            for (int i = 0; i < Math.Min(stackPanel.Children.Count, playerHand.Count); i++)
             {
-                if(stackPanel.Children[i] is Button button)
+                if (stackPanel.Children[i] is Button button)
                 {
-                    var card = playerHand[i];
-                    button.IsEnabled = IsPlayableCard(card);
+                    button.IsEnabled = IsPlayableCard(playerHand[i]);
                 }
             }
         }
 
         public void NextTurn()
+        {
+            ResetSelectedCard();
+
+            if (CheckAndHandleWinCondition()) return;
+
+            game.NextTurn();
+            LoadPlayerCards();
+            ChangePlayerTurn();
+        }
+
+        private void ResetSelectedCard()
         {
             selectedCard = null;
             currentButton = null;
@@ -399,7 +404,10 @@ namespace DominoWPF
                 lastButton.IsEnabled = true;
                 lastButton = null;
             }
+        }
 
+        private bool CheckAndHandleWinCondition()
+        {
             if (game.CheckWinCondition())
             {
                 string winnerName = game.GetCurrentPlayer().GetName();
@@ -412,18 +420,14 @@ namespace DominoWPF
                 if (gameWinner != null)
                 {
                     MessageBox.Show($"{gameWinner.GetName()} wins the entire game with {gameWinner.GetScore()} points!");
-
                     ResetGame();
-                    return;
+                    return true;
                 }
 
                 StartNewRound();
-                return;
+                return true;
             }
-
-            game.NextTurn();
-            LoadPlayerCards();
-            ChangePlayerTurn();
+            return false;
         }
 
         public void RotateButton(Button button)
@@ -445,50 +449,36 @@ namespace DominoWPF
 
         private void PlaceLeftButton_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedCard != null && currentButton != null)
-            {
-                var currentPlayer = game.GetCurrentPlayer();
-
-                if(game.PlayCard(currentPlayer, selectedCard, "left"))
-                {
-                    ContentInsert(selectedCard.GetLeftValueCard(), selectedCard.GetRightValueCard(), true);
-                    game.RemoveCard(selectedCard);
-                    RemoveButton();
-                    NextTurn();
-                }
-                else
-                {
-                    MessageBox.Show("Cannot place card on the left side!");
-                    currentButton.IsEnabled = true;
-                    currentButton = null;
-                }
-            }
-            else MessageBox.Show("Please select a card first!");
+            PlaceCard("left");
         }
 
         private void PlaceRightButton_Click(object sender, RoutedEventArgs e)
         {
-            if (selectedCard != null && currentButton != null)
-            {
-                var currentPlayer = game.GetCurrentPlayer();
+            PlaceCard("right");
+        }
 
-                if (game.PlayCard(currentPlayer, selectedCard, "right"))
-                {
-                    ContentInsert(selectedCard.GetLeftValueCard(), selectedCard.GetRightValueCard(), false);
-                    game.RemoveCard(selectedCard);
-                    RemoveButton();
-                    NextTurn();
-                }
-                else
-                {
-                    MessageBox.Show("Cannot place card on the right side!");
-                    currentButton.IsEnabled = true;
-                    currentButton = null;
-                }
+        private void PlaceCard(string position)
+        {
+            if (selectedCard == null || currentButton == null)
+            {
+                MessageBox.Show("Please select a card first!");
+                return;
+            }
+
+            var currentPlayer = game.GetCurrentPlayer();
+
+            if (game.PlayCard(currentPlayer, selectedCard, position))
+            {
+                ContentInsert(selectedCard.GetLeftValueCard(), selectedCard.GetRightValueCard(), position == "left");
+                game.RemoveCard(selectedCard);
+                RemoveButton();
+                NextTurn();
             }
             else
             {
-                MessageBox.Show("Please select a card first!");
+                MessageBox.Show($"Cannot place card on the {position} side!");
+                currentButton.IsEnabled = true;
+                currentButton = null;
             }
         }
 

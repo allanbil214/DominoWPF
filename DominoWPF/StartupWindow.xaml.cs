@@ -23,10 +23,7 @@ namespace DominoWPF
         public StartupWindow()
         {
             InitializeComponent();
-
             InitPlayerNumber();
-
-            //GetBrailles();
         }
 
         public void InitPlayerNumber()
@@ -51,14 +48,6 @@ namespace DominoWPF
             label.IsEnabled = isEnabled;
         }
 
-        private void WindowStartup_Closed(object sender, EventArgs e)
-        {
-            if (closeMainWindow)
-            {
-                App.Current.MainWindow.Close();
-            }
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             int selectedPlayers = playerNumberComboBox.SelectedIndex + 2;
@@ -72,8 +61,22 @@ namespace DominoWPF
                 return;
             }
 
-            closeMainWindow = false;
+            if (string.IsNullOrWhiteSpace(maxScoreTextBox.Text))
+            {
+                MessageBox.Show("Please enter maximum score before continuing.", "Missing Information", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            this.DialogResult = true;
             this.Close();
+        }
+
+        private void player4TextBox_Copy_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (!char.IsDigit(e.Text, 0) && !(e.Text == "." && !((TextBox)sender).Text.Contains(".")))
+            {
+                e.Handled = true;
+            }
         }
     }
 }

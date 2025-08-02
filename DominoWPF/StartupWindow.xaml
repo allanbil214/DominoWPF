@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DominoWPF"
         mc:Ignorable="d"
-        Title="Startup Window" Height="403" Width="387" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Closed="WindowStartup_Closed">
+        Title="Startup Window" Height="488" Width="387" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid x:Name="MainGrid">
         <ComboBox x:Name="playerNumberComboBox" HorizontalAlignment="Left" Margin="173,102,0,0" VerticalAlignment="Top" Width="167" SelectedIndex="0" SelectionChanged="playerNumberComboBox_SelectionChanged"/>
         <Label Content="Select How Many Player:" HorizontalAlignment="Left" Margin="29,98,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.84,-0.111"/>
@@ -22,7 +22,12 @@
         <Label Content="Fill in the Names" HorizontalAlignment="Left" Margin="138,136,0,0" VerticalAlignment="Top"/>
         <Separator HorizontalAlignment="Left" Margin="34,148,0,0" VerticalAlignment="Top" Height="4" Width="98"/>
         <Separator HorizontalAlignment="Left" Margin="242,148,0,0" VerticalAlignment="Top" Height="4" Width="98"/>
-        <Button Content="Play!" HorizontalAlignment="Left" Margin="146,314,0,0" VerticalAlignment="Top" Height="28" Width="82" Click="Button_Click"/>
+        <Button Content="Play!" HorizontalAlignment="Left" Margin="146,402,0,0" VerticalAlignment="Top" Height="28" Width="82" Click="Button_Click"/>
+        <Label Content="How Many Points?" HorizontalAlignment="Left" Margin="133,312,0,0" VerticalAlignment="Top"/>
+        <Separator HorizontalAlignment="Left" Margin="34,324,0,0" VerticalAlignment="Top" Height="4" Width="98"/>
+        <Separator HorizontalAlignment="Left" Margin="242,324,0,0" VerticalAlignment="Top" Height="4" Width="98"/>
+        <Label x:Name="maxScoreLabel" Content="Max Score:" HorizontalAlignment="Left" Margin="29,350,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="maxScoreTextBox" HorizontalAlignment="Left" Margin="102,352,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="238" Height="22" PreviewTextInput="player4TextBox_Copy_PreviewTextInput"/>
 
     </Grid>
 </Window>
