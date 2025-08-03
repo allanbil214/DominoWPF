@@ -313,7 +313,7 @@ namespace DominoWPF
                 VerticalAlignment = VerticalAlignment.Center,
                 IsEnabled = isEnabled,
                 Tag = card,
-                Style = (Style)FindResource(typeof(Button)) // Use default button style that scales
+                Style = (Style)FindResource(typeof(Button))
             };
         }
 
