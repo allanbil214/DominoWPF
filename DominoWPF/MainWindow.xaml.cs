@@ -26,15 +26,25 @@ namespace DominoWPF
         private List<IPlayer> players = [];
         private GameController game = null;
         private int maxScore = 150;
-        private int bottomLayerVerticalButton = 0;
-        private int rightLayerVerticalButton = 0; // if last bottomlayer is vertical then margin top of rightlayer then dikurangi 23 then
-        private int leftLayerVerticalButton = 0;
-        private int topLayerVerticalButton = 0;
+
+        private readonly Thickness baseBottomMargin = new Thickness(0, 0, 0, 180);
+        private readonly Thickness baseTopMargin = new Thickness(0, 29, 185, 0);
+        private readonly Thickness baseRightMargin = new Thickness(0, 320, -297, 0);
+        private readonly Thickness baseLeftMargin = new Thickness(-297, -320, 0, 0);
+
+        private int bottomLayerVerticalButton = 0; // everytime ada vertical jika stacknya horizontal maka stack yg vertikal tambah 16 atau kurangi 16 right atau left marginnya
+        private int rightLayerVerticalButton = 0; // everytime there is a vertical button then rightlayer margin top dikurangi 14, also
+                                                  // if last bottomlayer's child is vertical then margin top of rightlayer then dikurangi 24 then
+        private int topLayerVerticalButton = 0; // if last bottomlayer's child is vertical then margin left of toplayer then dikurangi 30 then also tambah margin top 10
+                                                // also if last rightlayer's child is vertical then margin left of toplayer then dikurangi 10 then also tambah margin top 18
+        private int leftLayerVerticalButton = 0; // follow the pattern?
 
         // Constructor and Initialization
         public MainWindow()
         {
             InitializeComponent();
+
+            InitStackPanelPositions();
             ChangeWindowSize();
             LoadStartup();
         }
@@ -74,6 +84,16 @@ namespace DominoWPF
 
             this.Effect = null;
         }
+
+        private void InitStackPanelPositions()
+        {
+            LayerLeftWrapper.Margin = baseLeftMargin;
+            LayerRightWrapper.Margin = baseRightMargin;
+
+            LayerBottomStackPanel.Margin = baseBottomMargin;
+            LayerTopStackPanel.Margin = baseTopMargin;
+        }
+
 
         // Game Initialization and Setup
         private void InitMaxScore(int value)
@@ -419,11 +439,19 @@ namespace DominoWPF
 
             if (lastCard.GetLeftValueCard() == lastCard.GetRightValueCard())
             {
-                newButton.RenderTransform = new RotateTransform(90);
-                newButton.Margin = new Thickness(-5, 0, -5, 0);
+                TransformGroup transformGroup = new();
+                transformGroup.Children.Add(new ScaleTransform());
+                transformGroup.Children.Add(new SkewTransform());
+                transformGroup.Children.Add(new RotateTransform(90));
+                transformGroup.Children.Add(new TranslateTransform());
+
+                newButton.RenderTransform = transformGroup;
+                newButton.RenderTransformOrigin = new Point(0.5, 0.5);
+                newButton.Margin = new Thickness(-8, 0, -8, 0);
             }
 
             StackPanelManager(newButton, isLeft);
+
         }
 
         private void StackPanelManager(Button button, bool isLeft)
@@ -453,7 +481,7 @@ namespace DominoWPF
                     var childToPush = current.Children[current.Children.Count - 1];
                     current.Children.RemoveAt(current.Children.Count - 1);
                     next.Children.Insert(0, childToPush);
-                    AdjustStackMargins(current); 
+                    AdjustStackMargins(current, maxPerStack);
                 }
 
                 LayerBottomStackPanel.Children.Insert(0, button);
@@ -465,7 +493,7 @@ namespace DominoWPF
                     if (stack.Children.Count < maxPerStack)
                     {
                         stack.Children.Add(button);
-                        AdjustStackMargins(stack); 
+                        AdjustStackMargins(stack, maxPerStack);
                         break;
                     }
                 }
@@ -473,19 +501,21 @@ namespace DominoWPF
         }
 
 
-        private void AdjustStackMargins(StackPanel targetStack)
+        private void AdjustStackMargins(StackPanel targetStack, int maxPerStack)
         {
-            if (targetStack == LayerBottomStackPanel && targetStack.Children.Count == 8 && targetStack.Margin.Bottom != 29)
+            if (targetStack == LayerBottomStackPanel && LayerBottomStackPanel.Children.Count == maxPerStack && targetStack.Margin.Bottom != 29)
             {
-                targetStack.Margin = new Thickness(0, 0, 0, 29);
+                LayerBottomStackPanel.Margin = new Thickness(0, 0, 0, 29);
             }
             else if (targetStack == LayerRightStackPanel && targetStack.Children.Count <= 8)
             {
+                MessageBox.Show("right");
                 var m = LayerRightWrapper.Margin;
                 LayerRightWrapper.Margin = new Thickness(m.Left, m.Top - 40, m.Right, m.Bottom);
             }
             else if (targetStack == LayerLeftStackPanel && targetStack.Children.Count <= 8)
             {
+                MessageBox.Show("left");
                 var m = LayerLeftWrapper.Margin;
                 LayerLeftWrapper.Margin = new Thickness(m.Left, m.Top + 40, m.Right, m.Bottom);
             }
@@ -606,27 +636,7 @@ namespace DominoWPF
 
         private void PlaceRightButton_Click(object sender, RoutedEventArgs e)
         {
-            //DebugRightInsert();
             PlaceCard("right");
-        }
-
-        private void DebugRightInsert()
-        {
-
-            var debugButton = new Button
-            {
-                Content = "Debug",
-                Background = Brushes.LightCoral,
-
-                Width = 40,
-                Height = 20,
-                FontSize = 12,
-                IsEnabled = false,
-                Style = (Style)FindResource(typeof(Button))
-            };
-
-            StackPanelManager(debugButton, isLeft: false); // Follows right insert flow
-            
         }
     }
 }
