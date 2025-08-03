@@ -118,7 +118,6 @@ namespace DominoWPF
 
             List<StackPanel> playerStackPanels = new List<StackPanel>();
 
-            // Get the parent StackPanels for each player
             for (int i = 0; i < playerNameLabels.Count; i++)
             {
                 if (playerNameLabels[i].Parent is StackPanel stackPanel)
@@ -127,13 +126,11 @@ namespace DominoWPF
                 }
             }
 
-            // Hide all player info first
             foreach (var stackPanel in playerStackPanels)
             {
                 stackPanel.Visibility = Visibility.Collapsed;
             }
 
-            // Show and update active players
             for (int i = 0; i < Math.Min(players.Count, playerNameLabels.Count); i++)
             {
                 playerNameLabels[i].Content = players[i].GetName();
@@ -145,7 +142,6 @@ namespace DominoWPF
                 }
             }
 
-            // Hide unused player grids
             Player1HandGrid.Visibility = players.Count >= 1 ? Visibility.Visible : Visibility.Collapsed;
             Player2HandGrid.Visibility = players.Count >= 2 ? Visibility.Visible : Visibility.Collapsed;
             Player3HandGrid.Visibility = players.Count >= 3 ? Visibility.Visible : Visibility.Collapsed;
