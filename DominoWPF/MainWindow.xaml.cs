@@ -427,22 +427,51 @@ namespace DominoWPF
                 LayerLeftStackPanel
             };
 
-            foreach (var stack in stackOrder)
+            int currentIndex = 0;
+
+            for (int i = 0; i < stackOrder.Count; i++)
             {
-                if (stack.Children.Count < maxPerStack)
+                if (stackOrder[i].Children.Count < maxPerStack || i == stackOrder.Count - 1)
                 {
-                    if (isLeft)
-                        stack.Children.Insert(0, button);
-                    else
-                        stack.Children.Add(button);
-
-                    if (stack == LayerBottomStackPanel && stack.Children.Count == maxPerStack)
-                    {
-                        stack.Margin = new Thickness(0, 150, 0, 0);
-                    }
-
+                    currentIndex = i;
                     break;
                 }
+            }
+
+            InsertWithShifting(stackOrder, currentIndex, button, isLeft, maxPerStack);
+        }
+
+        private void InsertWithShifting(List<StackPanel> stacks, int index, Button newButton, bool isLeft, int maxPerStack)
+        {
+            var stack = stacks[index];
+
+            if (stack.Children.Count < maxPerStack)
+            {
+                if (isLeft)
+                    stack.Children.Insert(0, newButton);
+                else
+                    stack.Children.Add(newButton);
+            }
+            else
+            {
+                Button overflowButton = isLeft
+                    ? (Button)stack.Children[^1]
+                    : (Button)stack.Children[0];
+
+                stack.Children.Remove(overflowButton);
+
+                if (isLeft)
+                    stack.Children.Insert(0, newButton);
+                else
+                    stack.Children.Add(newButton);
+
+                int nextIndex = (index + 1) % stacks.Count;
+                InsertWithShifting(stacks, nextIndex, overflowButton, isLeft, maxPerStack);
+            }
+
+            if (stacks[index] == LayerBottomStackPanel && stacks[index].Children.Count == maxPerStack)
+            {
+                LayerBottomStackPanel.Margin = new Thickness(0, 200, 0, 0);
             }
         }
 
