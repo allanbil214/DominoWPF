@@ -26,6 +26,10 @@ namespace DominoWPF
         private List<IPlayer> players = [];
         private GameController game = null;
         private int maxScore = 150;
+        private int bottomLayerVerticalButton = 0;
+        private int rightLayerVerticalButton = 0; // if last bottomlayer is vertical then margin top of rightlayer then dikurangi 23 then
+        private int leftLayerVerticalButton = 0;
+        private int topLayerVerticalButton = 0;
 
         // Constructor and Initialization
         public MainWindow()
@@ -313,7 +317,7 @@ namespace DominoWPF
                 VerticalAlignment = VerticalAlignment.Center,
                 IsEnabled = isEnabled,
                 Tag = card,
-                Style = (Style)FindResource(typeof(Button))
+                Style = (Style)FindResource(typeof(Button)) // Use default button style that scales
             };
         }
 
@@ -413,6 +417,12 @@ namespace DominoWPF
             newButton.Tag = lastCard;
             newButton.Style = (Style)FindResource(typeof(Button));
 
+            if (lastCard.GetLeftValueCard() == lastCard.GetRightValueCard())
+            {
+                newButton.RenderTransform = new RotateTransform(90);
+                newButton.Margin = new Thickness(-5, 0, -5, 0);
+            }
+
             StackPanelManager(newButton, isLeft);
         }
 
@@ -420,6 +430,7 @@ namespace DominoWPF
         {
             const int maxPerStack = 8;
 
+            // Clockwise order
             var stackOrder = new List<StackPanel> {
                 LayerBottomStackPanel,
                 LayerRightStackPanel,
@@ -427,53 +438,65 @@ namespace DominoWPF
                 LayerLeftStackPanel
             };
 
-            int currentIndex = 0;
-
-            for (int i = 0; i < stackOrder.Count; i++)
+            if (isLeft)
             {
-                if (stackOrder[i].Children.Count < maxPerStack || i == stackOrder.Count - 1)
+                // Perform pushing/cascading clockwise
+                for (int i = 0; i < stackOrder.Count; i++)
                 {
-                    currentIndex = i;
-                    break;
+                    var current = stackOrder[i];
+
+                    if (current.Children.Count < maxPerStack)
+                        break;
+
+                    var next = stackOrder[(i + 1) % stackOrder.Count];
+                    if (next.Children.Count >= maxPerStack)
+                        continue;
+
+                    // Move last item from current to front of next
+                    var childToPush = current.Children[current.Children.Count - 1];
+                    current.Children.RemoveAt(current.Children.Count - 1);
+                    next.Children.Insert(0, childToPush);
+                    AdjustStackMargins(current); // Optional visual tweaks
                 }
-            }
 
-            InsertWithShifting(stackOrder, currentIndex, button, isLeft, maxPerStack);
-        }
-
-        private void InsertWithShifting(List<StackPanel> stacks, int index, Button newButton, bool isLeft, int maxPerStack)
-        {
-            var stack = stacks[index];
-
-            if (stack.Children.Count < maxPerStack)
-            {
-                if (isLeft)
-                    stack.Children.Insert(0, newButton);
-                else
-                    stack.Children.Add(newButton);
+                // Insert button to start of Bottom stack
+                LayerBottomStackPanel.Children.Insert(0, button);
             }
             else
             {
-                Button overflowButton = isLeft
-                    ? (Button)stack.Children[^1]
-                    : (Button)stack.Children[0];
-
-                stack.Children.Remove(overflowButton);
-
-                if (isLeft)
-                    stack.Children.Insert(0, newButton);
-                else
-                    stack.Children.Add(newButton);
-
-                int nextIndex = (index + 1) % stacks.Count;
-                InsertWithShifting(stacks, nextIndex, overflowButton, isLeft, maxPerStack);
-            }
-
-            if (stacks[index] == LayerBottomStackPanel && stacks[index].Children.Count == maxPerStack)
-            {
-                LayerBottomStackPanel.Margin = new Thickness(0, 200, 0, 0);
+                // Simply insert into the first non-full stack (at end)
+                foreach (var stack in stackOrder)
+                {
+                    if (stack.Children.Count < maxPerStack)
+                    {
+                        stack.Children.Add(button);
+                        AdjustStackMargins(stack); // Optional visual tweaks
+                        break;
+                    }
+                }
             }
         }
+
+
+        private void AdjustStackMargins(StackPanel targetStack)
+        {
+            if (targetStack == LayerBottomStackPanel && targetStack.Children.Count == 8 && targetStack.Margin.Bottom != 29)
+            {
+                targetStack.Margin = new Thickness(0, 0, 0, 29);
+            }
+            else if (targetStack == LayerRightStackPanel && targetStack.Children.Count <= 8)
+            {
+                var m = LayerRightWrapper.Margin;
+                LayerRightWrapper.Margin = new Thickness(m.Left, m.Top - 40, m.Right, m.Bottom);
+            }
+            else if (targetStack == LayerLeftStackPanel && targetStack.Children.Count <= 8)
+            {
+                var m = LayerLeftWrapper.Margin;
+                LayerLeftWrapper.Margin = new Thickness(m.Left, m.Top + 40, m.Right, m.Bottom);
+            }
+        }
+
+
 
         // Utility Methods
         private string GetBrailleFace(int number)
@@ -520,7 +543,7 @@ namespace DominoWPF
             LayerRightStackPanel.Children.Clear();
             LayerTopStackPanel.Children.Clear();
             LayerLeftStackPanel.Children.Clear();
-            LayerBottomStackPanel.Margin = new Thickness(0, 25, 0, 0);
+            LayerBottomStackPanel.Margin = new Thickness(0, 0, 0, 200);
         }
 
         private void ResetSelectedCard()
@@ -588,7 +611,27 @@ namespace DominoWPF
 
         private void PlaceRightButton_Click(object sender, RoutedEventArgs e)
         {
+            //DebugRightInsert();
             PlaceCard("right");
+        }
+
+        private void DebugRightInsert()
+        {
+
+            var debugButton = new Button
+            {
+                Content = "Debug",
+                Background = Brushes.LightCoral,
+
+                Width = 40,
+                Height = 20,
+                FontSize = 12,
+                IsEnabled = false,
+                Style = (Style)FindResource(typeof(Button))
+            };
+
+            StackPanelManager(debugButton, isLeft: false); // Follows right insert flow
+            
         }
     }
 }
