@@ -92,7 +92,7 @@ namespace DominoWPF
 
         private void InitGame()
         {
-            InitializePlayerLabels();
+            InitPlayerLabels();
 
             if (game == null)
             {
@@ -104,24 +104,52 @@ namespace DominoWPF
             UpdateScoreDisplay();
         }
 
-        private void InitializePlayerLabels()
+        private void InitPlayerLabels()
         {
             List<Label> playerNameLabels = new List<Label>
             {
                 player1NameLabel, player2NameLabel, player3NameLabel, player4NameLabel
             };
 
-            foreach (var label in playerNameLabels)
+            List<Label> playerScoreLabels = new List<Label>
             {
-                label.Content = "";
-                label.Visibility = Visibility.Hidden;
+                player1ScoreLabel, player2ScoreLabel, player3ScoreLabel, player4ScoreLabel
+            };
+
+            List<StackPanel> playerStackPanels = new List<StackPanel>();
+
+            // Get the parent StackPanels for each player
+            for (int i = 0; i < playerNameLabels.Count; i++)
+            {
+                if (playerNameLabels[i].Parent is StackPanel stackPanel)
+                {
+                    playerStackPanels.Add(stackPanel);
+                }
             }
 
+            // Hide all player info first
+            foreach (var stackPanel in playerStackPanels)
+            {
+                stackPanel.Visibility = Visibility.Collapsed;
+            }
+
+            // Show and update active players
             for (int i = 0; i < Math.Min(players.Count, playerNameLabels.Count); i++)
             {
                 playerNameLabels[i].Content = players[i].GetName();
-                playerNameLabels[i].Visibility = Visibility.Visible;
+                playerScoreLabels[i].Content = $"Score: {players[i].GetScore()}";
+
+                if (i < playerStackPanels.Count)
+                {
+                    playerStackPanels[i].Visibility = Visibility.Visible;
+                }
             }
+
+            // Hide unused player grids
+            Player1HandGrid.Visibility = players.Count >= 1 ? Visibility.Visible : Visibility.Collapsed;
+            Player2HandGrid.Visibility = players.Count >= 2 ? Visibility.Visible : Visibility.Collapsed;
+            Player3HandGrid.Visibility = players.Count >= 3 ? Visibility.Visible : Visibility.Collapsed;
+            Player4HandGrid.Visibility = players.Count >= 4 ? Visibility.Visible : Visibility.Collapsed;
         }
 
         // Game Flow Management
@@ -207,7 +235,6 @@ namespace DominoWPF
             {
                 case 0:
                     Player1HandGrid.IsEnabled = true;
-                    SetButtonPositions(10, 260, 540, 260, 0, 0);
                     UpdateCardAvailability(Player1CardStackPanel);
                     break;
 
@@ -219,7 +246,6 @@ namespace DominoWPF
                         return;
                     }
                     Player2HandGrid.IsEnabled = true;
-                    SetButtonPositions(549, 236, 550, 43, -90, -90);
                     UpdateCardAvailability(Player2CardStackPanel);
                     break;
 
@@ -231,7 +257,6 @@ namespace DominoWPF
                         return;
                     }
                     Player3HandGrid.IsEnabled = true;
-                    SetButtonPositions(540, 10, 10, 10, 0, 0);
                     UpdateCardAvailability(Player3CardStackPanel);
                     break;
 
@@ -243,7 +268,6 @@ namespace DominoWPF
                         return;
                     }
                     Player4HandGrid.IsEnabled = true;
-                    SetButtonPositions(-2, 36, -3, 233, 90, 90);
                     UpdateCardAvailability(Player4CardStackPanel);
                     break;
             }
@@ -272,7 +296,11 @@ namespace DominoWPF
                 stackPanel.Children.Add(newButton);
                 if (!isHorizontal)
                 {
-                    newButton.Margin = new Thickness(0, 10, 0, 0);
+                    newButton.Margin = new Thickness(0, 5, 0, 0);
+                }
+                else
+                {
+                    newButton.Margin = new Thickness(5, 0, 0, 0);
                 }
             }
         }
@@ -287,9 +315,9 @@ namespace DominoWPF
                 FontSize = 16,
                 HorizontalAlignment = HorizontalAlignment.Center,
                 VerticalAlignment = VerticalAlignment.Center,
-                Margin = new Thickness(10, 0, 0, 0),
                 IsEnabled = isEnabled,
-                Tag = card
+                Tag = card,
+                Style = (Style)FindResource(typeof(Button)) // Use default button style that scales
             };
         }
 
@@ -374,17 +402,6 @@ namespace DominoWPF
             }
         }
 
-        private void SetButtonPositions(int leftX, int leftY, int rightX, int rightY, int leftRotation, int rightRotation)
-        {
-            PlaceLeftButton.Margin = new Thickness(leftX, leftY, 0, 0);
-            PlaceRightButton.Margin = new Thickness(rightX, rightY, rightX == 10 ? 540 : (rightX == -3 ? 553 : 10), rightY == 260 ? 10 : (rightY == 43 ? 226 : (rightY == 10 ? 260 : 36)));
-
-            PlaceLeftButton.RenderTransformOrigin = new Point(0.5, 0.5);
-            PlaceLeftButton.RenderTransform = new RotateTransform(leftRotation);
-            PlaceRightButton.RenderTransformOrigin = new Point(0.5, 0.5);
-            PlaceRightButton.RenderTransform = new RotateTransform(rightRotation);
-        }
-
         private void ContentInsert(int value1, int value2, bool isLeft)
         {
             Button newButton = new();
@@ -393,11 +410,13 @@ namespace DominoWPF
             var lastCard = isLeft ? playedCards.First() : playedCards.Last();
 
             newButton.Content = $"{GetBrailleFace(lastCard.GetLeftValueCard())} : {GetBrailleFace(lastCard.GetRightValueCard())}";
-            newButton.Width = 39.6233333333333;
-            newButton.Height = 19.96;
+            newButton.Width = 40;
+            newButton.Height = 20;
             newButton.FontSize = 12;
             newButton.IsEnabled = false;
             newButton.Tag = lastCard;
+            newButton.Style = (Style)FindResource(typeof(Button));
+
             StackPanelManager(newButton, isLeft);
         }
 
@@ -476,7 +495,7 @@ namespace DominoWPF
             LayerRightStackPanel.Children.Clear();
             LayerTopStackPanel.Children.Clear();
             LayerLeftStackPanel.Children.Clear();
-            LayerBottomStackPanel.Margin = new Thickness(0, 150, 0, 0);
+            LayerBottomStackPanel.Margin = new Thickness(0, 25, 0, 0);
         }
 
         private void ResetSelectedCard()

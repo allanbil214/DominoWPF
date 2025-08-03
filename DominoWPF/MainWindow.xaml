@@ -5,89 +5,179 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DominoWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800" MinWidth="800" MinHeight="450" ResizeMode="CanMinimize" WindowStartupLocation="CenterScreen">
-    <Grid x:Name="MainGrid" Margin="0,0,0,434">
-        <Grid x:Name="Player1HandGrid" Margin="83,0,88,-434" Background="#FFFFFDC7" VerticalAlignment="Bottom" Height="67">
-            <StackPanel RenderTransformOrigin="0.5,0.5" Orientation="Horizontal" x:Name="Player1CardStackPanel" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        </Grid>
-        <Grid x:Name="Player2HandGrid" Margin="0,0,0,-435" HorizontalAlignment="Right" Width="88" Background="#FFFFFDC7">
-            <StackPanel RenderTransformOrigin="0.5,0.5" Orientation="Vertical" x:Name="Player2CardStackPanel" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        </Grid>
-        <Grid x:Name="Player4HandGrid" Margin="0,0,0,-435" HorizontalAlignment="Left" Width="83" Background="#FFFFFDC7">
-            <StackPanel RenderTransformOrigin="0.5,0.5" Orientation="Vertical" x:Name="Player4CardStackPanel" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        </Grid>
-        <Grid x:Name="Player3HandGrid" Margin="83,0,88,-434" Background="#FFFFFDC7" VerticalAlignment="Top" Height="67">
-            <StackPanel RenderTransformOrigin="0.5,0.5" Orientation="Horizontal" x:Name="Player3CardStackPanel" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        </Grid>
-        <Grid x:Name="ContentGrid" Background="#FFBCFF86" Margin="83,67,88,-367">
-            <StackPanel x:Name="LayerBottomStackPanel" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,150,0,0"/>
-            <StackPanel x:Name="LayerRightStackPanel" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="277,0,0,85"/>
-            <StackPanel x:Name="LayerTopStackPanel" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,35,156,0" FlowDirection="RightToLeft"/>
-            <StackPanel x:Name="LayerLeftStackPanel" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,55,433,0"/>
-            <Button x:Name="PlaceLeftButton" HorizontalAlignment="Left" Margin="10,260,0,0" VerticalAlignment="Top" Height="30" Width="79" Content="Place Left" Click="PlaceLeftButton_Click"/>
-            <Button x:Name="PlaceRightButton" Content="Place Right" Margin="540,260,10,10" Click="PlaceRightButton_Click" />
-            <Label x:Name="player1NameLabel" Content="Label" HorizontalAlignment="Left" Margin="263,260,0,0" VerticalAlignment="Top" FontSize="18"/>
-            <Label x:Name="player1ScoreLabel" Content="Label" HorizontalAlignment="Left" Margin="319,260,0,0" VerticalAlignment="Top" FontSize="18"/>
-            <Label x:Name="player2NameLabel" Content="Label" HorizontalAlignment="Left" Margin="578,161,0,0" VerticalAlignment="Top" FontSize="18" RenderTransformOrigin="0.5,0.5">
-                <Label.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="-90"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Label.RenderTransform>
-            </Label>
-            <Label x:Name="player2ScoreLabel" Content="Label" HorizontalAlignment="Left" Margin="578,106,0,0" VerticalAlignment="Top" FontSize="18" RenderTransformOrigin="0.5,0.5">
-                <Label.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="-90"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Label.RenderTransform>
-            </Label>
-            <Label x:Name="player3NameLabel" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" RenderTransformOrigin="0.5,0.5" Margin="263,0,0,0">
-                <Label.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="0"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Label.RenderTransform>
-            </Label>
-            <Label x:Name="player3ScoreLabel" Content="Label" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="18" RenderTransformOrigin="0.5,0.5" Margin="314,0,0,0">
-                <Label.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="0"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Label.RenderTransform>
-            </Label>
-            <Label x:Name="player4NameLabel" Content="Label" HorizontalAlignment="Left" Margin="-9,110,0,0" VerticalAlignment="Top" FontSize="18" RenderTransformOrigin="0.5,0.5">
-                <Label.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="90"/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </Label.RenderTransform>
-            </Label>
-            <Label x:Name="player4ScoreLabel" Content="Label" HorizontalAlignment="Left" Margin="-9,162,0,0" VerticalAlignment="Top" FontSize="18" RenderTransformOrigin="0.226,0.548">
-                <Label.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="90"/>
-                        <TranslateTransform X="12.618" Y="-15.875"/>
-                    </TransformGroup>
-                </Label.RenderTransform>
-            </Label>
-        </Grid>
+        Title="Like A Domino | WPF Edition" Height="600" Width="900" 
+        MinWidth="600" MinHeight="400" 
+        WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Viewbox Stretch="Uniform" StretchDirection="Both">
+            <Border BorderBrush="Black" BorderThickness="1" Height="584" Width="900">
+                <Grid x:Name="MainGrid" Width="900" Height="600">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="80"/>
+                        <RowDefinition Height="520"/>
+                    </Grid.RowDefinitions>
+                    <Border Grid.Row="0" Background="#FFE6E6FA" BorderBrush="#FFCCCCCC" BorderThickness="0,0,0,2">
+                        <Grid Margin="20,10">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Row="0" Grid.Column="0" 
+                            Orientation="Horizontal" 
+                            VerticalAlignment="Center">
+                                <Label x:Name="player1NameLabel" Content="Player 1" 
+                                FontSize="16" FontWeight="Bold" Margin="0,0,10,0"/>
+                                <Label x:Name="player1ScoreLabel" Content="Score: 0" 
+                                FontSize="16"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="0" Grid.Column="1" 
+                            Orientation="Horizontal" 
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right">
+                                <Label x:Name="player3NameLabel" Content="Player 3" 
+                                FontSize="16" FontWeight="Bold" Margin="0,0,10,0"/>
+                                <Label x:Name="player3ScoreLabel" Content="Score: 0" 
+                                FontSize="16"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="0" 
+                            Orientation="Horizontal" 
+                            VerticalAlignment="Center">
+                                <Label x:Name="player2NameLabel" Content="Player 2" 
+                                FontSize="16" FontWeight="Bold" Margin="0,0,10,0"/>
+                                <Label x:Name="player2ScoreLabel" Content="Score: 0" 
+                                FontSize="16"/>
+                            </StackPanel>
+                            <StackPanel Grid.Row="1" Grid.Column="1" 
+                            Orientation="Horizontal" 
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Right">
+                                <Label x:Name="player4NameLabel" Content="Player 4" 
+                                FontSize="16" FontWeight="Bold" Margin="0,0,10,0"/>
+                                <Label x:Name="player4ScoreLabel" Content="Score: 0" 
+                                FontSize="16"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    <Grid Grid.Row="1" x:Name="GameArea">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="80"/>
+                            <RowDefinition Height="360"/>
+                            <RowDefinition Height="80"/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="100"/>
+                            <ColumnDefinition Width="700"/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid x:Name="Player3HandGrid" Grid.Row="0" Grid.Column="1" 
+                        Background="#FFFFFDC7" Margin="5">
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto" 
+                            VerticalScrollBarVisibility="Disabled">
+                                <StackPanel x:Name="Player3CardStackPanel" 
+                                Orientation="Horizontal" 
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"/>
+                            </ScrollViewer>
+                            <Border BorderBrush="#FFCCCCCC" BorderThickness="1"/>
+                        </Grid>
+                        <Grid x:Name="Player4HandGrid" Grid.Row="1" Grid.Column="0" 
+                        Background="#FFFFFDC7" Margin="5">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                            HorizontalScrollBarVisibility="Disabled">
+                                <StackPanel
+                    VerticalAlignment="Center" Orientation="Vertical" x:Name="Player4CardStackPanel" HorizontalAlignment="Center"/>
+                            </ScrollViewer>
+                            <Border BorderBrush="#FFCCCCCC" BorderThickness="1"/>
+                        </Grid>
+                        <Grid x:Name="Player2HandGrid" Grid.Row="1" Grid.Column="2" 
+                        Background="#FFFFFDC7" Margin="5">
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" 
+                            HorizontalScrollBarVisibility="Disabled">
+                                <StackPanel x:Name="Player2CardStackPanel" 
+                                Orientation="Vertical" 
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"/>
+                            </ScrollViewer>
+                            <Border BorderBrush="#FFCCCCCC" BorderThickness="1"/>
+                        </Grid>
+                        <Grid x:Name="Player1HandGrid" Grid.Row="2" Grid.Column="1" 
+                        Background="#FFFFFDC7" Margin="5">
+                            <ScrollViewer HorizontalScrollBarVisibility="Auto" 
+                            VerticalScrollBarVisibility="Disabled">
+                                <StackPanel x:Name="Player1CardStackPanel" 
+                                Orientation="Horizontal" 
+                                HorizontalAlignment="Center" 
+                                VerticalAlignment="Center"/>
+                            </ScrollViewer>
+                            <Border BorderBrush="#FFCCCCCC" BorderThickness="1"/>
+                        </Grid>
+
+                        <Grid x:Name="ContentGrid" Grid.Row="1" Grid.Column="1" 
+                        Background="#FFBCFF86" Margin="5">
+
+                            <StackPanel x:Name="LayerBottomStackPanel" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,200,0,0">
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                            </StackPanel>
+                            <StackPanel x:Name="LayerRightStackPanel" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="277,0,0,85">
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                            </StackPanel>
+                            <StackPanel x:Name="LayerTopStackPanel" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,86,187,0" FlowDirection="RightToLeft">
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                            </StackPanel>
+                            <StackPanel x:Name="LayerLeftStackPanel" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,106,464,0">
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                                <Button Content="Button"/>
+                            </StackPanel>
+
+                            <Button x:Name="PlaceLeftButton" 
+                            HorizontalAlignment="Left" Margin="10,180,0,0" VerticalAlignment="Top"
+                            Content="Place Left" 
+                            Click="PlaceLeftButton_Click"
+                            Width="80" Height="35"
+                            FontSize="14"/>
+
+                            <Button x:Name="PlaceRightButton" 
+                            Content="Place Right" 
+                            Click="PlaceRightButton_Click"
+                            Width="80" Height="35"
+                            FontSize="14"
+                            Margin="600,180,0,0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+                            <Border BorderBrush="#FFCCCCCC" BorderThickness="1"/>
+                        </Grid>
+                    </Grid>
+                </Grid>
+            </Border>
+        </Viewbox>
     </Grid>
 </Window>

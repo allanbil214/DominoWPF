@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DominoWPF"
         mc:Ignorable="d"
-        Title="Startup Window" Height="488" Width="387" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Like A Domino | WPF Edition (Startup Window)" Height="488" Width="387" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid x:Name="MainGrid">
         <ComboBox x:Name="playerNumberComboBox" HorizontalAlignment="Left" Margin="173,102,0,0" VerticalAlignment="Top" Width="167" SelectedIndex="0" SelectionChanged="playerNumberComboBox_SelectionChanged"/>
         <Label Content="Select How Many Player:" HorizontalAlignment="Left" Margin="29,98,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.84,-0.111"/>
