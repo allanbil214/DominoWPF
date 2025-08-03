@@ -317,7 +317,7 @@ namespace DominoWPF
                 VerticalAlignment = VerticalAlignment.Center,
                 IsEnabled = isEnabled,
                 Tag = card,
-                Style = (Style)FindResource(typeof(Button)) // Use default button style that scales
+                Style = (Style)FindResource(typeof(Button))
             };
         }
 
@@ -430,7 +430,6 @@ namespace DominoWPF
         {
             const int maxPerStack = 8;
 
-            // Clockwise order
             var stackOrder = new List<StackPanel> {
                 LayerBottomStackPanel,
                 LayerRightStackPanel,
@@ -440,7 +439,6 @@ namespace DominoWPF
 
             if (isLeft)
             {
-                // Perform pushing/cascading clockwise
                 for (int i = 0; i < stackOrder.Count; i++)
                 {
                     var current = stackOrder[i];
@@ -452,25 +450,22 @@ namespace DominoWPF
                     if (next.Children.Count >= maxPerStack)
                         continue;
 
-                    // Move last item from current to front of next
                     var childToPush = current.Children[current.Children.Count - 1];
                     current.Children.RemoveAt(current.Children.Count - 1);
                     next.Children.Insert(0, childToPush);
-                    AdjustStackMargins(current); // Optional visual tweaks
+                    AdjustStackMargins(current); 
                 }
 
-                // Insert button to start of Bottom stack
                 LayerBottomStackPanel.Children.Insert(0, button);
             }
             else
             {
-                // Simply insert into the first non-full stack (at end)
                 foreach (var stack in stackOrder)
                 {
                     if (stack.Children.Count < maxPerStack)
                     {
                         stack.Children.Add(button);
-                        AdjustStackMargins(stack); // Optional visual tweaks
+                        AdjustStackMargins(stack); 
                         break;
                     }
                 }
