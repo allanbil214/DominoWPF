@@ -531,7 +531,6 @@ namespace DominoWPF
             int topCount = LayerTopStackPanel.Children.Count;
             int topValue = 30;
 
-            // Right layer adjustments
             if (bottomCount >= 8 && rightCount < 8)
             {
                 rightMargin.Top -= topValue;
