@@ -63,7 +63,7 @@ namespace DominoWPF
             return _discardTile;
         }
 
-        public void OGInitDeck()
+        public void InitDeck()
         {
             for (int i = 0; i <= 6; i++)
             {
@@ -73,45 +73,6 @@ namespace DominoWPF
                 }
             }
         }
-
-        public void SameInitDeck()
-        {
-            _deck.AddRange(new List<Card>
-            {
-                new Card(1, 2), new Card(2, 1),
-                new Card(1, 2), new Card(2, 1),
-                new Card(1, 2), new Card(2, 1),
-                new Card(1, 2), new Card(2, 1),
-                new Card(1, 2), new Card(2, 1),
-                new Card(1, 2), new Card(2, 1),
-                new Card(1, 2), new Card(2, 1),
-                new Card(1, 2), new Card(2, 1),
-                new Card(1, 2), new Card(2, 1),
-                new Card(1, 2), new Card(2, 1),
-                new Card(1, 2), new Card(2, 1),
-                new Card(1, 2), new Card(2, 1),
-                new Card(1, 2), new Card(2, 1),
-                new Card(1, 2), new Card(2, 1)
-            });
-        }
-
-
-        public void InitDeck()
-        {
-            _deck.AddRange(new List<Card>
-            {
-                new Card(6, 6), new Card(6, 6), new Card(6, 6), new Card(6, 6),
-                new Card(6, 6), new Card(6, 6), new Card(6, 6), new Card(6, 6),
-                new Card(6, 6), new Card(6, 6), new Card(6, 6), new Card(6, 6),
-                new Card(6, 6), new Card(6, 6), new Card(6, 6), new Card(6, 6),
-                new Card(6, 6), new Card(6, 6), new Card(6, 6), new Card(6, 6),
-                new Card(6, 6), new Card(6, 6), new Card(6, 6), new Card(6, 6),
-                new Card(6, 6), new Card(6, 6), new Card(6, 6), new Card(6, 6)
-            });
-        }
-
-
-
 
         public void ShuffleDeck()
         {

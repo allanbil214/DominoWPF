@@ -20,17 +20,6 @@ namespace DominoWPF
     /// Interaction logic for MainWindow.xaml
     /// </summary>
 
-
-    /* jika ada vertical di bottomlayer:
-    rightlayer.margin.right - 10* n+1
-
-    jika ada vertical di bottomlayer child max:
-    rightlayer.margin.top - 10*2
-    rightlayer.margin.right - 10
-
-    jika ada vertical di rightlayer:
-    rightlayer.margin.top +10 */
-
     public partial class MainWindow : Window
     {
         private Random rand = new Random();
@@ -45,7 +34,7 @@ namespace DominoWPF
         private readonly Thickness baseBottomMargin = new Thickness(0, 0, 0, 180);
         private readonly Thickness baseTopMargin = new Thickness(0, 29, 185, 0);
         private readonly Thickness baseRightMargin = new Thickness(0, 319, -298, 0);
-        private readonly Thickness baseLeftMargin = new Thickness(-297, -320, 0, 0); //-222, -110, 0, 0
+        private readonly Thickness baseLeftMargin = new Thickness(-297, -320, 0, 0);
 
         // Constructor and Initialization
         public MainWindow()
@@ -56,20 +45,7 @@ namespace DominoWPF
             ChangeWindowSize();
             LoadStartup();
 
-
-            Button newButton = new();
-
-            newButton.Content = $"{GetBrailleFace(6)} : {GetBrailleFace(6)}";
-            newButton.Width = 40;
-            newButton.Height = 20;
-            newButton.FontSize = 12;
-            newButton.IsEnabled = false;
-            newButton.Style = (Style)FindResource(typeof(Button));
-
-            LayerLeftStackPanel.Children.Add(newButton);
-
-            var m = LayerRightWrapper.Margin;
-            debuglabel.Content = $"{m.Left.ToString()}, {m.Top.ToString()}, {m.Right.ToString()}, {m.Bottom.ToString()}";
+            //AddDebugButton();
         }
 
         private void ChangeWindowSize()
@@ -115,6 +91,8 @@ namespace DominoWPF
 
             LayerBottomStackPanel.Margin = baseBottomMargin;
             LayerTopStackPanel.Margin = baseTopMargin;
+
+            MiddleEllipse.Visibility = Visibility.Hidden;
         }
 
 
@@ -536,6 +514,7 @@ namespace DominoWPF
             if (LayerBottomStackPanel.Children.Count >= 8 && LayerBottomStackPanel.Margin.Bottom != 29)
             {
                 LayerBottomStackPanel.Margin = new Thickness(0, 0, 0, 29);
+                MiddleEllipse.Visibility = Visibility.Visible;
             }
 
             var rightMargin = baseRightMargin;
@@ -586,11 +565,16 @@ namespace DominoWPF
                 topMargin.Right = baseTopMargin.Right + 62;
             }
 
+            if(verticalInRight == 0)
+            {
+                leftMargin.Top += 40;
+            }
+
             if (verticalInRight > 0 && rightCount >= 8)
             {
-                leftMargin.Top += (topValue - 16) * verticalInRight;
+                leftMargin.Top += (topValue + 3) * verticalInRight;
                 leftMargin.Top += 1;
-                leftMargin.Left = baseLeftMargin.Left + 62;
+                leftMargin.Left = baseLeftMargin.Left + 14 * verticalInTop;
             }
 
             LayerRightWrapper.Margin = rightMargin;
@@ -727,6 +711,31 @@ namespace DominoWPF
         private void PlaceRightButton_Click(object sender, RoutedEventArgs e)
         {
             PlaceCard("right");
+        }
+
+        private void AddDebugButton()
+        {
+
+            Button newButton = new();
+
+            newButton.Content = $"{GetBrailleFace(6)} : {GetBrailleFace(6)}";
+            newButton.Width = 40;
+            newButton.Height = 20;
+            newButton.FontSize = 12;
+            newButton.IsEnabled = false;
+            newButton.Style = (Style)FindResource(typeof(Button));
+            TransformGroup transformGroup = new();
+            transformGroup.Children.Add(new ScaleTransform());
+            transformGroup.Children.Add(new SkewTransform());
+            transformGroup.Children.Add(new RotateTransform(90));
+            transformGroup.Children.Add(new TranslateTransform());
+
+            newButton.RenderTransform = transformGroup;
+            newButton.RenderTransformOrigin = new Point(0.5, 0.5);
+            newButton.Margin = new Thickness(-8, 0, -8, 0);
+
+            LayerLeftStackPanel.Children.Add(newButton);
+
         }
     }
 }
