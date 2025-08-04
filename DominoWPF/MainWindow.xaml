@@ -154,7 +154,7 @@
                             <Grid x:Name="LayerRightWrapper"
 								  HorizontalAlignment="Center"
 								  VerticalAlignment="Center"
-								  Margin="0,280,-297,0">
+								  Margin="0,280,-298,0">
                                 <StackPanel x:Name="LayerRightStackPanel"
 											Orientation="Horizontal"
 											HorizontalAlignment="Center"

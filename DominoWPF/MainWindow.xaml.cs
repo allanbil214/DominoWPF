@@ -43,8 +43,8 @@ namespace DominoWPF
 
         private readonly Thickness baseBottomMargin = new Thickness(0, 0, 0, 180);
         private readonly Thickness baseTopMargin = new Thickness(0, 29, 185, 0);
-        private readonly Thickness baseRightMargin = new Thickness(0, 319, -295, 0);
-        private readonly Thickness baseLeftMargin = new Thickness(-295, -319, 0, 0);
+        private readonly Thickness baseRightMargin = new Thickness(0, 319, -298, 0);
+        private readonly Thickness baseLeftMargin = new Thickness(-298, -319, 0, 0);
 
         // Constructor and Initialization
         public MainWindow()
@@ -527,42 +527,43 @@ namespace DominoWPF
 
             var rightMargin = baseRightMargin;
             var leftMargin = baseLeftMargin;
-
             int totalInRight = LayerRightStackPanel.Children.Count;
             int verticalInBottom = CountVerticalCardsInStack(LayerBottomStackPanel);
             int verticalInRight = CountVerticalCardsInStack(LayerRightStackPanel);
             int bottomCount = LayerBottomStackPanel.Children.Count;
             int rightCount = LayerRightStackPanel.Children.Count;
+            int topValue = 30;
 
             if (bottomCount >= 8 && rightCount < 8)
             {
-                rightMargin.Top -= 40;
+                rightMargin.Top -= topValue;
             }
 
             if (totalInRight > 0)
             {
-                rightMargin.Top -= 40 * totalInRight;
-            }
 
-            if (verticalInBottom > 0)
-            {
-                rightMargin.Right -= 10 * (verticalInBottom + 1);
+                int[] cardAdjustments = { 12, 52, 92, 132, 172, 212, 252, 292 };
+                rightMargin.Top -= cardAdjustments[totalInRight - 1];
+                if(totalInRight == 8)
+                {
+                    rightMargin.Top -= 27;
+                }
             }
 
             if (verticalInBottom > 0 && bottomCount >= 8)
             {
-                rightMargin.Top -= 20; 
-                rightMargin.Right = baseRightMargin.Right - 10; 
+                rightMargin.Top -= (topValue - 12);
+                rightMargin.Right = baseRightMargin.Right + 12 * (verticalInBottom + 1);
             }
 
             if (verticalInRight > 0)
             {
-                rightMargin.Top += 10 * verticalInRight;
+                rightMargin.Top += (topValue - 14) * verticalInRight;
             }
 
             if (bottomCount >= 8 && rightCount >= 8)
             {
-                leftMargin.Top += 40;
+                leftMargin.Top += topValue;
             }
 
             LayerRightWrapper.Margin = rightMargin;
