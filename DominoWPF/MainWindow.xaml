@@ -123,6 +123,7 @@
                         <Grid x:Name="ContentGrid" Grid.Row="1" Grid.Column="1" 
                         Background="#FFBCFF86" Margin="5">
 
+
                             <StackPanel x:Name="LayerBottomStackPanel" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,29">
                                 <Button Content="Button" Background="#FFFF6868"/>
                                 <Button Content="Button" Background="#FFFF6868"/>
@@ -133,28 +134,20 @@
                                 <Button Content="Button" Background="#FFFF6868"/>
                                 <Button Content="Button" Background="#FFFF6868"/>
                             </StackPanel>
-                            <StackPanel x:Name="LayerTopStackPanel" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,29,185,0" RenderTransformOrigin="0.5,0.5">
-                                <StackPanel.RenderTransform>
-                                    <TransformGroup>
-                                        <ScaleTransform/>
-                                        <SkewTransform/>
-                                        <RotateTransform Angle="180"/>
-                                        <TranslateTransform/>
-                                    </TransformGroup>
-                                </StackPanel.RenderTransform>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
+                            <StackPanel x:Name="LayerTopStackPanel" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="186,29,0,0" FlowDirection="RightToLeft">
+                                <Button Content="Button" Background="#FFFD5959"/>
+                                <Button Content="Button" Background="#FFFD5959"/>
+                                <Button Content="Button" Background="#FFFD5959"/>
+                                <Button Content="Button" Background="#FFFD5959"/>
+                                <Button Content="Button" Background="#FFFD5959"/>
+                                <Button Content="Button" Background="#FFFD5959"/>
+                                <Button Content="Button" Background="#FFFD5959"/>
+                                <Button Content="Button" Background="#FFFD5959"/>
                             </StackPanel>
                             <Grid x:Name="LayerRightWrapper"
 								  HorizontalAlignment="Center"
 								  VerticalAlignment="Center"
-								  Margin="0,280,-298,0">
+								  Margin="0,0,-297,0">
                                 <StackPanel x:Name="LayerRightStackPanel"
 											Orientation="Horizontal"
 											HorizontalAlignment="Center"
@@ -177,7 +170,7 @@
                             <Grid x:Name="LayerLeftWrapper"
 								  HorizontalAlignment="Center"
 								  VerticalAlignment="Center"
-								  Margin="-297,-320,0,0">
+								  Margin="-297,0,0,0">
                                 <StackPanel x:Name="LayerLeftStackPanel"
 											Orientation="Horizontal"
 											HorizontalAlignment="Center"
@@ -226,13 +219,9 @@
 									 VerticalAlignment="Center"
 									 Opacity="0.3"/>
 
-                            <Border BorderBrush="#FFCCCCCC" BorderThickness="1">
-                                <Button x:Name="debugButton_Copy1" Content="margin right" Margin="51,299,568,83" Click="debugButton_Click"/>
-                            </Border>
-                            <Button x:Name="debugButton2" Content="margin top" Margin="53,341,568,42" Click="debugButton2_Click"/>
+                            <Border BorderBrush="#FFCCCCCC" BorderThickness="1"/>
                         </Grid>
                         <Label x:Name="debuglabel" Content="Label" HorizontalAlignment="Left" Margin="30,246,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="1"/>
-                        <Button x:Name="updateLabelDebug" Content="Button" HorizontalAlignment="Left" Margin="69,387,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="1" Click="updateLabelDebug_Click"/>
                     </Grid>
                 </Grid>
             </Border>

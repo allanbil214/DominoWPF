@@ -44,7 +44,7 @@ namespace DominoWPF
         private readonly Thickness baseBottomMargin = new Thickness(0, 0, 0, 180);
         private readonly Thickness baseTopMargin = new Thickness(0, 29, 185, 0);
         private readonly Thickness baseRightMargin = new Thickness(0, 319, -298, 0);
-        private readonly Thickness baseLeftMargin = new Thickness(-298, -319, 0, 0);
+        private readonly Thickness baseLeftMargin = new Thickness(-297, -320, 0, 0); //-222, -110, 0, 0
 
         // Constructor and Initialization
         public MainWindow()
@@ -527,13 +527,19 @@ namespace DominoWPF
 
             var rightMargin = baseRightMargin;
             var leftMargin = baseLeftMargin;
+            var topMargin = baseTopMargin;
+
             int totalInRight = LayerRightStackPanel.Children.Count;
+            int totalInTop = LayerTopStackPanel.Children.Count;
             int verticalInBottom = CountVerticalCardsInStack(LayerBottomStackPanel);
             int verticalInRight = CountVerticalCardsInStack(LayerRightStackPanel);
+            int verticalInTop = CountVerticalCardsInStack(LayerTopStackPanel);
             int bottomCount = LayerBottomStackPanel.Children.Count;
             int rightCount = LayerRightStackPanel.Children.Count;
+            int topCount = LayerTopStackPanel.Children.Count;
             int topValue = 30;
 
+            // Right layer adjustments
             if (bottomCount >= 8 && rightCount < 8)
             {
                 rightMargin.Top -= topValue;
@@ -541,10 +547,9 @@ namespace DominoWPF
 
             if (totalInRight > 0)
             {
-
                 int[] cardAdjustments = { 12, 52, 92, 132, 172, 212, 252, 292 };
                 rightMargin.Top -= cardAdjustments[totalInRight - 1];
-                if(totalInRight == 8)
+                if (totalInRight == 8)
                 {
                     rightMargin.Top -= 27;
                 }
@@ -561,15 +566,25 @@ namespace DominoWPF
                 rightMargin.Top += (topValue - 14) * verticalInRight;
             }
 
-            if (bottomCount >= 8 && rightCount >= 8)
+            if (verticalInRight > 0 && rightCount >= 8)
             {
-                leftMargin.Top += topValue;
+                topMargin.Top += (topValue - 16) * verticalInRight;
+                topMargin.Top += 1;
+                topMargin.Right = baseTopMargin.Right + 62;
             }
 
-            LayerRightWrapper.Margin = rightMargin;
-            LayerLeftWrapper.Margin = leftMargin;
 
-            debuglabel.Content = $"R: {rightMargin.Left}, {rightMargin.Top}, {rightMargin.Right}, {rightMargin.Bottom}";
+            //// left
+            //if (bottomCount >= 8 && rightCount >= 8)
+            //{
+            //    leftMargin.Top += topValue;
+            //}
+
+            LayerRightWrapper.Margin = rightMargin;
+            //LayerLeftWrapper.Margin = leftMargin;
+            LayerTopStackPanel.Margin = topMargin;
+
+            debuglabel.Content = $"T: {topMargin.Left}, {topMargin.Top}, {topMargin.Right}, {topMargin.Bottom}"; // change these to left
         }
 
         private int CountVerticalCardsInStack(StackPanel stack)
@@ -699,28 +714,6 @@ namespace DominoWPF
         private void PlaceRightButton_Click(object sender, RoutedEventArgs e)
         {
             PlaceCard("right");
-        }
-
-        private void debugButton_Click(object sender, RoutedEventArgs e)
-        {
-            var m = LayerRightWrapper.Margin;
-            LayerRightWrapper.Margin = new Thickness(m.Left, m.Top, m.Right + 10, m.Bottom);
-            debuglabel.Content = $"{m.Left.ToString()}, {m.Top.ToString()}, {m.Right.ToString()}, {m.Bottom.ToString()}";
-
-        }
-
-        private void debugButton2_Click(object sender, RoutedEventArgs e)
-        {
-            var m = LayerRightWrapper.Margin;
-            LayerRightWrapper.Margin = new Thickness(m.Left, m.Top - 10, m.Right, m.Bottom);
-            debuglabel.Content = $"{m.Left.ToString()}, {m.Top.ToString()}, {m.Right.ToString()}, {m.Bottom.ToString()}";
-
-        }
-
-        private void updateLabelDebug_Click(object sender, RoutedEventArgs e)
-        {
-            var m = LayerRightWrapper.Margin;
-            debuglabel.Content = $"{m.Left.ToString()}, {m.Top.ToString()}, {m.Right.ToString()}, {m.Bottom.ToString()}";
         }
     }
 }
