@@ -497,8 +497,7 @@ namespace DominoWPF
                 }
             }
 
-            AdjustStackMargins(maxPerStack);
-            AdjustRightStackMargins(button);
+            AdjustAllMargins();
         }
 
         private void CascadeOverflow(params StackPanel[] stackOrder)
@@ -519,62 +518,71 @@ namespace DominoWPF
             }
         }
 
-        private void AdjustRightStackMargins(Button button)
+        private void AdjustAllMargins()
         {
-            var m = LayerRightWrapper.Margin;
-            if ((bool)button.Tag)
-            {
-                LayerRightWrapper.Margin = new Thickness(m.Left, m.Top, m.Right + 10, m.Bottom);
-                if (changedLast)
-                {
-                    LayerRightWrapper.Margin = new Thickness(m.Left, m.Top, m.Right - 10, m.Bottom);
-                }
-            }
-            
-            if (LayerBottomStackPanel.Children.Count > 7)
-            {
-                MessageBox.Show("awal");
-                if (LayerBottomStackPanel.Children[7] is Button)
-                {
-                    MessageBox.Show("sedang");
-                    Button stackButton = (Button)LayerBottomStackPanel.Children[7];
-                    if ((bool)stackButton.Tag && !changedLast)
-                    {
-                        MessageBox.Show("paling dalam");
-                        LayerRightWrapper.Margin = new Thickness(m.Left, m.Top -10*2, m.Right + 10, m.Bottom);
-                        changedLast = true;
-                    }
-                    else if (changedLast)
-                    {
-                        MessageBox.Show("paling dalam v2");
-                        LayerRightWrapper.Margin = new Thickness(m.Left, m.Top + 10 * 3, m.Right, m.Bottom);
-                        changedLast = false;
-                    }
-                }
-            }
-        }
-
-        private void AdjustStackMargins(int maxPerStack)
-        {
-            //LayerRightWrapper.Margin = new Thickness(m.Left, m.Top, m.Right + (10 * 1), m.Bottom);
-
-            if (LayerBottomStackPanel.Children.Count == maxPerStack && LayerBottomStackPanel.Margin.Bottom != 29)
+            if (LayerBottomStackPanel.Children.Count >= 8 && LayerBottomStackPanel.Margin.Bottom != 29)
             {
                 LayerBottomStackPanel.Margin = new Thickness(0, 0, 0, 29);
             }
-            else if (LayerBottomStackPanel.Children.Count == maxPerStack &&  LayerRightStackPanel.Children.Count < maxPerStack)
+
+            var rightMargin = baseRightMargin;
+            var leftMargin = baseLeftMargin;
+
+            int totalInRight = LayerRightStackPanel.Children.Count;
+            int verticalInBottom = CountVerticalCardsInStack(LayerBottomStackPanel);
+            int verticalInRight = CountVerticalCardsInStack(LayerRightStackPanel);
+            int bottomCount = LayerBottomStackPanel.Children.Count;
+            int rightCount = LayerRightStackPanel.Children.Count;
+
+            if (bottomCount >= 8 && rightCount < 8)
             {
-                var m = LayerRightWrapper.Margin;
-                LayerRightWrapper.Margin = new Thickness(m.Left, m.Top - 40, m.Right, m.Bottom);
+                rightMargin.Top -= 40;
             }
-            else if (LayerBottomStackPanel.Children.Count == maxPerStack && LayerRightStackPanel.Children.Count == maxPerStack && LayerLeftStackPanel.Children.Count < 8)
+
+            if (totalInRight > 0)
             {
-                var m = LayerLeftWrapper.Margin;
-                LayerLeftWrapper.Margin = new Thickness(m.Left, m.Top + 40, m.Right, m.Bottom);
+                rightMargin.Top -= 40 * totalInRight;
             }
+
+            if (verticalInBottom > 0)
+            {
+                rightMargin.Right -= 10 * (verticalInBottom + 1);
+            }
+
+            if (verticalInBottom > 0 && bottomCount >= 8)
+            {
+                rightMargin.Top -= 20; 
+                rightMargin.Right = baseRightMargin.Right - 10; 
+            }
+
+            if (verticalInRight > 0)
+            {
+                rightMargin.Top += 10 * verticalInRight;
+            }
+
+            if (bottomCount >= 8 && rightCount >= 8)
+            {
+                leftMargin.Top += 40;
+            }
+
+            LayerRightWrapper.Margin = rightMargin;
+            LayerLeftWrapper.Margin = leftMargin;
+
+            debuglabel.Content = $"R: {rightMargin.Left}, {rightMargin.Top}, {rightMargin.Right}, {rightMargin.Bottom}";
         }
 
-
+        private int CountVerticalCardsInStack(StackPanel stack)
+        {
+            int count = 0;
+            foreach (Button child in stack.Children.OfType<Button>())
+            {
+                if (child.Tag is bool isVertical && isVertical)
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
 
         // Utility Methods
         private string GetBrailleFace(int number)
