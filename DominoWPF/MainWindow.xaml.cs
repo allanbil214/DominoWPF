@@ -520,9 +520,10 @@ namespace DominoWPF
 
         private void AdjustRightStackMargins(Button button)
         {
+            var m = LayerRightWrapper.Margin;
+
             if ((bool)button.Tag)
             {
-                var m = LayerRightWrapper.Margin;
                 LayerRightWrapper.Margin = new Thickness(m.Left, m.Top, m.Right + 10, m.Bottom);
             }
             
