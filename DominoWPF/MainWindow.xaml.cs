@@ -1,4 +1,5 @@
-﻿using System.Collections.Specialized;
+﻿using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data.Common;
 using System.Reflection;
 using System.Text;
@@ -54,6 +55,18 @@ namespace DominoWPF
             InitStackPanel();
             ChangeWindowSize();
             LoadStartup();
+
+
+            Button newButton = new();
+
+            newButton.Content = $"{GetBrailleFace(6)} : {GetBrailleFace(6)}";
+            newButton.Width = 40;
+            newButton.Height = 20;
+            newButton.FontSize = 12;
+            newButton.IsEnabled = false;
+            newButton.Style = (Style)FindResource(typeof(Button));
+
+            LayerLeftStackPanel.Children.Add(newButton);
 
             var m = LayerRightWrapper.Margin;
             debuglabel.Content = $"{m.Left.ToString()}, {m.Top.ToString()}, {m.Right.ToString()}, {m.Bottom.ToString()}";
@@ -573,18 +586,18 @@ namespace DominoWPF
                 topMargin.Right = baseTopMargin.Right + 62;
             }
 
-
-            //// left
-            //if (bottomCount >= 8 && rightCount >= 8)
-            //{
-            //    leftMargin.Top += topValue;
-            //}
+            if (verticalInRight > 0 && rightCount >= 8)
+            {
+                leftMargin.Top += (topValue - 16) * verticalInRight;
+                leftMargin.Top += 1;
+                leftMargin.Left = baseLeftMargin.Left + 62;
+            }
 
             LayerRightWrapper.Margin = rightMargin;
-            //LayerLeftWrapper.Margin = leftMargin;
+            LayerLeftWrapper.Margin = leftMargin;
             LayerTopStackPanel.Margin = topMargin;
 
-            debuglabel.Content = $"T: {topMargin.Left}, {topMargin.Top}, {topMargin.Right}, {topMargin.Bottom}"; // change these to left
+            debuglabel.Content = $"L: {leftMargin.Left}, {leftMargin.Top}, {leftMargin.Right}, {leftMargin.Bottom}"; 
         }
 
         private int CountVerticalCardsInStack(StackPanel stack)

@@ -134,15 +134,23 @@
                                 <Button Content="Button" Background="#FFFF6868"/>
                                 <Button Content="Button" Background="#FFFF6868"/>
                             </StackPanel>
-                            <StackPanel x:Name="LayerTopStackPanel" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="186,29,0,0" FlowDirection="RightToLeft">
-                                <Button Content="Button" Background="#FFFD5959"/>
-                                <Button Content="Button" Background="#FFFD5959"/>
-                                <Button Content="Button" Background="#FFFD5959"/>
-                                <Button Content="Button" Background="#FFFD5959"/>
-                                <Button Content="Button" Background="#FFFD5959"/>
-                                <Button Content="Button" Background="#FFFD5959"/>
-                                <Button Content="Button" Background="#FFFD5959"/>
-                                <Button Content="Button" Background="#FFFD5959"/>
+                            <StackPanel x:Name="LayerTopStackPanel" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,29,185,0" RenderTransformOrigin="0.5,0.5">
+                                <StackPanel.RenderTransform>
+                                    <TransformGroup>
+                                        <ScaleTransform/>
+                                        <SkewTransform/>
+                                        <RotateTransform Angle="180"/>
+                                        <TranslateTransform/>
+                                    </TransformGroup>
+                                </StackPanel.RenderTransform>
+                                <Button Content="Button" Background="#FFFF6868"/>
+                                <Button Content="Button" Background="#FFFF6868"/>
+                                <Button Content="Button" Background="#FFFF6868"/>
+                                <Button Content="Button" Background="#FFFF6868"/>
+                                <Button Content="Button" Background="#FFFF6868"/>
+                                <Button Content="Button" Background="#FFFF6868"/>
+                                <Button Content="Button" Background="#FFFF6868"/>
+                                <Button Content="Button" Background="#FFFF6868"/>
                             </StackPanel>
                             <Grid x:Name="LayerRightWrapper"
 								  HorizontalAlignment="Center"
