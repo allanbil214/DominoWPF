@@ -39,11 +39,12 @@ namespace DominoWPF
         private List<IPlayer> players = [];
         private GameController game = null;
         private int maxScore = 150;
+        bool changedLast = false;
 
         private readonly Thickness baseBottomMargin = new Thickness(0, 0, 0, 180);
         private readonly Thickness baseTopMargin = new Thickness(0, 29, 0, 0);
-        private readonly Thickness baseRightMargin = new Thickness(0, 319, -296, 0);
-        private readonly Thickness baseLeftMargin = new Thickness(-296, -319, 0, 0);
+        private readonly Thickness baseRightMargin = new Thickness(0, 319, -295, 0);
+        private readonly Thickness baseLeftMargin = new Thickness(-295, -319, 0, 0);
 
         // Constructor and Initialization
         public MainWindow()
@@ -521,10 +522,13 @@ namespace DominoWPF
         private void AdjustRightStackMargins(Button button)
         {
             var m = LayerRightWrapper.Margin;
-
             if ((bool)button.Tag)
             {
                 LayerRightWrapper.Margin = new Thickness(m.Left, m.Top, m.Right + 10, m.Bottom);
+                if (changedLast)
+                {
+                    LayerRightWrapper.Margin = new Thickness(m.Left, m.Top, m.Right + 10, m.Bottom);
+                }
             }
             
             if (LayerBottomStackPanel.Children.Count > 7)
@@ -534,10 +538,17 @@ namespace DominoWPF
                 {
                     MessageBox.Show("sedang");
                     Button stackButton = (Button)LayerBottomStackPanel.Children[7];
-                    if ((bool)stackButton.Tag)
+                    if ((bool)stackButton.Tag && !changedLast)
                     {
                         MessageBox.Show("paling dalam");
                         LayerRightWrapper.Margin = new Thickness(m.Left, m.Top -10*2, m.Right + 10, m.Bottom);
+                        changedLast = true;
+                    }
+                    else if (changedLast)
+                    {
+                        MessageBox.Show("paling dalam v2");
+                        LayerRightWrapper.Margin = new Thickness(m.Left, m.Top + 10 * 3, m.Right, m.Bottom);
+                        changedLast = false;
                     }
                 }
             }
