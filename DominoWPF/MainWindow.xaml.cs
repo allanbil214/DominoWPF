@@ -42,7 +42,7 @@ namespace DominoWPF
         bool changedLast = false;
 
         private readonly Thickness baseBottomMargin = new Thickness(0, 0, 0, 180);
-        private readonly Thickness baseTopMargin = new Thickness(0, 29, 0, 0);
+        private readonly Thickness baseTopMargin = new Thickness(0, 29, 185, 0);
         private readonly Thickness baseRightMargin = new Thickness(0, 319, -295, 0);
         private readonly Thickness baseLeftMargin = new Thickness(-295, -319, 0, 0);
 
@@ -527,7 +527,7 @@ namespace DominoWPF
                 LayerRightWrapper.Margin = new Thickness(m.Left, m.Top, m.Right + 10, m.Bottom);
                 if (changedLast)
                 {
-                    LayerRightWrapper.Margin = new Thickness(m.Left, m.Top, m.Right + 10, m.Bottom);
+                    LayerRightWrapper.Margin = new Thickness(m.Left, m.Top, m.Right - 10, m.Bottom);
                 }
             }
             
