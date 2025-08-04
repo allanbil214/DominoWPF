@@ -19,6 +19,17 @@ namespace DominoWPF
     /// Interaction logic for MainWindow.xaml
     /// </summary>
 
+
+    /* jika ada vertical di bottomlayer:
+    rightlayer.margin.right - 10* n+1
+
+    jika ada vertical di bottomlayer child max:
+    rightlayer.margin.top - 10*2
+    rightlayer.margin.right - 10
+
+    jika ada vertical di rightlayer:
+    rightlayer.margin.top +10 */
+
     public partial class MainWindow : Window
     {
         private Random rand = new Random();
