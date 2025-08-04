@@ -133,7 +133,7 @@
                                 <Button Content="Button" Background="#FFFF6868"/>
                                 <Button Content="Button" Background="#FFFF6868"/>
                             </StackPanel>
-                            <StackPanel x:Name="LayerTopStackPanel" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,29,0,0" RenderTransformOrigin="0.5,0.5">
+                            <StackPanel x:Name="LayerTopStackPanel" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,29,185,0" RenderTransformOrigin="0.5,0.5">
                                 <StackPanel.RenderTransform>
                                     <TransformGroup>
                                         <ScaleTransform/>

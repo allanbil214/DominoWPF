@@ -42,8 +42,8 @@ namespace DominoWPF
 
         private readonly Thickness baseBottomMargin = new Thickness(0, 0, 0, 180);
         private readonly Thickness baseTopMargin = new Thickness(0, 29, 0, 0);
-        private readonly Thickness baseRightMargin = new Thickness(0, 319, -297, 0);
-        private readonly Thickness baseLeftMargin = new Thickness(-297, -319, 0, 0);
+        private readonly Thickness baseRightMargin = new Thickness(0, 319, -296, 0);
+        private readonly Thickness baseLeftMargin = new Thickness(-296, -319, 0, 0);
 
         // Constructor and Initialization
         public MainWindow()
@@ -495,7 +495,9 @@ namespace DominoWPF
                     }
                 }
             }
+
             AdjustStackMargins(maxPerStack);
+            AdjustRightStackMargins(button);
         }
 
         private void CascadeOverflow(params StackPanel[] stackOrder)
@@ -516,6 +518,30 @@ namespace DominoWPF
             }
         }
 
+        private void AdjustRightStackMargins(Button button)
+        {
+            if ((bool)button.Tag)
+            {
+                var m = LayerRightWrapper.Margin;
+                LayerRightWrapper.Margin = new Thickness(m.Left, m.Top, m.Right + 10, m.Bottom);
+            }
+            
+            if (LayerBottomStackPanel.Children.Count > 7)
+            {
+                MessageBox.Show("awal");
+                if (LayerBottomStackPanel.Children[7] is Button)
+                {
+                    MessageBox.Show("sedang");
+                    Button stackButton = (Button)LayerBottomStackPanel.Children[7];
+                    if ((bool)stackButton.Tag)
+                    {
+                        MessageBox.Show("paling dalam");
+                        LayerRightWrapper.Margin = new Thickness(m.Left, m.Top -10*2, m.Right + 10, m.Bottom);
+                    }
+                }
+            }
+        }
+
         private void AdjustStackMargins(int maxPerStack)
         {
             //LayerRightWrapper.Margin = new Thickness(m.Left, m.Top, m.Right + (10 * 1), m.Bottom);
@@ -524,12 +550,12 @@ namespace DominoWPF
             {
                 LayerBottomStackPanel.Margin = new Thickness(0, 0, 0, 29);
             }
-            else if (LayerBottomStackPanel.Children.Count == maxPerStack && LayerRightWrapper.Children.Count <= 8)
+            else if (LayerBottomStackPanel.Children.Count == maxPerStack &&  LayerRightStackPanel.Children.Count < maxPerStack)
             {
                 var m = LayerRightWrapper.Margin;
                 LayerRightWrapper.Margin = new Thickness(m.Left, m.Top - 40, m.Right, m.Bottom);
             }
-            else if (LayerBottomStackPanel.Children.Count == maxPerStack && LayerRightWrapper.Children.Count == 8 && LayerLeftWrapper.Children.Count <= 8)
+            else if (LayerBottomStackPanel.Children.Count == maxPerStack && LayerRightStackPanel.Children.Count == maxPerStack && LayerLeftStackPanel.Children.Count < 8)
             {
                 var m = LayerLeftWrapper.Margin;
                 LayerLeftWrapper.Margin = new Thickness(m.Left, m.Top + 40, m.Right, m.Bottom);
@@ -657,7 +683,7 @@ namespace DominoWPF
         private void debugButton_Click(object sender, RoutedEventArgs e)
         {
             var m = LayerRightWrapper.Margin;
-            LayerRightWrapper.Margin = new Thickness(m.Left, m.Top, m.Right - 10, m.Bottom);
+            LayerRightWrapper.Margin = new Thickness(m.Left, m.Top, m.Right + 10, m.Bottom);
             debuglabel.Content = $"{m.Left.ToString()}, {m.Top.ToString()}, {m.Right.ToString()}, {m.Bottom.ToString()}";
 
         }
