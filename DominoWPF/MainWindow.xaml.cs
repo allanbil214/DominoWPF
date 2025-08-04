@@ -1,4 +1,5 @@
-﻿using System.Data.Common;
+﻿using System.Collections.Specialized;
+using System.Data.Common;
 using System.Reflection;
 using System.Text;
 using System.Windows;
@@ -17,6 +18,7 @@ namespace DominoWPF
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+
     public partial class MainWindow : Window
     {
         private Random rand = new Random();
@@ -28,25 +30,21 @@ namespace DominoWPF
         private int maxScore = 150;
 
         private readonly Thickness baseBottomMargin = new Thickness(0, 0, 0, 180);
-        private readonly Thickness baseTopMargin = new Thickness(0, 29, 185, 0);
-        private readonly Thickness baseRightMargin = new Thickness(0, 320, -297, 0);
-        private readonly Thickness baseLeftMargin = new Thickness(-297, -320, 0, 0);
-
-        private int bottomLayerVerticalButton = 0; // everytime ada vertical jika stacknya horizontal maka stack yg vertikal tambah 16 atau kurangi 16 right atau left marginnya
-        private int rightLayerVerticalButton = 0; // everytime there is a vertical button then rightlayer margin top dikurangi 14, also
-                                                  // if last bottomlayer's child is vertical then margin top of rightlayer then dikurangi 24 then
-        private int topLayerVerticalButton = 0; // if last bottomlayer's child is vertical then margin left of toplayer then dikurangi 30 then also tambah margin top 10
-                                                // also if last rightlayer's child is vertical then margin left of toplayer then dikurangi 10 then also tambah margin top 18
-        private int leftLayerVerticalButton = 0; // follow the pattern?
+        private readonly Thickness baseTopMargin = new Thickness(0, 29, 0, 0);
+        private readonly Thickness baseRightMargin = new Thickness(0, 319, -297, 0);
+        private readonly Thickness baseLeftMargin = new Thickness(-297, -319, 0, 0);
 
         // Constructor and Initialization
         public MainWindow()
         {
             InitializeComponent();
 
-            InitStackPanelPositions();
+            InitStackPanel();
             ChangeWindowSize();
             LoadStartup();
+
+            var m = LayerRightWrapper.Margin;
+            debuglabel.Content = $"{m.Left.ToString()}, {m.Top.ToString()}, {m.Right.ToString()}, {m.Bottom.ToString()}";
         }
 
         private void ChangeWindowSize()
@@ -85,7 +83,7 @@ namespace DominoWPF
             this.Effect = null;
         }
 
-        private void InitStackPanelPositions()
+        private void InitStackPanel()
         {
             LayerLeftWrapper.Margin = baseLeftMargin;
             LayerRightWrapper.Margin = baseRightMargin;
@@ -434,10 +432,12 @@ namespace DominoWPF
             newButton.Height = 20;
             newButton.FontSize = 12;
             newButton.IsEnabled = false;
-            newButton.Tag = lastCard;
             newButton.Style = (Style)FindResource(typeof(Button));
 
-            if (lastCard.GetLeftValueCard() == lastCard.GetRightValueCard())
+            bool isVertical = lastCard.GetLeftValueCard() == lastCard.GetRightValueCard();
+            newButton.Tag = isVertical;
+
+            if (isVertical)
             {
                 TransformGroup transformGroup = new();
                 transformGroup.Children.Add(new ScaleTransform());
@@ -451,71 +451,75 @@ namespace DominoWPF
             }
 
             StackPanelManager(newButton, isLeft);
-
         }
 
         private void StackPanelManager(Button button, bool isLeft)
         {
             const int maxPerStack = 8;
-
-            var stackOrder = new List<StackPanel> {
-                LayerBottomStackPanel,
-                LayerRightStackPanel,
-                LayerTopStackPanel,
-                LayerLeftStackPanel
-            };
-
+    
             if (isLeft)
             {
-                for (int i = 0; i < stackOrder.Count; i++)
-                {
-                    var current = stackOrder[i];
-
-                    if (current.Children.Count < maxPerStack)
-                        break;
-
-                    var next = stackOrder[(i + 1) % stackOrder.Count];
-                    if (next.Children.Count >= maxPerStack)
-                        continue;
-
-                    var childToPush = current.Children[current.Children.Count - 1];
-                    current.Children.RemoveAt(current.Children.Count - 1);
-                    next.Children.Insert(0, childToPush);
-                    AdjustStackMargins(current, maxPerStack);
-                }
-
                 LayerBottomStackPanel.Children.Insert(0, button);
+        
+                if (LayerBottomStackPanel.Children.Count > maxPerStack)
+                {
+                    CascadeOverflow(LayerBottomStackPanel, LayerRightStackPanel, LayerTopStackPanel, LayerLeftStackPanel);
+                }
             }
             else
             {
+                var stackOrder = new List<StackPanel> {
+                    LayerBottomStackPanel,
+                    LayerRightStackPanel,
+                    LayerTopStackPanel,
+                    LayerLeftStackPanel
+                };
+        
                 foreach (var stack in stackOrder)
                 {
                     if (stack.Children.Count < maxPerStack)
                     {
                         stack.Children.Add(button);
-                        AdjustStackMargins(stack, maxPerStack);
                         break;
                     }
                 }
             }
+            AdjustStackMargins(maxPerStack);
         }
 
-
-        private void AdjustStackMargins(StackPanel targetStack, int maxPerStack)
+        private void CascadeOverflow(params StackPanel[] stackOrder)
         {
-            if (targetStack == LayerBottomStackPanel && LayerBottomStackPanel.Children.Count == maxPerStack && targetStack.Margin.Bottom != 29)
+            const int maxPerStack = 8;
+    
+            for (int i = 0; i < stackOrder.Length - 1; i++)
+            {
+                var current = stackOrder[i];
+                var next = stackOrder[i + 1];
+        
+                if (current.Children.Count > maxPerStack)
+                {
+                    var childToMove = current.Children[current.Children.Count - 1];
+                    current.Children.RemoveAt(current.Children.Count - 1);
+                    next.Children.Insert(0, childToMove);
+                }
+            }
+        }
+
+        private void AdjustStackMargins(int maxPerStack)
+        {
+            //LayerRightWrapper.Margin = new Thickness(m.Left, m.Top, m.Right + (10 * 1), m.Bottom);
+
+            if (LayerBottomStackPanel.Children.Count == maxPerStack && LayerBottomStackPanel.Margin.Bottom != 29)
             {
                 LayerBottomStackPanel.Margin = new Thickness(0, 0, 0, 29);
             }
-            else if (targetStack == LayerRightStackPanel && targetStack.Children.Count <= 8)
+            else if (LayerBottomStackPanel.Children.Count == maxPerStack && LayerRightWrapper.Children.Count <= 8)
             {
-                MessageBox.Show("right");
                 var m = LayerRightWrapper.Margin;
                 LayerRightWrapper.Margin = new Thickness(m.Left, m.Top - 40, m.Right, m.Bottom);
             }
-            else if (targetStack == LayerLeftStackPanel && targetStack.Children.Count <= 8)
+            else if (LayerBottomStackPanel.Children.Count == maxPerStack && LayerRightWrapper.Children.Count == 8 && LayerLeftWrapper.Children.Count <= 8)
             {
-                MessageBox.Show("left");
                 var m = LayerLeftWrapper.Margin;
                 LayerLeftWrapper.Margin = new Thickness(m.Left, m.Top + 40, m.Right, m.Bottom);
             }
@@ -637,6 +641,28 @@ namespace DominoWPF
         private void PlaceRightButton_Click(object sender, RoutedEventArgs e)
         {
             PlaceCard("right");
+        }
+
+        private void debugButton_Click(object sender, RoutedEventArgs e)
+        {
+            var m = LayerRightWrapper.Margin;
+            LayerRightWrapper.Margin = new Thickness(m.Left, m.Top, m.Right - 10, m.Bottom);
+            debuglabel.Content = $"{m.Left.ToString()}, {m.Top.ToString()}, {m.Right.ToString()}, {m.Bottom.ToString()}";
+
+        }
+
+        private void debugButton2_Click(object sender, RoutedEventArgs e)
+        {
+            var m = LayerRightWrapper.Margin;
+            LayerRightWrapper.Margin = new Thickness(m.Left, m.Top - 10, m.Right, m.Bottom);
+            debuglabel.Content = $"{m.Left.ToString()}, {m.Top.ToString()}, {m.Right.ToString()}, {m.Bottom.ToString()}";
+
+        }
+
+        private void updateLabelDebug_Click(object sender, RoutedEventArgs e)
+        {
+            var m = LayerRightWrapper.Margin;
+            debuglabel.Content = $"{m.Left.ToString()}, {m.Top.ToString()}, {m.Right.ToString()}, {m.Bottom.ToString()}";
         }
     }
 }

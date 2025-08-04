@@ -78,5 +78,16 @@ namespace DominoWPF
                 e.Handled = true;
             }
         }
+
+        private void fillAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            player1TextBox.Text = "John";
+            player2TextBox.Text = "Jane";
+            player3TextBox.Text = "Rusty";
+            player4TextBox.Text = "Maris";
+
+            playerNumberComboBox.SelectedIndex = 3;
+            maxScoreTextBox.Text = "10";
+        }
     }
 }
