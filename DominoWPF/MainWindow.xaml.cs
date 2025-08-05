@@ -29,12 +29,11 @@ namespace DominoWPF
         private List<IPlayer> players = [];
         private GameController game = null;
         private int maxScore = 150;
-        bool changedLast = false;
 
         private readonly Thickness baseBottomMargin = new Thickness(0, 0, 0, 180);
         private readonly Thickness baseTopMargin = new Thickness(0, 29, 185, 0);
         private readonly Thickness baseRightMargin = new Thickness(0, 319, -298, 0);
-        private readonly Thickness baseLeftMargin = new Thickness(-297, -320, 0, 0);
+        private readonly Thickness baseLeftMargin = new Thickness(-285, 10, 0, 0); // og -297, -320, 0, 0
 
         // Constructor and Initialization
         public MainWindow()
@@ -201,37 +200,60 @@ namespace DominoWPF
 
         private void ChangePlayerTurn()
         {
+            if (HandleBlockedPlayers()) return;
+
+            int currentIndex = EnsureValidPlayerIndex();
+            SetPlayerTurnUI(currentIndex);
+        }
+
+        private bool HandleBlockedPlayers()
+        {
             var discardTile = game.GetDiscardTile();
             int skipCount = 0;
 
             while (!game.HasPlayableCard(discardTile) && skipCount < players.Count)
             {
-                MessageBox.Show($"{game.GetCurrentPlayer().GetName()} has no playable cards! Skipping turn.", "Skipping Player", MessageBoxButton.OK, MessageBoxImage.Information);
+                ShowSkipMessage();
                 game.NextTurn();
                 skipCount++;
 
                 if (skipCount >= players.Count)
                 {
-                    MessageBox.Show("No players can play! Game is blocked.", "Game Blocked", MessageBoxButton.OK, MessageBoxImage.Information);
-                    game.HandleBlockedGame();
-
-                    string blockedWinner = game.GetCurrentPlayer().GetName();
-                    MessageBox.Show($"{blockedWinner} wins the blocked game!", $"{blockedWinner} Win This Round!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-
-                    var gameWinner = players.FirstOrDefault(p => p.GetScore() >= maxScore);
-                    if (gameWinner != null)
-                    {
-                        MessageBox.Show($"{gameWinner.GetName()} wins the entire game with {gameWinner.GetScore()} points!", $"{gameWinner.GetName()} Win The Game!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
-
-                        ResetGame();
-                        return;
-                    }
-
-                    StartNewRound();
-                    return;
+                    HandleBlockedGameState();
+                    return true;
                 }
             }
 
+            return false;
+        }
+
+        private void ShowSkipMessage()
+        {
+            MessageBox.Show($"{game.GetCurrentPlayer().GetName()} has no playable cards! Skipping turn.");
+        }
+
+        private void HandleBlockedGameState()
+        {
+            MessageBox.Show("No players can play! Game is blocked.");
+            game.HandleBlockedGame();
+
+            string blockedWinner = game.GetCurrentPlayer().GetName();
+            MessageBox.Show($"{blockedWinner} wins the blocked game!");
+
+            var gameWinner = players.FirstOrDefault(p => p.GetScore() >= maxScore);
+            if (gameWinner != null)
+            {
+                MessageBox.Show($"{gameWinner.GetName()} wins the entire game with {gameWinner.GetScore()} points!");
+                ResetGame();
+            }
+            else
+            {
+                StartNewRound();
+            }
+        }
+
+        private int EnsureValidPlayerIndex()
+        {
             int currentIndex = game.GetCurrentPlayerIndex();
 
             while (currentIndex >= players.Count)
@@ -240,8 +262,9 @@ namespace DominoWPF
                 currentIndex = game.GetCurrentPlayerIndex();
             }
 
-            SetPlayerTurnUI(currentIndex);
+            return currentIndex;
         }
+
 
         private void SetPlayerTurnUI(int currentIndex)
         {
@@ -306,10 +329,11 @@ namespace DominoWPF
         private void LoadButton(StackPanel stackPanel, IPlayer player, bool isHorizontal)
         {
             var playerHand = game.GetPlayerHand(player);
+            var discardTile = game.GetDiscardTile();
 
             foreach (var card in playerHand)
             {
-                Button newButton = CreateDominoButton(card, IsPlayableCard(card));
+                Button newButton = CreateDominoButton(card, game.FindPlayableCard(discardTile, card));
                 newButton.Click += (sender, EventArgs) => { GetButtonValue(sender, EventArgs, newButton, card); };
 
                 stackPanel.Children.Add(newButton);
@@ -345,29 +369,17 @@ namespace DominoWPF
             return newButton;
         }
 
-        private bool IsPlayableCard(ICard card)
-        {
-            var discardTile = game.GetDiscardTile();
-
-            if (game.IsEmpty()) return true;
-
-            int leftValue = discardTile.GetLeftValueDiscardTile();
-            int rightValue = discardTile.GetRightValueDiscardTile();
-
-            return (card.GetLeftValueCard() == leftValue || card.GetLeftValueCard() == rightValue ||
-                card.GetRightValueCard() == rightValue || card.GetRightValueCard() == leftValue);
-        }
-
         private void UpdateCardAvailability(StackPanel stackPanel)
         {
             var currentPlayer = game.GetCurrentPlayer();
             var playerHand = game.GetPlayerHand(currentPlayer);
+            var discardTile = game.GetDiscardTile();
 
             for (int i = 0; i < Math.Min(stackPanel.Children.Count, playerHand.Count); i++)
             {
                 if (stackPanel.Children[i] is Button button)
                 {
-                    button.IsEnabled = IsPlayableCard(playerHand[i]);
+                    button.IsEnabled = game.FindPlayableCard(discardTile, playerHand[i]);
                 }
             }
         }
@@ -555,8 +567,6 @@ namespace DominoWPF
             {
                 rightMargin.Top -= (topValue - 12);
                 rightMargin.Right = baseRightMargin.Right + 12 * (verticalInBottom + 1);
-                topMargin.Right = baseTopMargin.Right + 12 * (verticalInBottom + 1);
-
             }
 
             if (verticalInRight > 0)
@@ -572,21 +582,16 @@ namespace DominoWPF
                     {
                         rightMargin.Top += 24;
                         rightMargin.Right -= 25;
-                        topMargin.Right -= 1;
-                        topMargin.Top += 5;
                     }
                     else if ((bool)bottomButton.Tag && !(bool)rightButton.Tag)
                     {
                         rightMargin.Top -= 4;
                         rightMargin.Right -= 3;
-                        topMargin.Right += 2;
                     }
                     else if (!(bool)bottomButton.Tag && !(bool)rightButton.Tag)
                     {
                         rightMargin.Top += 20;
                         rightMargin.Right -= 4;
-                        topMargin.Right += 2;
-                        topMargin.Top += 9;
                     }
                 }
             }
@@ -597,31 +602,101 @@ namespace DominoWPF
                 rightMargin.Right += 1;
             }
 
-            if (verticalInRight > 0 && rightCount >= 8)
+
+            if (bottomCount > 0 && LayerBottomStackPanel.Children[bottomCount - 1] is Button bottomLastButton)
             {
-                topMargin.Top += (topValue - 14) * verticalInRight;
-                topMargin.Top += 10;
-                topMargin.Right -= 5;
+                if ((bool)bottomLastButton.Tag) 
+                {
+                    topMargin.Right -= 6; 
+                    topMargin.Top -= 8;
+                }
             }
 
-            if (topCount > 0 && rightCount == 8)
+            if (rightCount > 0 && LayerRightStackPanel.Children[0] is Button rightFirstButton)
             {
-                if (LayerTopStackPanel.Children[0] is Button topButton && LayerRightStackPanel.Children[7] is Button rightButton && LayerBottomStackPanel.Children[7] is Button bottomButton)
+                if ((bool)rightFirstButton.Tag) 
                 {
-                    if (!(bool)rightButton.Tag && (bool)topButton.Tag)
+                    topMargin.Top += 1; 
+                    topMargin.Right -= 10;
+                }
+            }
+
+            if (rightCount > 0 && LayerRightStackPanel.Children[rightCount - 1] is Button rightLastButton)
+            {
+                if ((bool)rightLastButton.Tag) 
+                {
+                    topMargin.Top += 6; 
+                    topMargin.Right += 5;
+                }
+            }
+
+            if (topCount > 0 && LayerTopStackPanel.Children[0] is Button topFirstButton)
+            {
+                if ((bool)topFirstButton.Tag) 
+                {
+                    topMargin.Right += 2; 
+                    topMargin.Top -= 8;
+                }
+            }
+
+            if (topCount > 0 && rightCount > 0)
+            {
+                var bottomLast = LayerBottomStackPanel.Children[7] as Button;
+                var rightLast = LayerRightStackPanel.Children[7] as Button;
+                var topFirst = LayerTopStackPanel.Children[0] as Button;
+                var rightFirst = LayerRightStackPanel.Children[0] as Button;
+
+                if (bottomLast != null && rightLast != null)
+                {
+                    if ((bool)bottomLast.Tag && (bool)rightLast.Tag) 
                     {
-                        topMargin.Right += 2;
+                        topMargin.Right += 4; 
+                        topMargin.Top -= 6; 
                     }
-                    else if ((bool)rightButton.Tag && !(bool)topButton.Tag)
+                    else if ((bool)bottomLast.Tag && !(bool)rightLast.Tag) 
                     {
-                        topMargin.Top += 4;
-                        topMargin.Right += 14;
-                        if ((bool)bottomButton.Tag)
-                        {
-                            topMargin.Top -= 4;
-                        }
+                        topMargin.Top -= 2; 
+                    }
+
+                    if ((bool)topFirst.Tag && (bool)bottomLast.Tag)
+                    {
+                        topMargin.Right += 4;
+                        topMargin.Top -= 3;
+                    }
+
+                    if ((bool)topFirst.Tag && (bool)rightFirst.Tag) 
+                    {
+                        topMargin.Right += 4; 
+                        topMargin.Top -= 6; 
                     }
                 }
+            }
+
+            if (verticalInBottom > 0 && bottomCount >= 8)
+            {
+                topMargin.Right += 8 * verticalInBottom; 
+            }
+
+            if (rightCount >= 8 && verticalInRight > 0)
+            {
+                topMargin.Top += 10 * verticalInRight; 
+                topMargin.Top += 4;
+            }
+
+            if (verticalInRight == 0 && bottomCount > 0 && rightCount > 0)
+            {
+                var bottomLast = LayerBottomStackPanel.Children[bottomCount - 1] as Button;
+                if (bottomLast != null && (bool)bottomLast.Tag) 
+                {
+                    topMargin.Top -= 4; 
+                    topMargin.Right += 2; 
+                }
+            }
+
+            if (verticalInRight > 0)
+            {
+                topMargin.Top += 1 * verticalInRight; 
+                topMargin.Top += 2;
             }
 
             if (verticalInRight == 0)

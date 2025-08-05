@@ -79,7 +79,7 @@ namespace DominoWPF
             }
         }
 
-        private void fillAllButton_Click(object sender, RoutedEventArgs e)
+        private void Label_MouseEnter(object sender, MouseEventArgs e)
         {
             player1TextBox.Text = "John";
             player2TextBox.Text = "Jane";

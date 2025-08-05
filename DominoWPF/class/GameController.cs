@@ -216,24 +216,14 @@ namespace DominoWPF
                 card.GetRightValueCard() == rightValue || card.GetRightValueCard() == leftValue);
         }
 
-        public ICard FindPlayableCard(IDiscardTile discardTile) // not used?
+        public bool FindPlayableCard(IDiscardTile discardTile, ICard cardToCheck)   // originally ICard FindPlayableCard
         {
-            var currentPlayer = _players[_currentPlayerIndex];
-            var currentHand = GetPlayerHand(currentPlayer);
-
-            if (discardTile.GetPlayedCards().Count == 0)
-            {
-                return currentHand.FirstOrDefault();
-            }
-
+            if (IsEmpty()) return true;
             int leftValue = discardTile.GetLeftValueDiscardTile();
             int rightValue = discardTile.GetRightValueDiscardTile();
-
-            return currentHand.FirstOrDefault(card =>
-                card.GetLeftValueCard() == leftValue || card.GetLeftValueCard() == rightValue ||
-                card.GetRightValueCard() == rightValue || card.GetRightValueCard() == leftValue);
+            return (cardToCheck.GetLeftValueCard() == leftValue || cardToCheck.GetLeftValueCard() == rightValue ||
+                cardToCheck.GetRightValueCard() == rightValue || cardToCheck.GetRightValueCard() == leftValue);
         }
-
         public bool PlayCard(IPlayer player, ICard card, string positionCard)
         {
             var playerHand = GetPlayerHand(player);
