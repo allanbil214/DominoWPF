@@ -517,9 +517,9 @@ namespace DominoWPF
                 MiddleEllipse.Visibility = Visibility.Visible;
             }
 
-            var rightMargin = baseRightMargin;
-            var leftMargin = baseLeftMargin;
-            var topMargin = baseTopMargin;
+            var rightMargin = new Thickness(baseRightMargin.Left, baseRightMargin.Top, baseRightMargin.Right, baseRightMargin.Bottom);
+            var leftMargin = new Thickness(baseLeftMargin.Left, baseLeftMargin.Top, baseLeftMargin.Right, baseLeftMargin.Bottom);
+            var topMargin = new Thickness(baseTopMargin.Left, baseTopMargin.Top, baseTopMargin.Right, baseTopMargin.Bottom);
 
             int totalInRight = LayerRightStackPanel.Children.Count;
             int totalInTop = LayerTopStackPanel.Children.Count;
@@ -550,6 +550,8 @@ namespace DominoWPF
             {
                 rightMargin.Top -= (topValue - 12);
                 rightMargin.Right = baseRightMargin.Right + 12 * (verticalInBottom + 1);
+                topMargin.Right = baseTopMargin.Right + 12 * (verticalInBottom + 1);
+
             }
 
             if (verticalInRight > 0)
@@ -557,14 +559,67 @@ namespace DominoWPF
                 rightMargin.Top += (topValue - 14) * verticalInRight;
             }
 
-            if (verticalInRight > 0 && rightCount >= 8)
+            if (rightCount > 0 && bottomCount == 8)
             {
-                topMargin.Top += (topValue - 16) * verticalInRight;
-                topMargin.Top += 1;
-                topMargin.Right = baseTopMargin.Right + 62;
+                if (LayerBottomStackPanel.Children[7] is Button bottomButton && LayerRightStackPanel.Children[0] is Button rightButton)
+                {
+                    if (!(bool)bottomButton.Tag && (bool)rightButton.Tag)
+                    {
+                        rightMargin.Top += 24;
+                        rightMargin.Right -= 25;
+                        topMargin.Right -= 4;
+                        topMargin.Top += 5;
+                    }
+                    else if ((bool)bottomButton.Tag && !(bool)rightButton.Tag)
+                    {
+                        rightMargin.Top -= 4;
+                        rightMargin.Right -= 3;
+                        topMargin.Top -= 5;
+                        topMargin.Right -= 2;
+                    }
+                    else if (!(bool)bottomButton.Tag && !(bool)rightButton.Tag)
+                    {
+                        rightMargin.Top += 20;
+                        rightMargin.Right -= 4;
+                        topMargin.Right += 2;
+                        topMargin.Top += 9;
+                    }
+                }
             }
 
-            if(verticalInRight == 0)
+            if (verticalInBottom == 0)
+            {
+                rightMargin.Top -= 17;
+                rightMargin.Right += 1;
+            }
+
+            if (verticalInRight > 0 && rightCount >= 8)
+            {
+                topMargin.Top += (topValue - 14) * verticalInRight;
+                topMargin.Top += 10;
+            }
+
+            if (topCount > 0 && rightCount == 8)
+            {
+                if (LayerTopStackPanel.Children[0] is Button topButton && LayerRightStackPanel.Children[7] is Button rightButton && LayerBottomStackPanel.Children[7] is Button bottomButton)
+                {
+                    if (!(bool)rightButton.Tag && (bool)topButton.Tag)
+                    {
+                        topMargin.Right -= 1;
+                    }
+                    else if ((bool)rightButton.Tag && !(bool)topButton.Tag)
+                    {
+                        topMargin.Top += 4;
+                        topMargin.Right += 10;
+                        if ((bool)bottomButton.Tag)
+                        {
+                            topMargin.Top -= 4;
+                        }
+                    }
+                }
+            }
+
+            if (verticalInRight == 0)
             {
                 leftMargin.Top += 40;
             }
@@ -580,7 +635,7 @@ namespace DominoWPF
             LayerLeftWrapper.Margin = leftMargin;
             LayerTopStackPanel.Margin = topMargin;
 
-            debuglabel.Content = $"L: {leftMargin.Left}, {leftMargin.Top}, {leftMargin.Right}, {leftMargin.Bottom}"; 
+            debuglabel.Content = $"T: {topMargin.Left}, {topMargin.Top}, {topMargin.Right}, {topMargin.Bottom}"; 
         }
 
         private int CountVerticalCardsInStack(StackPanel stack)
