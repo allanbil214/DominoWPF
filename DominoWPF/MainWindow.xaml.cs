@@ -206,8 +206,7 @@ namespace DominoWPF
             game.ShuffleDeck();
             game.InitHand();
 
-            var startingPlayer = game.DetermineStartingPlayer();
-            game.SetCurrentPlayer(startingPlayer);
+            game.StartGame();
 
             LoadPlayerCards();
             ChangePlayerTurn();
