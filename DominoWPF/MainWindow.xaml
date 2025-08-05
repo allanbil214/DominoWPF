@@ -229,7 +229,6 @@
 
                             <Border BorderBrush="#FFCCCCCC" BorderThickness="1"/>
                         </Grid>
-                        <Label x:Name="debuglabel" Content="Label" HorizontalAlignment="Left" Margin="30,246,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="1"/>
                     </Grid>
                 </Grid>
             </Border>

@@ -28,7 +28,6 @@
         <Separator HorizontalAlignment="Left" Margin="242,324,0,0" VerticalAlignment="Top" Height="4" Width="98"/>
         <Label x:Name="maxScoreLabel" Content="Max Score:" HorizontalAlignment="Left" Margin="29,350,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="maxScoreTextBox" HorizontalAlignment="Left" Margin="102,352,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="238" Height="22" PreviewTextInput="player4TextBox_Copy_PreviewTextInput"/>
-        <Button x:Name="fillAllButton" Content="Button" HorizontalAlignment="Left" Margin="302,416,0,0" VerticalAlignment="Top" Click="fillAllButton_Click"/>
 
     </Grid>
 </Window>

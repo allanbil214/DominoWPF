@@ -44,8 +44,6 @@ namespace DominoWPF
             InitStackPanel();
             ChangeWindowSize();
             LoadStartup();
-
-            //AddDebugButton();
         }
 
         private void ChangeWindowSize()
@@ -208,22 +206,22 @@ namespace DominoWPF
 
             while (!game.HasPlayableCard(discardTile) && skipCount < players.Count)
             {
-                MessageBox.Show($"{game.GetCurrentPlayer().GetName()} has no playable cards! Skipping turn.");
+                MessageBox.Show($"{game.GetCurrentPlayer().GetName()} has no playable cards! Skipping turn.", "Skipping Player", MessageBoxButton.OK, MessageBoxImage.Information);
                 game.NextTurn();
                 skipCount++;
 
                 if (skipCount >= players.Count)
                 {
-                    MessageBox.Show("No players can play! Game is blocked.");
+                    MessageBox.Show("No players can play! Game is blocked.", "Game Blocked", MessageBoxButton.OK, MessageBoxImage.Information);
                     game.HandleBlockedGame();
 
                     string blockedWinner = game.GetCurrentPlayer().GetName();
-                    MessageBox.Show($"{blockedWinner} wins the blocked game!");
+                    MessageBox.Show($"{blockedWinner} wins the blocked game!", $"{blockedWinner} Win This Round!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 
                     var gameWinner = players.FirstOrDefault(p => p.GetScore() >= maxScore);
                     if (gameWinner != null)
                     {
-                        MessageBox.Show($"{gameWinner.GetName()} wins the entire game with {gameWinner.GetScore()} points!");
+                        MessageBox.Show($"{gameWinner.GetName()} wins the entire game with {gameWinner.GetScore()} points!", $"{gameWinner.GetName()} Win The Game!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 
                         ResetGame();
                         return;
@@ -338,7 +336,8 @@ namespace DominoWPF
                 VerticalAlignment = VerticalAlignment.Center,
                 IsEnabled = isEnabled,
                 Tag = card,
-                Style = (Style)FindResource(typeof(Button))
+                Style = (Style)FindResource(typeof(Button)),
+                Background = Brushes.White
             };
         }
 
@@ -373,7 +372,7 @@ namespace DominoWPF
         {
             if (selectedCard == null || currentButton == null)
             {
-                MessageBox.Show("Please select a card first!");
+                MessageBox.Show("Please select a card first!", "Select Card", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
 
@@ -394,7 +393,7 @@ namespace DominoWPF
             }
             else
             {
-                MessageBox.Show($"Cannot place card on the {position} side!");
+                MessageBox.Show($"Cannot place card on the {position} side!", "Select Different Side", MessageBoxButton.OK, MessageBoxImage.Warning);
                 currentButton.IsEnabled = true;
                 currentButton = null;
             }
@@ -436,6 +435,7 @@ namespace DominoWPF
             newButton.FontSize = 12;
             newButton.IsEnabled = false;
             newButton.Style = (Style)FindResource(typeof(Button));
+            newButton.Background = Brushes.White;
 
             bool isVertical = lastCard.GetLeftValueCard() == lastCard.GetRightValueCard();
             newButton.Tag = isVertical;
@@ -634,8 +634,6 @@ namespace DominoWPF
             LayerRightWrapper.Margin = rightMargin;
             LayerLeftWrapper.Margin = leftMargin;
             LayerTopStackPanel.Margin = topMargin;
-
-            debuglabel.Content = $"T: {topMargin.Left}, {topMargin.Top}, {topMargin.Right}, {topMargin.Bottom}"; 
         }
 
         private int CountVerticalCardsInStack(StackPanel stack)
@@ -718,12 +716,12 @@ namespace DominoWPF
                 int points = game.CalculateScore();
                 game.EndGame();
 
-                MessageBox.Show($"{winnerName} wins the round with {points} points!");
+                MessageBox.Show($"{winnerName} wins the round with {points} points!", $"{winnerName} Win The Round!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 
                 var gameWinner = players.FirstOrDefault(p => p.GetScore() >= maxScore);
                 if (gameWinner != null)
                 {
-                    MessageBox.Show($"{gameWinner.GetName()} wins the entire game with {gameWinner.GetScore()} points!");
+                    MessageBox.Show($"{gameWinner.GetName()} wins the entire game with {gameWinner.GetScore()} points!", $"{gameWinner.GetName()} Won The Game", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                     ResetGame();
                     return true;
                 }
@@ -765,31 +763,6 @@ namespace DominoWPF
         private void PlaceRightButton_Click(object sender, RoutedEventArgs e)
         {
             PlaceCard("right");
-        }
-
-        private void AddDebugButton()
-        {
-
-            Button newButton = new();
-
-            newButton.Content = $"{GetBrailleFace(6)} : {GetBrailleFace(6)}";
-            newButton.Width = 40;
-            newButton.Height = 20;
-            newButton.FontSize = 12;
-            newButton.IsEnabled = false;
-            newButton.Style = (Style)FindResource(typeof(Button));
-            TransformGroup transformGroup = new();
-            transformGroup.Children.Add(new ScaleTransform());
-            transformGroup.Children.Add(new SkewTransform());
-            transformGroup.Children.Add(new RotateTransform(90));
-            transformGroup.Children.Add(new TranslateTransform());
-
-            newButton.RenderTransform = transformGroup;
-            newButton.RenderTransformOrigin = new Point(0.5, 0.5);
-            newButton.Margin = new Thickness(-8, 0, -8, 0);
-
-            LayerLeftStackPanel.Children.Add(newButton);
-
         }
     }
 }
