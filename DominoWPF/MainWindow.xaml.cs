@@ -555,7 +555,7 @@ namespace DominoWPF
             {
                 rightMargin.Top -= (topValue - 12);
                 rightMargin.Right = baseRightMargin.Right + 12 * (verticalInBottom + 1);
-                topMargin.Right = baseTopMargin.Right + 15 * (verticalInBottom + 1);
+                topMargin.Right = baseTopMargin.Right + 12 * (verticalInBottom + 1);
 
             }
 
@@ -572,14 +572,13 @@ namespace DominoWPF
                     {
                         rightMargin.Top += 24;
                         rightMargin.Right -= 25;
-                        topMargin.Right += 2;
+                        topMargin.Right -= 1;
                         topMargin.Top += 5;
                     }
                     else if ((bool)bottomButton.Tag && !(bool)rightButton.Tag)
                     {
                         rightMargin.Top -= 4;
                         rightMargin.Right -= 3;
-                        topMargin.Top -= 5;
                         topMargin.Right += 2;
                     }
                     else if (!(bool)bottomButton.Tag && !(bool)rightButton.Tag)
@@ -602,6 +601,7 @@ namespace DominoWPF
             {
                 topMargin.Top += (topValue - 14) * verticalInRight;
                 topMargin.Top += 10;
+                topMargin.Right -= 5;
             }
 
             if (topCount > 0 && rightCount == 8)
@@ -615,7 +615,7 @@ namespace DominoWPF
                     else if ((bool)rightButton.Tag && !(bool)topButton.Tag)
                     {
                         topMargin.Top += 4;
-                        topMargin.Right += 10;
+                        topMargin.Right += 14;
                         if ((bool)bottomButton.Tag)
                         {
                             topMargin.Top -= 4;
