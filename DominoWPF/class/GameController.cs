@@ -34,7 +34,7 @@ namespace DominoWPF
             OnStart?.Invoke(null);
         }
 
-        // new func not in class diagram
+        // new func not in class diagram,
 
         public int GetCurrentPlayerIndex()
         {
@@ -150,7 +150,7 @@ namespace DominoWPF
             OnScore?.Invoke();
         }
 
-        // end of new func not in class diagram
+        // end of new func not in class diagram,
 
         public void AddCard(ICard card)
         {

@@ -86,7 +86,7 @@ namespace DominoWPF
             player3TextBox.Text = "Rusty";
             player4TextBox.Text = "Maris";
 
-            playerNumberComboBox.SelectedIndex = 3;
+            playerNumberComboBox.SelectedIndex = 2;
             maxScoreTextBox.Text = "10";
         }
     }
