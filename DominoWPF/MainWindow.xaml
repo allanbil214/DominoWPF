@@ -8,6 +8,46 @@
         Title="Like A Domino | WPF Edition" Height="722" Width="885" 
         MinWidth="600" MinHeight="400" 
         WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <FontFamily x:Key="edosz" >/fonts/#EDO SZ</FontFamily>
+        <Style TargetType="Button" x:Key="BrightDisabledButtonStyle" BasedOn="{StaticResource {x:Type Button}}">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Opacity" Value="1"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="HighContrastDisabledButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="Black"/>
+                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="BorderBrush" Value="Black"/>
+                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="FontWeight" Value="SemiBold"/>
+                    <Setter Property="Opacity" Value="1"/>
+
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style x:Key="ExtraDimDisabledButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Foreground" Value="Gray"/>
+                    <Setter Property="Background" Value="#FFEEEEEE"/>
+                    <!-- light gray -->
+                    <Setter Property="BorderBrush" Value="#FFCCCCCC"/>
+                    <!-- softer border -->
+                    <Setter Property="Opacity" Value="0.5"/>
+                    <!-- very dim -->
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
+
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="86*"/>
@@ -79,6 +119,9 @@
                         </Grid.ColumnDefinitions>
                         <Grid x:Name="Player3HandGrid" Grid.Row="0" Grid.Column="1" 
                         Background="#FFFFFDC7" Margin="5">
+                            <Grid.Effect>
+                                <DropShadowEffect Opacity="0.5"/>
+                            </Grid.Effect>
                             <ScrollViewer HorizontalScrollBarVisibility="Auto" 
                             VerticalScrollBarVisibility="Disabled">
                                 <StackPanel x:Name="Player3CardStackPanel" 
@@ -90,6 +133,9 @@
                         </Grid>
                         <Grid x:Name="Player4HandGrid" Grid.Row="1" Grid.Column="0" 
                         Background="#FFFFFDC7" Margin="5">
+                            <Grid.Effect>
+                                <DropShadowEffect Opacity="0.5"/>
+                            </Grid.Effect>
                             <ScrollViewer VerticalScrollBarVisibility="Auto" 
                             HorizontalScrollBarVisibility="Disabled">
                                 <StackPanel
@@ -99,6 +145,9 @@
                         </Grid>
                         <Grid x:Name="Player2HandGrid" Grid.Row="1" Grid.Column="2" 
                         Background="#FFFFFDC7" Margin="5">
+                            <Grid.Effect>
+                                <DropShadowEffect Opacity="0.5"/>
+                            </Grid.Effect>
                             <ScrollViewer VerticalScrollBarVisibility="Auto" 
                             HorizontalScrollBarVisibility="Disabled">
                                 <StackPanel x:Name="Player2CardStackPanel" 
@@ -110,6 +159,9 @@
                         </Grid>
                         <Grid x:Name="Player1HandGrid" Grid.Row="2" Grid.Column="1" 
                         Background="#FFFFFDC7" Margin="5">
+                            <Grid.Effect>
+                                <DropShadowEffect Opacity="0.5"/>
+                            </Grid.Effect>
                             <ScrollViewer HorizontalScrollBarVisibility="Auto" 
                             VerticalScrollBarVisibility="Disabled">
                                 <StackPanel x:Name="Player1CardStackPanel" 
@@ -122,6 +174,15 @@
 
                         <Grid x:Name="ContentGrid" Grid.Row="1" Grid.Column="1" 
                         Background="#FFBCFF86" Margin="5">
+                            <Grid.Effect>
+                                <DropShadowEffect Opacity="0.5"/>
+                            </Grid.Effect>
+
+
+                            <Image x:Name="kiryu" Source="/img/kiryu.png" Stretch="Fill" Opacity="0.1"/>
+
+
+                            <Label Content="LIKE A DOMINO" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="{StaticResource edosz}" FontSize="68" Height="90" Width="449" Foreground="#FFFF4747" Margin="130,0,0,0" Opacity="0.5"/>
 
 
                             <StackPanel x:Name="LayerBottomStackPanel" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,29">
@@ -201,7 +262,7 @@
                             <Button x:Name="PlaceLeftButton" 
 							   HorizontalAlignment="Left" 
 							   VerticalAlignment="Center"
-							   Margin="70,0,0,0"
+							   Margin="30,0,0,0"
 							   Content="◀ Place Left" 
 							   Click="PlaceLeftButton_Click"
 							   Width="100" 
@@ -218,9 +279,9 @@
 								FontSize="14"
 								Background="#FFE6F3FF"
 								BorderBrush="#FF4A90E2"
-								HorizontalAlignment="Right" 
+								HorizontalAlignment="Left" 
 								VerticalAlignment="Center"
-								Margin="0,0,70,0"/>
+								Margin="558,0,0,0"/>
                             <Ellipse x:Name="MiddleEllipse" Width="10" Height="10" 
 									 Fill="#FF666666" 
 									 HorizontalAlignment="Center" 

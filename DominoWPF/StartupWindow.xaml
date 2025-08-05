@@ -17,7 +17,7 @@
         <TextBox x:Name="player2TextBox" HorizontalAlignment="Left" Margin="127,210,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213" Height="22"/>
         <TextBox x:Name="player3TextBox" HorizontalAlignment="Left" Margin="127,240,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213" Height="22"/>
         <TextBox x:Name="player4TextBox" HorizontalAlignment="Left" Margin="127,272,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213" Height="22"/>
-        <Label Content="Like a Domino" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" FontSize="36" MouseEnter="Label_MouseEnter"/>
+        <Label Content="Like a Domino" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" FontSize="36" MouseEnter="Label_MouseEnter" />
         <Label Content="WPF Edition" HorizontalAlignment="Left" Margin="228,50,0,0" VerticalAlignment="Top"/>
         <Label Content="Fill in the Names" HorizontalAlignment="Left" Margin="138,136,0,0" VerticalAlignment="Top"/>
         <Separator HorizontalAlignment="Left" Margin="34,148,0,0" VerticalAlignment="Top" Height="4" Width="98"/>
