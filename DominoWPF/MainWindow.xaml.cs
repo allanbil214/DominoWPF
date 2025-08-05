@@ -326,26 +326,30 @@ namespace DominoWPF
 
         private Button CreateDominoButton(ICard card, bool isEnabled)
         {
-            return new Button
+            Button newButton = new Button();
+            newButton.Content = $"{GetBrailleFace(card.GetLeftValueCard())} │ {GetBrailleFace(card.GetRightValueCard())}";
+            newButton.Width = 75;
+            newButton.Height = 25;
+            newButton.FontSize = 16;
+            newButton.HorizontalAlignment = HorizontalAlignment.Center;
+            newButton.VerticalAlignment = VerticalAlignment.Center;
+            newButton.IsEnabled = isEnabled;
+            newButton.Tag = card;
+            newButton.Style = (Style)FindResource(typeof(Button));
+
+            game.AddCard(card);
+            if (game.IsDoubleValue())
             {
-                Content = $"{GetBrailleFace(card.GetLeftValueCard())} │ {GetBrailleFace(card.GetRightValueCard())}",
-                Width = 75,
-                Height = 25,
-                FontSize = 16,
-                HorizontalAlignment = HorizontalAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                IsEnabled = isEnabled,
-                Tag = card,
-                Style = (Style)FindResource(typeof(Button)),
-                Background = Brushes.White
-            };
+                newButton.Foreground = Brushes.Red;
+            }
+            return newButton;
         }
 
         private bool IsPlayableCard(ICard card)
         {
             var discardTile = game.GetDiscardTile();
 
-            if (discardTile.GetPlayedCards().Count == 0) return true;
+            if (game.IsEmpty()) return true;
 
             int leftValue = discardTile.GetLeftValueDiscardTile();
             int rightValue = discardTile.GetRightValueDiscardTile();
@@ -437,10 +441,11 @@ namespace DominoWPF
             newButton.Style = (Style)FindResource(typeof(Button));
             newButton.Background = Brushes.White;
 
-            bool isVertical = lastCard.GetLeftValueCard() == lastCard.GetRightValueCard();
-            newButton.Tag = isVertical;
+            game.AddCard(lastCard);
 
-            if (isVertical)
+            newButton.Tag = game.IsDoubleValue();
+
+            if (game.IsDoubleValue())
             {
                 TransformGroup transformGroup = new();
                 transformGroup.Children.Add(new ScaleTransform());
@@ -550,7 +555,7 @@ namespace DominoWPF
             {
                 rightMargin.Top -= (topValue - 12);
                 rightMargin.Right = baseRightMargin.Right + 12 * (verticalInBottom + 1);
-                topMargin.Right = baseTopMargin.Right + 12 * (verticalInBottom + 1);
+                topMargin.Right = baseTopMargin.Right + 15 * (verticalInBottom + 1);
 
             }
 
@@ -567,7 +572,7 @@ namespace DominoWPF
                     {
                         rightMargin.Top += 24;
                         rightMargin.Right -= 25;
-                        topMargin.Right -= 4;
+                        topMargin.Right += 2;
                         topMargin.Top += 5;
                     }
                     else if ((bool)bottomButton.Tag && !(bool)rightButton.Tag)
@@ -575,7 +580,7 @@ namespace DominoWPF
                         rightMargin.Top -= 4;
                         rightMargin.Right -= 3;
                         topMargin.Top -= 5;
-                        topMargin.Right -= 2;
+                        topMargin.Right += 2;
                     }
                     else if (!(bool)bottomButton.Tag && !(bool)rightButton.Tag)
                     {
@@ -605,7 +610,7 @@ namespace DominoWPF
                 {
                     if (!(bool)rightButton.Tag && (bool)topButton.Tag)
                     {
-                        topMargin.Right -= 1;
+                        topMargin.Right += 2;
                     }
                     else if ((bool)rightButton.Tag && !(bool)topButton.Tag)
                     {

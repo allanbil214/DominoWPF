@@ -198,17 +198,10 @@ namespace DominoWPF
             _currentPlayerIndex = (_currentPlayerIndex + 1) % _players.Count;
         }
 
-        // Consolidated playable card checking logic
         public bool HasPlayableCard(IDiscardTile discardTile)
         {
             var currentPlayer = _players[_currentPlayerIndex];
-            return HasPlayableCard(discardTile, currentPlayer);
-        }
-
-        // Overloaded method for flexibility
-        public bool HasPlayableCard(IDiscardTile discardTile, IPlayer player)
-        {
-            var currentHand = GetPlayerHand(player);
+            var currentHand = GetPlayerHand(currentPlayer);
 
             if (discardTile.GetPlayedCards().Count == 0)
             {
@@ -283,9 +276,10 @@ namespace DominoWPF
                 }
                 else if (card.GetLeftValueCard() == leftValue)
                 {
-                    ICard rotatedCard = new Card(card.GetRightValueCard(), card.GetLeftValueCard());
-                    playedCard.Insert(0, rotatedCard);
-                    _discardTile.SetLeftValueDiscardTile(rotatedCard.GetLeftValueCard());
+                    AddCard(card);
+                    RotateValue();
+                    playedCard.Insert(0, card);
+                    _discardTile.SetLeftValueDiscardTile(card.GetLeftValueCard());
                     return true;
                 }
             }
@@ -299,9 +293,10 @@ namespace DominoWPF
                 }
                 else if (card.GetRightValueCard() == rightValue)
                 {
-                    ICard rotatedCard = new Card(card.GetRightValueCard(), card.GetLeftValueCard());
-                    playedCard.Add(rotatedCard);
-                    _discardTile.SetRightValueDiscardTile(rotatedCard.GetRightValueCard());
+                    AddCard(card);
+                    RotateValue();
+                    playedCard.Add(card);
+                    _discardTile.SetRightValueDiscardTile(card.GetRightValueCard());
                     return true;
                 }
             }
