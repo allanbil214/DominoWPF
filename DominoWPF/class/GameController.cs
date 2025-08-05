@@ -112,11 +112,6 @@ namespace DominoWPF
             _currentPlayerIndex = 0;
         }
 
-        public void SetCurrentPlayer(IPlayer player)
-        {
-            _currentPlayerIndex = _players.IndexOf(player);
-        }
-
         public void HandleBlockedGame()
         {
             Dictionary<IPlayer, int> handValues = new Dictionary<IPlayer, int>();
