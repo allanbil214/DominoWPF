@@ -1,42 +1,44 @@
 classDiagram
-class Game {
+class GameController {
     -List~IPlayer~ _players
-    -IDiscardTiles discardTile 
+    -IDiscardTile _discardTile 
     -ICard card
     -Dictionary <.IPlayer,List<.ICard>> _hand
     -int _currentPlayerIndex
     -List~ICard~ _deck
     +Action~ICard~ OnStart
     +Action OnScore
-    +Game(List~IPlayer~ players)
+    +Random rand
+    +GameController(List~IPlayer~ players)
     +StartGame() void
-
-    %% new func
-    +GetCurrentPlayer() : void
-    +GetPlayerHand(IPlayer player) : IPlayer
-    +GetDiscardTile() : IDiscardPile
-    +InitializeDeck() : List<ICard>
-    +ShuffleDeck() : void
-    +InitializeHands() : void
-    %% end new fun
-
+    %% new func not in class diagram
+    +GetCurrentPlayerIndex() int
+    +GetCurrentPlayer() IPlayer
+    +GetPlayerHand(IPlayer player) List~ICard~
+    +GetDiscardTile() IDiscardTile
+    +InitDeck() void
+    +ShuffleDeck() void
+    +InitHand() void
+    +ResetRound() void
+    +SetCurrentPlayer(IPlayer player) void
+    +HandleBlockedGame() void
+    %% end of new func not in class diagram
     +AddCard(ICard card) void
-    +IsDoubleValue() void : boolean
+    +IsDoubleValue() boolean
     +IsEmpty() boolean
     +DetermineStartingPlayer() IPlayer
     +NextTurn() void
-    +HasPlayableCard(IDiscardTiles discardTile) boolean
-    +FindPlayableCard(IDiscardTiles discardTile) ICard
-    +PlayCard(IPlayer player , ICard card , string potionCard) boolean
-    +RotateValue()  void 
-    +PlaceCard(ICard card, string potionCard) boolean  
+    +HasPlayableCard(IDiscardTile discardTile) boolean
+    +FindPlayableCard(IDiscardTile discardTile, ICard cardToCheck) boolean %% used to be ICard not bool
+    +PlayCard(IPlayer player , ICard card , string positionCard) boolean
+    +RotateValue() void 
+    +PlaceCard(ICard card, string positionCard) boolean  
     +RemoveCard(ICard card) boolean
     +CheckWinCondition() boolean
     +AddScore(int points) void
     +CalculateScore() int
     +EndGame() void
 }
-
 class Player {
     -string _name
     -int _score
@@ -46,11 +48,10 @@ class Player {
     +GetName() string
     +SetName(string name) void
 }
-
 class Card {
     -int _leftValueCard
     -int _rightValueCard
-    +Card(int _leftValueCard , int _rightValueCard)
+    +Card(int leftValueCard , int rightValueCard)
     +GetLeftValueCard() int
     +SetLeftValueCard(int value) void
     +GetRightValueCard() int
@@ -58,13 +59,6 @@ class Card {
     +GetOtherValueCard(int value) int
     +ToString() string
 }
-
-%% class Hand {
-%%     -List~ICard~ _card
-%%     +GetCards(): List~ICard~
-    
-%% }
-
 class DiscardTile {
     -List~ICard~ _playedDominoes 
     -int _leftValueDiscardTile
@@ -76,7 +70,6 @@ class DiscardTile {
     +GetPlayedCards() List~ICard~
     +SetPlayedCards(List~ICard~ card) void
 }
-
 class IDiscardTile {
     <<interface>>
     +GetLeftValueDiscardTile() int
@@ -85,7 +78,6 @@ class IDiscardTile {
     +SetRightValueDiscardTile(int value) void
     +GetPlayedCards() List~ICard~
     +SetPlayedCards(List~ICard~ card) void
-
 }
 class IPlayer {
     <<interface>>
@@ -103,18 +95,13 @@ class ICard {
     +GetOtherValueCard(int value) int
 }
 %%implementasi
-DiscardTile <-- IDiscardTile
-Player <-- IPlayer
-Card <-- ICard
+DiscardTile --|> IDiscardTile
+Player --|> IPlayer
+Card --|> ICard
 %%assosiation
 DiscardTile --* ICard
 IDiscardTile --> ICard
-Game --* IPlayer
-Game --* IDiscardTile
-Game --* ICard
-Player --*ICard
-%% Game "1" -- "*" IPlayer : contains
-%% Game "1" -- "1" Board : uses
-%% Player "1" -- "1" Hand : has
-%% Hand "1" -- "*" Card : contains
-%% Board "1" -- "*" Card : displays
+GameController --* IPlayer
+GameController --* IDiscardTile
+GameController --* ICard
+Player --* ICard
