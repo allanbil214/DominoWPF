@@ -12,6 +12,7 @@
     <None Remove="fonts\edosz.ttf" />
     <None Remove="img\kiryu.png" />
     <None Remove="img\kiryu_2.png" />
+    <None Remove="img\kiryu_3.png" />
     <None Remove="img\red_brush.png" />
     <None Remove="red_brush.png" />
   </ItemGroup>
@@ -20,6 +21,7 @@
     <Resource Include="fonts\edosz.ttf" />
     <Resource Include="img\kiryu.png" />
     <Resource Include="img\kiryu_2.png" />
+    <Resource Include="img\kiryu_3.png" />
     <Resource Include="img\red_brush.png" />
   </ItemGroup>
 

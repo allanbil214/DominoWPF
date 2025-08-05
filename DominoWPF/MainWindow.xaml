@@ -290,6 +290,37 @@
 
                             <Border BorderBrush="#FFCCCCCC" BorderThickness="1"/>
                         </Grid>
+                        <Label x:Name="player1NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="5,75,0,0" Grid.Row="2" VerticalAlignment="Top" Grid.Column="1" Opacity="0.75"/>
+                        <Label x:Name="player2NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="62,388,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="2" Opacity="0.75" RenderTransformOrigin="0.5,0.5">
+                            <Label.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="-90"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Label.RenderTransform>
+                        </Label>
+                        <Label x:Name="player3NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Grid.Column="1" Opacity="0.75" RenderTransformOrigin="0.5,0.5">
+                            <Label.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="0"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Label.RenderTransform>
+                        </Label>
+                        <Label x:Name="player4NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="0,12,0,0" VerticalAlignment="Top" Opacity="0.75" RenderTransformOrigin="0.5,0.5" Grid.Row="1">
+                            <Label.RenderTransform>
+                                <TransformGroup>
+                                    <ScaleTransform/>
+                                    <SkewTransform/>
+                                    <RotateTransform Angle="90.8"/>
+                                    <TranslateTransform/>
+                                </TransformGroup>
+                            </Label.RenderTransform>
+                        </Label>
                     </Grid>
                 </Grid>
             </Border>

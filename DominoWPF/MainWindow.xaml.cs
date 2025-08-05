@@ -156,6 +156,11 @@ namespace DominoWPF
                 player1NameLabel, player2NameLabel, player3NameLabel, player4NameLabel
             };
 
+            List<Label> playerNameLabels2 = new List<Label>
+            {
+                player1NameLabel2, player2NameLabel2, player3NameLabel2, player4NameLabel2
+            };
+
             List<Label> playerScoreLabels = new List<Label>
             {
                 player1ScoreLabel, player2ScoreLabel, player3ScoreLabel, player4ScoreLabel
@@ -179,6 +184,7 @@ namespace DominoWPF
             for (int i = 0; i < Math.Min(players.Count, playerNameLabels.Count); i++)
             {
                 playerNameLabels[i].Content = players[i].GetName();
+                playerNameLabels2[i].Content = players[i].GetName();
                 playerScoreLabels[i].Content = $"Score: {players[i].GetScore()}";
 
                 if (i < playerStackPanels.Count)
