@@ -216,7 +216,7 @@ namespace DominoWPF
                 card.GetRightValueCard() == rightValue || card.GetRightValueCard() == leftValue);
         }
 
-        public ICard FindPlayableCard(IDiscardTile discardTile)
+        public ICard FindPlayableCard(IDiscardTile discardTile) // not used?
         {
             var currentPlayer = _players[_currentPlayerIndex];
             var currentHand = GetPlayerHand(currentPlayer);
