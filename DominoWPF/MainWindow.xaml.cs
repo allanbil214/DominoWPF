@@ -370,7 +370,7 @@ namespace DominoWPF
             newButton.HorizontalAlignment = HorizontalAlignment.Center;
             newButton.VerticalAlignment = VerticalAlignment.Center;
             newButton.IsEnabled = isEnabled;
-            newButton.Tag = card;
+            newButton.Tag = game.IsDoubleValue();
             newButton.Style = dimStyle;
             newButton.Background = Brushes.White;
 
