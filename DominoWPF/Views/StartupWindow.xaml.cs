@@ -14,9 +14,6 @@ using System.Windows.Shapes;
 
 namespace DominoWPF
 {
-    /// <summary>
-    /// Interaction logic for StartupWindow.xaml
-    /// </summary>
     public partial class StartupWindow : Window
     {
         public bool closeMainWindow = true;
@@ -87,7 +84,7 @@ namespace DominoWPF
             player4TextBox.Text = "Maris";
 
             playerNumberComboBox.SelectedIndex = 2;
-            maxScoreTextBox.Text = "10";
+            maxScoreTextBox.Text = "100";
         }
     }
 }

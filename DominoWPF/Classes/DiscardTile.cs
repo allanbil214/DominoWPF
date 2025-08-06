@@ -36,5 +36,11 @@ namespace DominoWPF
         {
             _playedDominos = cards;
         }
+        public void Reset()
+        {
+            _playedDominos.Clear();
+            _leftValueDiscardTile = 0;
+            _rightValueDiscardTile = 0;
+        }
     }
 }

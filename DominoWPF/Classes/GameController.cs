@@ -34,8 +34,6 @@ namespace DominoWPF
             OnStart?.Invoke(null);
         }
 
-        // new func not in class diagram,
-
         public int GetCurrentPlayerIndex()
         {
             return _currentPlayerIndex;
@@ -48,13 +46,14 @@ namespace DominoWPF
 
         public List<ICard> GetPlayerHand(IPlayer player)
         {
-            if (_hand.TryGetValue(player, out var cards))
+            var cards = new List<ICard>();
+            if (_hand.TryGetValue(player, out cards))
             {
                 return cards;
             }
             else
             {
-                return new List<ICard>();
+                return cards;
             }
         }
 
@@ -108,7 +107,7 @@ namespace DominoWPF
         {
             _deck.Clear();
             _hand.Clear();
-            _discardTile = new DiscardTile();
+            _discardTile.Reset();
             _currentPlayerIndex = 0;
         }
 
@@ -145,8 +144,6 @@ namespace DominoWPF
             OnScore?.Invoke();
         }
 
-        // end of new func not in class diagram,
-
         public void AddCard(ICard card)
         {
             this.card = card;
@@ -156,14 +153,16 @@ namespace DominoWPF
         {
             if (card != null)
             {
-                return card.GetLeftValueCard() == card.GetRightValueCard();
+                bool sameValue = card.GetLeftValueCard() == card.GetRightValueCard();
+                return sameValue;
             }
             return false;
         }
 
         public bool IsEmpty()
         {
-            return _discardTile.GetPlayedCards().Count == 0;
+            bool emptyCount = _discardTile.GetPlayedCards().Count == 0;
+            return emptyCount;
         }
 
         public IPlayer DetermineStartingPlayer()
@@ -184,8 +183,8 @@ namespace DominoWPF
                 }
                 maxValue.Add(player, maxCardValue);
             }
-
-            return maxValue.OrderByDescending(x => x.Value).First().Key;
+            var maxKey = maxValue.OrderByDescending(x => x.Value).First().Key;
+            return maxKey;
         }
 
         public void NextTurn()
@@ -197,33 +196,37 @@ namespace DominoWPF
         {
             var currentPlayer = _players[_currentPlayerIndex];
             var currentHand = GetPlayerHand(currentPlayer);
+            bool handCount;
 
             if (discardTile.GetPlayedCards().Count == 0)
             {
-                return (currentHand.Count > 0);
+                handCount = currentHand.Count > 0;
+                return handCount;
             }
 
             int leftValue = discardTile.GetLeftValueDiscardTile();
             int rightValue = discardTile.GetRightValueDiscardTile();
-
-            return currentHand.Any(card =>
+            handCount = currentHand.Any(card =>
                 card.GetLeftValueCard() == leftValue || card.GetLeftValueCard() == rightValue ||
                 card.GetRightValueCard() == rightValue || card.GetRightValueCard() == leftValue);
+            return handCount;
         }
 
-        public bool FindPlayableCard(IDiscardTile discardTile, ICard cardToCheck)   // originally ICard FindPlayableCard
+        public bool FindPlayableCard(IDiscardTile discardTile, ICard cardToCheck)  
         {
             if (IsEmpty()) return true;
             int leftValue = discardTile.GetLeftValueDiscardTile();
             int rightValue = discardTile.GetRightValueDiscardTile();
-            return (cardToCheck.GetLeftValueCard() == leftValue || cardToCheck.GetLeftValueCard() == rightValue ||
-                cardToCheck.GetRightValueCard() == rightValue || cardToCheck.GetRightValueCard() == leftValue);
+            bool isPlayableCard = cardToCheck.GetLeftValueCard() == leftValue || cardToCheck.GetLeftValueCard() == rightValue ||
+                cardToCheck.GetRightValueCard() == rightValue || cardToCheck.GetRightValueCard() == leftValue;
+            return isPlayableCard;
         }
         public bool PlayCard(IPlayer player, ICard card, string positionCard)
         {
             var playerHand = GetPlayerHand(player);
             if (!playerHand.Contains(card)) return false;
-            return PlaceCard(card, positionCard);
+            bool isPlacingCard = PlaceCard(card, positionCard);
+            return isPlacingCard;
         }
 
         public void RotateValue()
@@ -293,14 +296,16 @@ namespace DominoWPF
         {
             var currentPlayer = _players[_currentPlayerIndex];
             var playerHand = GetPlayerHand(currentPlayer);
-            return playerHand.Remove(card);
+            bool removedPlayerHandCard = playerHand.Remove(card);
+            return removedPlayerHandCard;
         }
 
         public bool CheckWinCondition()
         {
             var currentPlayer = _players[_currentPlayerIndex];
             var playerHand = GetPlayerHand(currentPlayer);
-            return playerHand.Count == 0;
+            bool isPlayerHandEmpty = playerHand.Count == 0;
+            return isPlayerHandEmpty;
         }
 
         public void AddScore(int points)

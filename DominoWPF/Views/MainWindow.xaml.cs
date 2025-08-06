@@ -13,12 +13,13 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Media;
+using System.Media;
+
+using System.IO;
 
 namespace DominoWPF
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         #region Fields and Constants
@@ -30,12 +31,13 @@ namespace DominoWPF
         private List<IPlayer> players = [];
         private GameController game = null;
         private int maxScore = 150;
-        bool changedLast = false;
 
         private readonly Thickness baseBottomMargin = new Thickness(0, 0, 0, 180);
         private readonly Thickness baseTopMargin = new Thickness(0, 29, 185, 0);
         private readonly Thickness baseRightMargin = new Thickness(0, 319, -298, 0);
         private readonly Thickness baseLeftMargin = new Thickness(-285, 10, 0, 0);
+
+        private SoundPlayer player = new SoundPlayer();
 
         #endregion
 
@@ -53,9 +55,9 @@ namespace DominoWPF
         private void RandomKiryu()
         {
             string[] kiryuImages = {
-                "img/kiryu.png",
-                "img/kiryu_2.png",
-                "img/kiryu_3.png"
+                "Images/kiryu.png",
+                "Images/kiryu_2.png",
+                "Images/kiryu_3.png"
             };
 
             Random rand = new Random();
@@ -417,6 +419,11 @@ namespace DominoWPF
             {
                 ContentInsert(cardToPlay.GetLeftValueCard(), cardToPlay.GetRightValueCard(), position == "left");
                 game.RemoveCard(cardToPlay);
+
+                player.SoundLocation = "Sounds/domino_put.wav";
+                player.Load();
+                player.Play();
+
                 RemoveButton();
                 NextTurn();
             }
@@ -853,6 +860,10 @@ namespace DominoWPF
 
         private void GetButtonValue(object sender, RoutedEventArgs e, Button button, ICard card)
         {
+            player.SoundLocation = "Sounds/domino_click.wav";
+            player.Load();
+            player.Play();
+
             selectedCard = (button.Tag is ICard tagCard) ? tagCard : card;
             lastButton = currentButton;
             currentButton = button;
