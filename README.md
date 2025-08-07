@@ -1,6 +1,6 @@
 # Like A Domino | WPF Edition
 
-A modern, tokyo-neon themed domino game built with WPF (Windows Presentation Foundation) featuring immersive audio, sleek tokyo-neon inspired visuals, and support for 2-4 players.
+A tokyo-neon themed domino game built with WPF (Windows Presentation Foundation) featuring immersive audio, sleek tokyo-neon inspired visuals, and support for 2-4 players.
 
 ## 🚀 Getting Started
 
