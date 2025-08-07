@@ -63,6 +63,9 @@ A modern, tokyo-neon themed domino game built with WPF (Windows Presentation Fou
 3. Voice types: "win", "lose", "turn", "block", etc.
 4. Files are automatically detected and randomly selected
 
+### Adding Wallpapers
+1. Just put jpeg files into "Images/Wallpaper"
+
 ### Modifying Themes
 - Edit brush resources in XAML files
 - Customize gradients in `Window.Resources`
