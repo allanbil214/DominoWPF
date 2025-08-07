@@ -9,28 +9,376 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Fonts\DragonfishRegular.otf" />
     <None Remove="Fonts\edosz.ttf" />
+    <None Remove="Fonts\Rajdhani-Bold.ttf" />
+    <None Remove="Fonts\Rajdhani-Light.ttf" />
+    <None Remove="Fonts\Rajdhani-Medium.ttf" />
+    <None Remove="Fonts\Rajdhani-Regular.ttf" />
+    <None Remove="Fonts\Rajdhani-SemiBold.ttf" />
+    <None Remove="Fonts\RGGStudioSymbols-Regular.otf" />
+    <None Remove="Images\hannya.jpg" />
     <None Remove="Images\kiryu.png" />
     <None Remove="Images\kiryu_2.png" />
     <None Remove="Images\kiryu_3.png" />
     <None Remove="Images\red_brush.png" />
+    <None Remove="Images\table.jpg" />
     <None Remove="red_brush.png" />
+    <None Remove="Sounds\bg_music.wav" />
     <None Remove="Sounds\domino_click.mp3" />
     <None Remove="Sounds\domino_click.wav" />
+    <None Remove="Sounds\domino_hover.wav" />
     <None Remove="Sounds\domino_put.wav" />
+    <None Remove="Sounds\hover.wav" />
+    <None Remove="Sounds\menu_exit.wav" />
+    <None Remove="Sounds\player1\myturn_01.wav" />
+    <None Remove="Sounds\player1\myturn_02.wav" />
+    <None Remove="Sounds\player1\myturn_03.wav" />
+    <None Remove="Sounds\player1\myturn_04.wav" />
+    <None Remove="Sounds\player1\skipped_01.wav" />
+    <None Remove="Sounds\player1\skipped_02.wav" />
+    <None Remove="Sounds\player1\skipped_03.wav" />
+    <None Remove="Sounds\player1\taunt\taunt_01.wav" />
+    <None Remove="Sounds\player1\taunt\taunt_02.wav" />
+    <None Remove="Sounds\player1\taunt\taunt_03.wav" />
+    <None Remove="Sounds\player1\taunt\taunt_04.wav" />
+    <None Remove="Sounds\player1\taunt\taunt_05.wav" />
+    <None Remove="Sounds\player1\taunt\taunt_06.wav" />
+    <None Remove="Sounds\player1\taunt\taunt_07.wav" />
+    <None Remove="Sounds\player1\taunt\taunt_08.wav" />
+    <None Remove="Sounds\player2\myturn\myturn_05.wav" />
+    <None Remove="Sounds\player2\myturn\myturn_06.wav" />
+    <None Remove="Sounds\player2\myturn_01.wav" />
+    <None Remove="Sounds\player2\myturn_02.wav" />
+    <None Remove="Sounds\player2\myturn_03.wav" />
+    <None Remove="Sounds\player2\myturn_04.wav" />
+    <None Remove="Sounds\player2\skipped\skipped_04.wav" />
+    <None Remove="Sounds\player2\skipped_01.wav" />
+    <None Remove="Sounds\player2\skipped_02.wav" />
+    <None Remove="Sounds\player2\skipped_03.wav" />
+    <None Remove="Sounds\player2\taunt\taunt_01.wav" />
+    <None Remove="Sounds\player2\taunt\taunt_02.wav" />
+    <None Remove="Sounds\player2\taunt\taunt_03.wav" />
+    <None Remove="Sounds\player2\taunt\taunt_04.wav" />
+    <None Remove="Sounds\player2\taunt\taunt_05.wav" />
+    <None Remove="Sounds\player2\taunt\taunt_06.wav" />
+    <None Remove="Sounds\player2\taunt\taunt_07.wav" />
+    <None Remove="Sounds\player2\taunt\taunt_08.wav" />
+    <None Remove="Sounds\player3\myturn\myturn_05.wav" />
+    <None Remove="Sounds\player3\myturn\myturn_06.wav" />
+    <None Remove="Sounds\player3\myturn_01.wav" />
+    <None Remove="Sounds\player3\myturn_02.wav" />
+    <None Remove="Sounds\player3\myturn_03.wav" />
+    <None Remove="Sounds\player3\myturn_04.wav" />
+    <None Remove="Sounds\player3\skipped_01.wav" />
+    <None Remove="Sounds\player3\skipped_02.wav" />
+    <None Remove="Sounds\player3\skipped_03.wav" />
+    <None Remove="Sounds\player3\taunt\taunt_01.wav" />
+    <None Remove="Sounds\player3\taunt\taunt_02.wav" />
+    <None Remove="Sounds\player3\taunt\taunt_03.wav" />
+    <None Remove="Sounds\player3\taunt\taunt_04.wav" />
+    <None Remove="Sounds\player3\taunt\taunt_05.wav" />
+    <None Remove="Sounds\player3\taunt\taunt_06.wav" />
+    <None Remove="Sounds\player3\taunt\taunt_07.wav" />
+    <None Remove="Sounds\player3\taunt\taunt_08.wav" />
+    <None Remove="Sounds\player3\taunt\taunt_09.wav" />
+    <None Remove="Sounds\player4\myturn\myturn_05.wav" />
+    <None Remove="Sounds\player4\myturn_01.wav" />
+    <None Remove="Sounds\player4\myturn_02.wav" />
+    <None Remove="Sounds\player4\myturn_03.wav" />
+    <None Remove="Sounds\player4\myturn_04.wav" />
+    <None Remove="Sounds\player4\skipped\skipped_04.wav" />
+    <None Remove="Sounds\player4\skipped_01.wav" />
+    <None Remove="Sounds\player4\skipped_02.wav" />
+    <None Remove="Sounds\player4\skipped_03.wav" />
+    <None Remove="Sounds\player4\taunt\taunt_01.wav" />
+    <None Remove="Sounds\player4\taunt\taunt_02.wav" />
+    <None Remove="Sounds\player4\taunt\taunt_03.wav" />
+    <None Remove="Sounds\player4\taunt\taunt_04.wav" />
+    <None Remove="Sounds\player4\taunt\taunt_05.wav" />
+    <None Remove="Sounds\player4\taunt\taunt_06.wav" />
+    <None Remove="Sounds\player4\taunt\taunt_07.wav" />
+    <None Remove="Sounds\player4\taunt\taunt_08.wav" />
+    <None Remove="Sounds\player4\taunt\taunt_09.wav" />
+    <None Remove="Sounds\player4\taunt\taunt_10.wav" />
+    <None Remove="Sounds\select.wav" />
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Images\table.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\domino_hover.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\hover.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\menu_exit.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player2\taunt\taunt_08.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Sounds\bg_music.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Sounds\domino_click.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Sounds\domino_put.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Sounds\player1\myturn\myturn_01.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player1\myturn\myturn_02.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player1\myturn\myturn_03.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player1\myturn\myturn_04.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player1\skipped\skipped_01.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player1\skipped\skipped_02.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player1\skipped\skipped_03.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player1\taunt\taunt_01.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player1\taunt\taunt_02.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player1\taunt\taunt_03.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player1\taunt\taunt_04.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player1\taunt\taunt_05.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player1\taunt\taunt_06.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player1\taunt\taunt_07.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player2\myturn\myturn_01.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player2\myturn\myturn_02.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player2\myturn\myturn_03.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player2\myturn\myturn_04.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player2\myturn\myturn_05.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player2\myturn\myturn_06.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player2\skipped\skipped_01.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player2\skipped\skipped_02.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player2\skipped\skipped_03.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player2\skipped\skipped_04.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player2\taunt\taunt_01.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player2\taunt\taunt_02.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player2\taunt\taunt_03.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player2\taunt\taunt_04.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player2\taunt\taunt_05.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player2\taunt\taunt_06.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player2\taunt\taunt_07.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player3\myturn\myturn_01.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player3\myturn\myturn_02.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player3\myturn\myturn_03.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player3\myturn\myturn_04.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player3\myturn\myturn_05.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player3\myturn\myturn_06.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player3\skipped\skipped_01.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player3\skipped\skipped_02.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player3\skipped\skipped_03.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player3\taunt\taunt_01.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player3\taunt\taunt_02.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player3\taunt\taunt_03.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player3\taunt\taunt_04.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player3\taunt\taunt_05.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player3\taunt\taunt_06.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player3\taunt\taunt_07.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player3\taunt\taunt_08.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player3\taunt\taunt_09.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player4\myturn\myturn_01.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player4\myturn\myturn_02.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player4\myturn\myturn_03.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player4\myturn\myturn_04.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player4\myturn\myturn_05.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player4\skipped\skipped_01.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player4\skipped\skipped_02.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player4\skipped\skipped_03.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player4\skipped\skipped_04.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Fonts\edosz.ttf" />
+    <Content Include="Sounds\player1\taunt\taunt_08.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player4\taunt\taunt_01.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player4\taunt\taunt_02.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player4\taunt\taunt_03.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player4\taunt\taunt_04.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player4\taunt\taunt_05.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player4\taunt\taunt_06.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player4\taunt\taunt_07.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player4\taunt\taunt_08.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player4\taunt\taunt_09.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\player4\taunt\taunt_10.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Sounds\select.wav">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NAudio" Version="2.2.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Fonts\DragonfishRegular.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\edosz.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\Rajdhani-Bold.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\Rajdhani-Light.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\Rajdhani-Medium.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\Rajdhani-Regular.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\Rajdhani-SemiBold.ttf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Fonts\RGGStudioSymbols-Regular.otf">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Images\hannya.jpg">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Resource>
     <Resource Include="Images\kiryu.png" />
     <Resource Include="Images\kiryu_2.png" />
     <Resource Include="Images\kiryu_3.png" />

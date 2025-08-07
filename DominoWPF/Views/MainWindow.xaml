@@ -10,6 +10,10 @@
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
         <FontFamily x:Key="edosz" >/fonts/#EDO SZ</FontFamily>
+        <FontFamily x:Key="dragonfish" >/fonts/#Dragonfish</FontFamily>
+        <FontFamily x:Key="rgg_symbols" >/fonts/#RGGStudioSymbols</FontFamily>
+        <FontFamily x:Key="radjani_medium" >/fonts/#Rajdhani Medium</FontFamily>
+        <FontFamily x:Key="radjani_semibold" >/fonts/#Rajdhani SemiBold</FontFamily>
         <Style TargetType="Button" x:Key="BrightDisabledButtonStyle" BasedOn="{StaticResource {x:Type Button}}">
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
@@ -107,6 +111,9 @@
                         </Grid>
                     </Border>
                     <Grid Grid.Row="1" x:Name="GameArea">
+                        <Grid.Background>
+                            <ImageBrush ImageSource="/Images/hannya.jpg"/>
+                        </Grid.Background>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="4*"/>
@@ -182,19 +189,10 @@
                             <Image x:Name="kiryu" Source="/img/kiryu.png" Stretch="Fill" Opacity="0.1"/>
 
 
-                            <Label Content="LIKE A DOMINO" HorizontalAlignment="Left" VerticalAlignment="Center" FontFamily="{StaticResource edosz}" FontSize="68" Height="90" Width="449" Foreground="#FFFF4747" Margin="130,0,0,0" Opacity="0.5"/>
+                            <Label Content="Like a Domino" HorizontalAlignment="Center" VerticalAlignment="Top" FontFamily="{StaticResource dragonfish}" FontSize="58" Height="90" Width="399" Foreground="#FFFF4747" Margin="10,170,0,0" Opacity="0.5"/>
 
 
-                            <StackPanel x:Name="LayerBottomStackPanel" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,29">
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                            </StackPanel>
+                            <StackPanel x:Name="LayerBottomStackPanel" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,29"/>
                             <StackPanel x:Name="LayerTopStackPanel" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,29,185,0" RenderTransformOrigin="0.5,0.5">
                                 <StackPanel.RenderTransform>
                                     <TransformGroup>
@@ -204,14 +202,6 @@
                                         <TranslateTransform/>
                                     </TransformGroup>
                                 </StackPanel.RenderTransform>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
-                                <Button Content="Button" Background="#FFFF6868"/>
                             </StackPanel>
                             <Grid x:Name="LayerRightWrapper"
 								  HorizontalAlignment="Center"
@@ -225,14 +215,6 @@
                                     <StackPanel.RenderTransform>
                                         <RotateTransform Angle="-90"/>
                                     </StackPanel.RenderTransform>
-                                    <Button Content="Button" Background="#FFFF6A6A"/>
-                                    <Button Content="Button" Background="#FFFF6A6A"/>
-                                    <Button Content="Button" Background="#FFFF6A6A"/>
-                                    <Button Content="Button" Background="#FFFF6A6A"/>
-                                    <Button Content="Button" Background="#FFFF6A6A"/>
-                                    <Button Content="Button" Background="#FFFF6A6A"/>
-                                    <Button Content="Button" Background="#FFFF6A6A"/>
-                                    <Button Content="Button" Background="#FFFF6A6A"/>
                                 </StackPanel>
                             </Grid>
 
@@ -248,14 +230,6 @@
                                     <StackPanel.RenderTransform>
                                         <RotateTransform Angle="90"/>
                                     </StackPanel.RenderTransform>
-                                    <Button Content="Button" Background="#FFFF6E6E"/>
-                                    <Button Content="Button" Background="#FFFF6E6E"/>
-                                    <Button Content="Button" Background="#FFFF6E6E"/>
-                                    <Button Content="Button" Background="#FFFF6E6E"/>
-                                    <Button Content="Button" Background="#FFFF6E6E"/>
-                                    <Button Content="Button" Background="#FFFF6E6E"/>
-                                    <Button Content="Button" Background="#FFFF6E6E"/>
-                                    <Button Content="Button" Background="#FFFF6E6E"/>
                                 </StackPanel>
                             </Grid>
 
@@ -290,8 +264,8 @@
 
                             <Border BorderBrush="#FFCCCCCC" BorderThickness="1"/>
                         </Grid>
-                        <Label x:Name="player1NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="5,75,0,0" Grid.Row="2" VerticalAlignment="Top" Grid.Column="1" Opacity="0.75"/>
-                        <Label x:Name="player2NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="62,388,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="2" Opacity="0.75" RenderTransformOrigin="0.5,0.5">
+                        <Label x:Name="player1NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="5,75,0,0" Grid.Row="2" VerticalAlignment="Top" Grid.Column="1" Opacity="0.75" Visibility="Hidden"/>
+                        <Label x:Name="player2NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="62,388,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="2" Opacity="0.75" RenderTransformOrigin="0.5,0.5" Visibility="Hidden">
                             <Label.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -301,7 +275,7 @@
                                 </TransformGroup>
                             </Label.RenderTransform>
                         </Label>
-                        <Label x:Name="player3NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Grid.Column="1" Opacity="0.75" RenderTransformOrigin="0.5,0.5">
+                        <Label x:Name="player3NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Grid.Column="1" Opacity="0.75" RenderTransformOrigin="0.5,0.5" Visibility="Hidden">
                             <Label.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -311,7 +285,7 @@
                                 </TransformGroup>
                             </Label.RenderTransform>
                         </Label>
-                        <Label x:Name="player4NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="0,12,0,0" VerticalAlignment="Top" Opacity="0.75" RenderTransformOrigin="0.5,0.5" Grid.Row="1">
+                        <Label x:Name="player4NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="0,12,0,0" VerticalAlignment="Top" Opacity="0.75" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Visibility="Hidden">
                             <Label.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>

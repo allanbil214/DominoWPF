@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DominoWPF.Classes;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,8 +18,10 @@ namespace DominoWPF
     public partial class StartupWindow : Window
     {
         public bool closeMainWindow = true;
-        public StartupWindow()
+        AudioManager _audio = null;
+        public StartupWindow(AudioManager audio)
         {
+            _audio = audio;
             InitializeComponent();
             InitPlayerNumber();
         }
@@ -39,13 +42,95 @@ namespace DominoWPF
             SetPlayerControls(player4TextBox, player4Label, selectedPlayers >= 4);
         }
 
-        private void SetPlayerControls(Control textBox, Control label, bool isEnabled)
+        private void SetPlayerControls(TextBox textBox, Label label, bool isEnabled)
         {
+            _audio.PlaySfx("Sounds/select.wav");
             textBox.IsEnabled = isEnabled;
+            textBox.Clear();
             label.IsEnabled = isEnabled;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void player4TextBox_Copy_PreviewTextInput(object sender, TextCompositionEventArgs e)
+        {
+            if (!char.IsDigit(e.Text, 0) && !(e.Text == "." && !((TextBox)sender).Text.Contains(".")))
+            {
+                e.Handled = true;
+            }
+        }
+
+        private void Label_MouseEnter(object sender, MouseEventArgs e)
+        {
+            playerNumberComboBox.SelectedIndex = 2;
+
+            player1TextBox.Text = "Coach";
+            player2TextBox.Text = "Ellis";
+            player3TextBox.Text = "Nick";
+            player4TextBox.Text = "Louis";
+
+            maxScoreTextBox.Text = "100";
+        }
+
+        private void playerNumberComboBox_MouseEnter(object sender, MouseEventArgs e)
+        {
+            _audio.PlaySfx("Sounds/hover.wav");
+        }
+
+        private void Button_MouseEnter(object sender, MouseEventArgs e)
+        {
+            _audio.PlaySfx("Sounds/hover.wav");
+        }
+
+        private void player1TextBox_MouseEnter(object sender, MouseEventArgs e)
+        {
+            _audio.PlaySfx("Sounds/hover.wav");
+        }
+
+        private void player2TextBox_MouseEnter(object sender, MouseEventArgs e)
+        {
+            _audio.PlaySfx("Sounds/hover.wav");
+        }
+
+        private void player3TextBox_MouseEnter(object sender, MouseEventArgs e)
+        {
+            _audio.PlaySfx("Sounds/hover.wav");
+        }
+
+        private void player4TextBox_MouseEnter(object sender, MouseEventArgs e)
+        {
+            _audio.PlaySfx("Sounds/hover.wav");
+        }
+
+        private void maxScoreTextBox_MouseEnter(object sender, MouseEventArgs e)
+        {
+            _audio.PlaySfx("Sounds/hover.wav");
+        }
+
+        private void player1TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            _audio.PlaySfx("Sounds/select.wav");
+        }
+
+        private void player2TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            _audio.PlaySfx("Sounds/select.wav");
+        }
+
+        private void player3TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            _audio.PlaySfx("Sounds/select.wav");
+        }
+
+        private void player4TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            _audio.PlaySfx("Sounds/select.wav");
+        }
+
+        private void maxScoreTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            _audio.PlaySfx("Sounds/select.wav");
+        }
+
+        private void Label_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             int selectedPlayers = playerNumberComboBox.SelectedIndex + 2;
 
@@ -64,27 +149,10 @@ namespace DominoWPF
                 return;
             }
 
+            _audio.PlaySfx("Sounds/select.wav");
+
             this.DialogResult = true;
             this.Close();
-        }
-
-        private void player4TextBox_Copy_PreviewTextInput(object sender, TextCompositionEventArgs e)
-        {
-            if (!char.IsDigit(e.Text, 0) && !(e.Text == "." && !((TextBox)sender).Text.Contains(".")))
-            {
-                e.Handled = true;
-            }
-        }
-
-        private void Label_MouseEnter(object sender, MouseEventArgs e)
-        {
-            player1TextBox.Text = "John";
-            player2TextBox.Text = "Jane";
-            player3TextBox.Text = "Rusty";
-            player4TextBox.Text = "Maris";
-
-            playerNumberComboBox.SelectedIndex = 2;
-            maxScoreTextBox.Text = "100";
         }
     }
 }

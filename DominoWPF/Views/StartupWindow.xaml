@@ -5,29 +5,59 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DominoWPF"
         mc:Ignorable="d"
-        Title="Like A Domino | WPF Edition (Startup Window)" Height="488" Width="387" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Like A Domino | WPF Edition (Startup Window)" Height="518" Width="387" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <FontFamily x:Key="edosz" >/fonts/#EDO SZ</FontFamily>
+        <FontFamily x:Key="dragonfish" >/fonts/#Dragonfish</FontFamily>
+        <FontFamily x:Key="rgg_symbols" >/fonts/#RGGStudioSymbols</FontFamily>
+        <FontFamily x:Key="radjani_medium" >/fonts/#Rajdhani Medium</FontFamily>
+        <FontFamily x:Key="radjani_semibold" >/fonts/#Rajdhani SemiBold</FontFamily>
+        <Style TargetType="Button">
+            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
+            <Setter Property="IsTabStop" Value="False"/>
+        </Style>
+    </Window.Resources>
     <Grid x:Name="MainGrid">
-        <ComboBox x:Name="playerNumberComboBox" HorizontalAlignment="Left" Margin="173,102,0,0" VerticalAlignment="Top" Width="167" SelectedIndex="0" SelectionChanged="playerNumberComboBox_SelectionChanged"/>
-        <Label Content="Select How Many Player:" HorizontalAlignment="Left" Margin="29,98,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.84,-0.111"/>
-        <Label x:Name="player1Label" Content="Player 1 Name: " HorizontalAlignment="Left" Margin="29,176,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="player2Label" Content="Player 2 Name: " HorizontalAlignment="Left" Margin="29,208,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="player3Label" Content="Player 3 Name: " HorizontalAlignment="Left" Margin="29,238,0,0" VerticalAlignment="Top"/>
-        <Label x:Name="player4Label" Content="Player 4 Name: " HorizontalAlignment="Left" Margin="29,270,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="player1TextBox" HorizontalAlignment="Left" Margin="127,178,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213" Height="22"/>
-        <TextBox x:Name="player2TextBox" HorizontalAlignment="Left" Margin="127,210,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213" Height="22"/>
-        <TextBox x:Name="player3TextBox" HorizontalAlignment="Left" Margin="127,240,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213" Height="22"/>
-        <TextBox x:Name="player4TextBox" HorizontalAlignment="Left" Margin="127,272,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213" Height="22"/>
-        <Label Content="Like a Domino" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" FontSize="36" MouseEnter="Label_MouseEnter" />
-        <Label Content="WPF Edition" HorizontalAlignment="Left" Margin="228,50,0,0" VerticalAlignment="Top"/>
-        <Label Content="Fill in the Names" HorizontalAlignment="Left" Margin="138,136,0,0" VerticalAlignment="Top"/>
+        <Label Content="a" HorizontalAlignment="Left" Margin="35.7,-2,0,0" VerticalAlignment="Top" FontFamily="{StaticResource rgg_symbols}" FontSize="52">
+            <Label.Effect>
+                <DropShadowEffect Opacity="0.5" Direction="315"/>
+            </Label.Effect>
+        </Label>
+        <Label Content="a" HorizontalAlignment="Left" Margin="36.9,0.1,0,0" VerticalAlignment="Top" FontFamily="{StaticResource rgg_symbols}" FontSize="48" Foreground="#FFFFFBFB"/>
+        <Label Content="b" HorizontalAlignment="Left" Margin="146,382,0,0" VerticalAlignment="Top" FontFamily="{StaticResource rgg_symbols}" FontSize="72" Foreground="#FFE22323"/>
+
+        <ComboBox x:Name="playerNumberComboBox" HorizontalAlignment="Left" Margin="173,102,0,0" VerticalAlignment="Top" Width="167" SelectedIndex="0" SelectionChanged="playerNumberComboBox_SelectionChanged" MouseEnter="playerNumberComboBox_MouseEnter">
+            <ComboBox.Background>
+                <LinearGradientBrush EndPoint="0,1">
+                    <GradientStop Color="#FFF0F0F0"/>
+                    <GradientStop Color="#FFE5E5E5" Offset="1"/>
+                </LinearGradientBrush>
+            </ComboBox.Background>
+        </ComboBox>
+        <Label Content="Select How Many Player:" HorizontalAlignment="Left" Margin="29,102,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.84,-0.111" FontFamily="{StaticResource radjani_semibold}"/>
+        <Label x:Name="player1Label" Content="Player 1 Name: " HorizontalAlignment="Left" Margin="32,178,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}"/>
+        <Label x:Name="player2Label" Content="Player 2 Name: " HorizontalAlignment="Left" Margin="32,210,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}"/>
+        <Label x:Name="player3Label" Content="Player 3 Name: " HorizontalAlignment="Left" Margin="31,240,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}"/>
+        <Label x:Name="player4Label" Content="Player 4 Name: " HorizontalAlignment="Left" Margin="31,272,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}"/>
+        <TextBox x:Name="player1TextBox" HorizontalAlignment="Left" Margin="127,178,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213" Height="22" MouseEnter="player1TextBox_MouseEnter" GotFocus="player1TextBox_GotFocus"/>
+        <TextBox x:Name="player2TextBox" HorizontalAlignment="Left" Margin="127,210,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213" Height="22" MouseEnter="player2TextBox_MouseEnter" GotFocus="player2TextBox_GotFocus"/>
+        <TextBox x:Name="player3TextBox" HorizontalAlignment="Left" Margin="127,240,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213" Height="22" MouseEnter="player3TextBox_MouseEnter" GotFocus="player3TextBox_GotFocus"/>
+        <TextBox x:Name="player4TextBox" HorizontalAlignment="Left" Margin="127,272,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213" Height="22" MouseEnter="player4TextBox_MouseEnter" GotFocus="player4TextBox_GotFocus"/>
+        <Label Content="Like a Domino" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" FontSize="36" MouseEnter="Label_MouseEnter" FontFamily="{StaticResource dragonfish}" Foreground="#FFE00101">
+            <Label.Effect>
+                <DropShadowEffect Opacity="0.5"/>
+            </Label.Effect>
+        </Label>
+        <Label Content="WPF Edition" HorizontalAlignment="Left" Margin="238,47,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}" Opacity="0.8"/>
+        <Label Content="Fill in the Names" HorizontalAlignment="Left" Margin="135,138,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}" FontSize="14"/>
         <Separator HorizontalAlignment="Left" Margin="34,148,0,0" VerticalAlignment="Top" Height="4" Width="98"/>
         <Separator HorizontalAlignment="Left" Margin="242,148,0,0" VerticalAlignment="Top" Height="4" Width="98"/>
-        <Button Content="Play!" HorizontalAlignment="Left" Margin="146,402,0,0" VerticalAlignment="Top" Height="28" Width="82" Click="Button_Click"/>
-        <Label Content="How Many Points?" HorizontalAlignment="Left" Margin="133,312,0,0" VerticalAlignment="Top"/>
-        <Separator HorizontalAlignment="Left" Margin="34,324,0,0" VerticalAlignment="Top" Height="4" Width="98"/>
-        <Separator HorizontalAlignment="Left" Margin="242,324,0,0" VerticalAlignment="Top" Height="4" Width="98"/>
-        <Label x:Name="maxScoreLabel" Content="Max Score:" HorizontalAlignment="Left" Margin="29,350,0,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="maxScoreTextBox" HorizontalAlignment="Left" Margin="102,352,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="238" Height="22" PreviewTextInput="player4TextBox_Copy_PreviewTextInput"/>
+        <Label Content="How Many Points?" HorizontalAlignment="Left" Margin="131,314,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}" FontSize="14"/>
+        <Separator HorizontalAlignment="Left" Margin="34,324,0,0" VerticalAlignment="Top" Height="4" Width="93"/>
+        <Separator HorizontalAlignment="Left" Margin="247,324,0,0" VerticalAlignment="Top" Height="4" Width="93"/>
+        <Label x:Name="maxScoreLabel" Content="Max Score:" HorizontalAlignment="Left" Margin="31,352,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}"/>
+        <TextBox x:Name="maxScoreTextBox" HorizontalAlignment="Left" Margin="102,352,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="238" Height="22" MouseEnter="maxScoreTextBox_MouseEnter" GotFocus="maxScoreTextBox_GotFocus"/>
+        <Label Content="PLAY!" HorizontalAlignment="Left" Margin="165,406,0,0" VerticalAlignment="Top" FontFamily="{StaticResource edosz}" FontSize="24" MouseLeftButtonUp="Label_MouseLeftButtonUp"/>
 
     </Grid>
 </Window>

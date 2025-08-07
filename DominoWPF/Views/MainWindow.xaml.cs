@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using DominoWPF.Classes;
+using Microsoft.VisualBasic.Devices;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data.Common;
+using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Windows;
@@ -13,10 +16,9 @@ using System.Windows.Media.Effects;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using System.Windows.Media;
-using System.Media;
+using System.Windows.Threading;
 
-using System.IO;
+// nuget install NAudio
 
 namespace DominoWPF
 {
@@ -36,8 +38,9 @@ namespace DominoWPF
         private readonly Thickness baseTopMargin = new Thickness(0, 29, 185, 0);
         private readonly Thickness baseRightMargin = new Thickness(0, 319, -298, 0);
         private readonly Thickness baseLeftMargin = new Thickness(-285, 10, 0, 0);
-
-        private SoundPlayer player = new SoundPlayer();
+        
+        static AudioManager audio = new AudioManager();
+        VoiceManager voiceManager = new VoiceManager(audio);
 
         #endregion
 
@@ -48,6 +51,7 @@ namespace DominoWPF
             InitializeComponent();
             InitStackPanel();
             ChangeWindowSize();
+            audio.PlayMusic("Sounds/bg_music.wav");
             LoadStartup();
             RandomKiryu();
         }
@@ -82,7 +86,7 @@ namespace DominoWPF
         {
             this.Effect = new BlurEffect();
 
-            StartupWindow startup = new();
+            StartupWindow startup = new(audio);
             bool? result = startup.ShowDialog();
 
             if (result != true)
@@ -104,6 +108,8 @@ namespace DominoWPF
             InitGame();
             LoadPlayerCards();
             ChangePlayerTurn();
+
+            audio.PlaySfx("Sounds/menu_exit.wav");
 
             this.Effect = null;
         }
@@ -192,6 +198,7 @@ namespace DominoWPF
                 if (i < playerStackPanels.Count)
                 {
                     playerStackPanels[i].Visibility = Visibility.Visible;
+                    playerNameLabels2[i].Visibility = Visibility.Visible;
                 }
             }
 
@@ -231,13 +238,14 @@ namespace DominoWPF
             ChangePlayerTurn();
         }
 
-        private void ChangePlayerTurn()
+        private void ChangePlayerTurn() // boldify current player's label 2
         {
             var discardTile = game.GetDiscardTile();
             int skipCount = 0;
 
             while (!game.HasPlayableCard(discardTile) && skipCount < players.Count)
             {
+                voiceManager.PlayRandom(game.GetCurrentPlayerIndex(), "skipped");
                 MessageBox.Show($"{game.GetCurrentPlayer().GetName()} has no playable cards! Skipping turn.", "Skipping Player", MessageBoxButton.OK, MessageBoxImage.Information);
                 game.NextTurn();
                 skipCount++;
@@ -248,11 +256,13 @@ namespace DominoWPF
                     game.HandleBlockedGame();
 
                     string blockedWinner = game.GetCurrentPlayer().GetName();
+                    voiceManager.PlayRandom(game.GetCurrentPlayerIndex(), "taunt");
                     MessageBox.Show($"{blockedWinner} wins the blocked game!", $"{blockedWinner} Win This Round!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 
                     var gameWinner = players.FirstOrDefault(p => p.GetScore() >= maxScore);
                     if (gameWinner != null)
                     {
+                        voiceManager.PlayRandom(game.GetCurrentPlayerIndex(), "taunt");
                         MessageBox.Show($"{gameWinner.GetName()} wins the entire game with {gameWinner.GetScore()} points!", $"{gameWinner.GetName()} Win The Game!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 
                         ResetGame();
@@ -277,6 +287,7 @@ namespace DominoWPF
 
         private void SetPlayerTurnUI(int currentIndex)
         {
+            voiceManager.PlayRandom(currentIndex, "myturn");
             Player1HandGrid.IsEnabled = false;
             Player2HandGrid.IsEnabled = false;
             Player3HandGrid.IsEnabled = false;
@@ -346,8 +357,8 @@ namespace DominoWPF
             foreach (var card in playerHand)
             {
                 Button newButton = CreateDominoButton(card, game.FindPlayableCard(discardTile, card));
-                newButton.Click += (sender, EventArgs) => { GetButtonValue(sender, EventArgs, newButton, card); };
-
+                newButton.Click += (sender, e) => GetButtonValue(sender, e, newButton, card);
+                newButton.MouseEnter += HandButton_MouseEnter;
                 stackPanel.Children.Add(newButton);
                 if (!isHorizontal)
                 {
@@ -417,12 +428,14 @@ namespace DominoWPF
 
             if (game.PlayCard(currentPlayer, cardToPlay, position))
             {
-                ContentInsert(cardToPlay.GetLeftValueCard(), cardToPlay.GetRightValueCard(), position == "left");
+                audio.PlaySfx("Sounds/domino_put.wav");
+                StartDelay(() => ContentInsert(
+                    cardToPlay.GetLeftValueCard(),
+                    cardToPlay.GetRightValueCard(),
+                    position == "left"
+                ), 0.2);
+                
                 game.RemoveCard(cardToPlay);
-
-                player.SoundLocation = "Sounds/domino_put.wav";
-                player.Load();
-                player.Play();
 
                 RemoveButton();
                 NextTurn();
@@ -772,6 +785,21 @@ namespace DominoWPF
 
             return brailleDice[number];
         }
+        private void StartDelay(Action methodToCall, double seconds)
+        {
+            DispatcherTimer timer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromSeconds(seconds)
+            };
+
+            timer.Tick += (s, e) =>
+            {
+                timer.Stop();
+                methodToCall?.Invoke();
+            };
+
+            timer.Start();
+        }
 
         #endregion
 
@@ -827,11 +855,13 @@ namespace DominoWPF
                 int points = game.CalculateScore();
                 game.EndGame();
 
+                voiceManager.PlayRandom(game.GetCurrentPlayerIndex(), "taunt");
                 MessageBox.Show($"{winnerName} wins the round with {points} points!", $"{winnerName} Win The Round!", MessageBoxButton.OK, MessageBoxImage.Exclamation);
 
                 var gameWinner = players.FirstOrDefault(p => p.GetScore() >= maxScore);
                 if (gameWinner != null)
                 {
+                    voiceManager.PlayRandom(game.GetCurrentPlayerIndex(), "taunt");
                     MessageBox.Show($"{gameWinner.GetName()} wins the entire game with {gameWinner.GetScore()} points!", $"{gameWinner.GetName()} Won The Game", MessageBoxButton.OK, MessageBoxImage.Exclamation);
                     ResetGame();
                     return true;
@@ -860,9 +890,7 @@ namespace DominoWPF
 
         private void GetButtonValue(object sender, RoutedEventArgs e, Button button, ICard card)
         {
-            player.SoundLocation = "Sounds/domino_click.wav";
-            player.Load();
-            player.Play();
+            audio.PlaySfx("Sounds/domino_click.wav");
 
             selectedCard = (button.Tag is ICard tagCard) ? tagCard : card;
             lastButton = currentButton;
@@ -882,7 +910,10 @@ namespace DominoWPF
         {
             PlaceCard("right");
         }
-
+        private void HandButton_MouseEnter(object sender, MouseEventArgs e)
+        {
+            audio.PlaySfx("Sounds/domino_hover.wav");
+        }
         #endregion
     }
 }
