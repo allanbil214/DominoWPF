@@ -40,6 +40,7 @@ namespace DominoWPF
         private readonly Thickness baseLeftMargin = new Thickness(-285, 10, 0, 0);
         
         static AudioManager audio = new AudioManager();
+        AudioSettingsWindow _audioSettingsWindow = null;
         VoiceManager voiceManager = new VoiceManager(audio);
 
         #endregion
@@ -52,25 +53,26 @@ namespace DominoWPF
             InitStackPanel();
             ChangeWindowSize();
             audio.PlayMusic("Sounds/bg_music.wav");
+
             LoadStartup();
             RandomKiryu();
         }
 
         private void RandomKiryu()
         {
-            string[] kiryuImages = {
-                "Images/kiryu.png",
-                "Images/kiryu_2.png",
-                "Images/kiryu_3.png"
-            };
+            string folderPath = "Images/Wallpaper";
+            string[] imageFiles = Directory.GetFiles(folderPath, "*.jpg", SearchOption.TopDirectoryOnly);
+
+            if (imageFiles.Length == 0) return;
 
             Random rand = new Random();
-            int index = rand.Next(kiryuImages.Length);
-            string imagePath = kiryuImages[index];
+            int index = rand.Next(imageFiles.Length);
+            string imagePath = imageFiles[index];
 
             BitmapImage bitmap = new BitmapImage();
             bitmap.BeginInit();
-            bitmap.UriSource = new Uri($"pack://application:,,,/{imagePath}", UriKind.Absolute);
+            bitmap.UriSource = new Uri(System.IO.Path.GetFullPath(imagePath), UriKind.Relative);
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
             bitmap.EndInit();
 
             kiryu.Source = bitmap;
@@ -107,10 +109,10 @@ namespace DominoWPF
             InitPlayers(playerNames);
             InitGame();
             LoadPlayerCards();
+
             ChangePlayerTurn();
 
-            audio.PlaySfx("Sounds/menu_exit.wav");
-
+            this.WindowState = WindowState.Maximized;
             this.Effect = null;
         }
 
@@ -238,7 +240,7 @@ namespace DominoWPF
             ChangePlayerTurn();
         }
 
-        private void ChangePlayerTurn() // boldify current player's label 2
+        private void ChangePlayerTurn()
         {
             var discardTile = game.GetDiscardTile();
             int skipCount = 0;
@@ -288,15 +290,27 @@ namespace DominoWPF
         private void SetPlayerTurnUI(int currentIndex)
         {
             voiceManager.PlayRandom(currentIndex, "myturn");
+
             Player1HandGrid.IsEnabled = false;
             Player2HandGrid.IsEnabled = false;
             Player3HandGrid.IsEnabled = false;
             Player4HandGrid.IsEnabled = false;
 
+            List<Label> playerNameLabels2 = new List<Label>
+                {
+                    player1NameLabel2, player2NameLabel2, player3NameLabel2, player4NameLabel2
+                };
+
+            foreach (var label in playerNameLabels2)
+            {
+                label.Opacity = 0.5;
+            }
+
             switch (currentIndex)
             {
                 case 0:
                     Player1HandGrid.IsEnabled = true;
+                    player1NameLabel2.Opacity = 1;
                     UpdateCardAvailability(Player1CardStackPanel);
                     break;
 
@@ -308,6 +322,7 @@ namespace DominoWPF
                         return;
                     }
                     Player2HandGrid.IsEnabled = true;
+                    player2NameLabel2.Opacity = 1;
                     UpdateCardAvailability(Player2CardStackPanel);
                     break;
 
@@ -319,6 +334,7 @@ namespace DominoWPF
                         return;
                     }
                     Player3HandGrid.IsEnabled = true;
+                    player3NameLabel2.Opacity = 1;
                     UpdateCardAvailability(Player3CardStackPanel);
                     break;
 
@@ -330,6 +346,7 @@ namespace DominoWPF
                         return;
                     }
                     Player4HandGrid.IsEnabled = true;
+                    player4NameLabel2.Opacity = 1;
                     UpdateCardAvailability(Player4CardStackPanel);
                     break;
             }
@@ -374,24 +391,54 @@ namespace DominoWPF
         private Button CreateDominoButton(ICard card, bool isEnabled)
         {
             Style dimStyle = (Style)FindResource("ExtraDimDisabledButton");
-
             Button newButton = new Button();
             newButton.Content = $"{GetBrailleFace(card.GetLeftValueCard())} │ {GetBrailleFace(card.GetRightValueCard())}";
             newButton.Width = 75;
             newButton.Height = 25;
             newButton.FontSize = 16;
+            newButton.FontFamily = (FontFamily)FindResource("radjani_semibold");
             newButton.HorizontalAlignment = HorizontalAlignment.Center;
             newButton.VerticalAlignment = VerticalAlignment.Center;
             newButton.IsEnabled = isEnabled;
             newButton.Tag = game.IsDoubleValue();
             newButton.Style = dimStyle;
-            newButton.Background = Brushes.White;
+
+            LinearGradientBrush neonWhiteBrush = new LinearGradientBrush();
+            neonWhiteBrush.StartPoint = new Point(0, 0);
+            neonWhiteBrush.EndPoint = new Point(1, 1);
+            neonWhiteBrush.GradientStops.Add(new GradientStop(Color.FromRgb(255, 255, 255), 0.0)); 
+            neonWhiteBrush.GradientStops.Add(new GradientStop(Color.FromRgb(240, 248, 255), 0.3));
+            neonWhiteBrush.GradientStops.Add(new GradientStop(Color.FromRgb(248, 248, 255), 1.0));
+            newButton.Background = neonWhiteBrush;
+
+            newButton.BorderBrush = (Brush)FindResource("BorderGlow");
+            newButton.BorderThickness = new Thickness(1.5);
+
+            DropShadowEffect glowEffect = new DropShadowEffect();
+            glowEffect.Color = Color.FromRgb(74, 158, 255); 
+            glowEffect.BlurRadius = 8;
+            glowEffect.ShadowDepth = 0;
+            glowEffect.Opacity = 0.6;
+            newButton.Effect = glowEffect;
 
             game.AddCard(card);
             if (game.IsDoubleValue())
             {
-                newButton.Foreground = Brushes.Red;
+                LinearGradientBrush neonRedBrush = (LinearGradientBrush)FindResource("NeonRedGradient");
+                newButton.Foreground = neonRedBrush;
+
+                DropShadowEffect redGlow = new DropShadowEffect();
+                redGlow.Color = Color.FromRgb(255, 0, 64);
+                redGlow.BlurRadius = 10;
+                redGlow.ShadowDepth = 0;
+                redGlow.Opacity = 0.8;
+                newButton.Effect = redGlow;
             }
+            else
+            {
+                newButton.Foreground = (Brush)FindResource("NeonBlueGradient");
+            }
+
             return newButton;
         }
 
@@ -478,9 +525,6 @@ namespace DominoWPF
         {
             Button newButton = new();
 
-            Style brightDisabled = (Style)FindResource("BrightDisabledButtonStyle");
-            Style highContrast = (Style)FindResource("HighContrastDisabledButton");
-
             var playedCards = game.GetDiscardTile().GetPlayedCards();
             var lastCard = isLeft ? playedCards.First() : playedCards.Last();
 
@@ -489,15 +533,15 @@ namespace DominoWPF
             newButton.Height = 20;
             newButton.FontSize = 12;
             newButton.IsEnabled = false;
-            newButton.Style = highContrast;
             newButton.Background = Brushes.White;
-
+			newButton.Foreground = (Brush)FindResource("NeonPurpleGradient");
             game.AddCard(lastCard);
 
             newButton.Tag = game.IsDoubleValue();
 
             if (game.IsDoubleValue())
             {
+				newButton.Foreground = (Brush)FindResource("NeonRedGradient");
                 TransformGroup transformGroup = new();
                 transformGroup.Children.Add(new ScaleTransform());
                 transformGroup.Children.Add(new SkewTransform());
@@ -511,6 +555,7 @@ namespace DominoWPF
 
             StackPanelManager(newButton, isLeft);
         }
+
 
         private void StackPanelManager(Button button, bool isLeft)
         {
@@ -737,15 +782,10 @@ namespace DominoWPF
                 topMargin.Top += 2;
             }
 
-            if (verticalInRight == 0)
-            {
-                leftMargin.Top += 40;
-            }
 
             if (verticalInRight > 0 && rightCount >= 8)
             {
-                leftMargin.Top += (topValue + 3) * verticalInRight;
-                leftMargin.Top += 1;
+                leftMargin.Top += (topValue - 28) * verticalInRight;
                 leftMargin.Left = baseLeftMargin.Left + 14 * verticalInTop;
             }
 
@@ -887,6 +927,39 @@ namespace DominoWPF
         #endregion
 
         #region Event Handlers
+
+        private void AudioSettings_Click(object sender, MouseButtonEventArgs e)
+        {
+            audio.PlaySfx("Sounds/select.wav");
+
+            if (_audioSettingsWindow == null || !_audioSettingsWindow.IsLoaded)
+            {
+                _audioSettingsWindow = new AudioSettingsWindow(audio, voiceManager);
+                _audioSettingsWindow.SetPosition(this);
+
+                _audioSettingsWindow.Closed += AudioSettingsWindow_Closed;
+
+                _audioSettingsWindow.Show();
+            }
+            else
+            {
+                _audioSettingsWindow.Activate();
+                _audioSettingsWindow.Focus();
+            }
+        }
+
+        private void AudioSettingsWindow_Closed(object sender, EventArgs e)
+        {
+            if (_audioSettingsWindow != null)
+            {
+                _audioSettingsWindow = null;
+            }
+        }
+
+        private void AudioSettingsButton_MouseEnter(object sender, MouseEventArgs e)
+        {
+            audio.PlaySfx("Sounds/hover.wav");
+        }
 
         private void GetButtonValue(object sender, RoutedEventArgs e, Button button, ICard card)
         {

@@ -14,57 +14,150 @@
         <FontFamily x:Key="rgg_symbols" >/fonts/#RGGStudioSymbols</FontFamily>
         <FontFamily x:Key="radjani_medium" >/fonts/#Rajdhani Medium</FontFamily>
         <FontFamily x:Key="radjani_semibold" >/fonts/#Rajdhani SemiBold</FontFamily>
-        <Style TargetType="Button" x:Key="BrightDisabledButtonStyle" BasedOn="{StaticResource {x:Type Button}}">
+
+        <LinearGradientBrush x:Key="YakuzaBackground" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF0A0A0A" Offset="0"/>
+            <GradientStop Color="#FF1A1A2E" Offset="0.5"/>
+            <GradientStop Color="#FF16213E" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="NeonRedGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FFFF0040" Offset="0"/>
+            <GradientStop Color="#FFCC0033" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="NeonBlueGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF00CCFF" Offset="0"/>
+            <GradientStop Color="#FF0080CC" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="NeonPurpleGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF8A2BE2" Offset="0"/>
+            <GradientStop Color="#FF5700B1" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="DarkControlBackground" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#FF2A2A3A" Offset="0"/>
+            <GradientStop Color="#FF1A1A2A" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="PlayerAreaBackground" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF1A1A2A" Offset="0"/>
+            <GradientStop Color="#FF2A2A3A" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="GameAreaBackground" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF0F2027" Offset="0"/>
+            <GradientStop Color="#FF203A43" Offset="0.5"/>
+            <GradientStop Color="#FF2C5364" Offset="1"/>
+        </LinearGradientBrush>
+
+        <SolidColorBrush x:Key="NeonYellow" Color="#FFFFFF00"/>
+        <SolidColorBrush x:Key="NeonPink" Color="#FFFF1493"/>
+        <SolidColorBrush x:Key="TextWhite" Color="#FFF0F0F0"/>
+        <SolidColorBrush x:Key="BorderGlow" Color="#FF4A9EFF"/>
+
+        <Style TargetType="Button" x:Key="BrightDisabledButtonStyle">
+            <Setter Property="Background" Value="{StaticResource NeonBlueGradient}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="{StaticResource NeonYellow}"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="FontFamily" Value="{StaticResource radjani_semibold}"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="8" Color="#FF00CCFF" ShadowDepth="0" Opacity="0.7"/>
+                </Setter.Value>
+            </Setter>
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
                     <Setter Property="Foreground" Value="Black"/>
-                    <Setter Property="Background" Value="White"/>
+                    <Setter Property="Background" Value="{StaticResource NeonYellow}"/>
                     <Setter Property="Opacity" Value="1"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="6" Color="#FFFFFF00" ShadowDepth="0" Opacity="0.8"/>
+                        </Setter.Value>
+                    </Setter>
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <Style x:Key="HighContrastDisabledButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+
+        <Style x:Key="HighContrastDisabledButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource DarkControlBackground}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextWhite}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderGlow}"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="FontFamily" Value="{StaticResource radjani_semibold}"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="5" Color="#FF4A9EFF" ShadowDepth="0" Opacity="0.5"/>
+                </Setter.Value>
+            </Setter>
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
                     <Setter Property="Foreground" Value="Black"/>
-                    <Setter Property="Background" Value="White"/>
-                    <Setter Property="BorderBrush" Value="Black"/>
-                    <Setter Property="BorderThickness" Value="1"/>
+                    <Setter Property="Background" Value="{StaticResource NeonYellow}"/>
+                    <Setter Property="BorderBrush" Value="{StaticResource NeonRedGradient}"/>
+                    <Setter Property="BorderThickness" Value="2"/>
                     <Setter Property="FontWeight" Value="SemiBold"/>
                     <Setter Property="Opacity" Value="1"/>
-
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="8" Color="#FFFFFF00" ShadowDepth="0" Opacity="0.9"/>
+                        </Setter.Value>
+                    </Setter>
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <Style x:Key="ExtraDimDisabledButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+
+        <Style x:Key="ExtraDimDisabledButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource DarkControlBackground}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextWhite}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderGlow}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontFamily" Value="{StaticResource radjani_medium}"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="3" Color="#FF4A9EFF" ShadowDepth="0" Opacity="0.3"/>
+                </Setter.Value>
+            </Setter>
             <Style.Triggers>
                 <Trigger Property="IsEnabled" Value="False">
-                    <Setter Property="Foreground" Value="Gray"/>
-                    <Setter Property="Background" Value="#FFEEEEEE"/>
-                    <!-- light gray -->
-                    <Setter Property="BorderBrush" Value="#FFCCCCCC"/>
-                    <!-- softer border -->
-                    <Setter Property="Opacity" Value="0.5"/>
-                    <!-- very dim -->
+                    <Setter Property="Foreground" Value="#FF666666"/>
+                    <Setter Property="Background" Value="#FF2A2A2A"/>
+                    <Setter Property="BorderBrush" Value="#FF444444"/>
+                    <Setter Property="Opacity" Value="0.6"/>
+                    <Setter Property="Effect">
+                        <Setter.Value>
+                            <DropShadowEffect BlurRadius="2" Color="#FF666666" ShadowDepth="0" Opacity="0.2"/>
+                        </Setter.Value>
+                    </Setter>
                 </Trigger>
             </Style.Triggers>
         </Style>
-
     </Window.Resources>
 
-    <Grid>
+    <Grid Background="{StaticResource YakuzaBackground}">
+
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="86*"/>
             <ColumnDefinition Width="209*"/>
         </Grid.ColumnDefinitions>
         <Viewbox Stretch="Uniform" StretchDirection="Both" Grid.ColumnSpan="2">
-            <Border x:Name="MainBorder" BorderBrush="Black" BorderThickness="1" Width="900" Height="720">
-                <Grid x:Name="MainGrid">
+            <Border x:Name="MainBorder" BorderBrush="{StaticResource BorderGlow}" BorderThickness="3" Width="900" Height="720">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="15" Color="#FF4A9EFF" ShadowDepth="0" Opacity="0.6"/>
+                </Border.Effect>
+                <Grid x:Name="MainGrid" Background="{StaticResource YakuzaBackground}">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="80"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Border Grid.Row="0" Background="#FFE6E6FA" BorderBrush="#FFCCCCCC" BorderThickness="0,0,0,2">
+
+                    <Border Grid.Row="0" Background="{StaticResource PlayerAreaBackground}" BorderBrush="{StaticResource BorderGlow}" BorderThickness="0,0,0,2">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="8" Color="#FF4A9EFF" ShadowDepth="2" Opacity="0.4"/>
+                        </Border.Effect>
                         <Grid Margin="20,10">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
@@ -78,42 +171,68 @@
                             Orientation="Horizontal" 
                             VerticalAlignment="Center" Margin="20,0,0,0">
                                 <Label x:Name="player1NameLabel" Content="Player 1" 
-                                FontSize="16" FontWeight="Bold" Margin="0,0,10,0"/>
+                                FontSize="16" FontWeight="Bold" Margin="0,0,10,0"
+                                FontFamily="{StaticResource radjani_semibold}"
+                                Foreground="{StaticResource NeonYellow}">
+                                    <Label.Effect>
+                                        <DropShadowEffect BlurRadius="4" Color="#FFFFFF00" ShadowDepth="0" Opacity="0.7"/>
+                                    </Label.Effect>
+                                </Label>
                                 <Label x:Name="player1ScoreLabel" Content="Score: 0" 
-                                FontSize="16"/>
+                                FontSize="16" FontFamily="{StaticResource radjani_medium}"
+                                Foreground="{StaticResource TextWhite}"/>
                             </StackPanel>
                             <StackPanel Grid.Column="1" 
                             Orientation="Horizontal" 
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left" Margin="252,0,0,0" Width="177">
                                 <Label x:Name="player3NameLabel" Content="Player 3" 
-                                FontSize="16" FontWeight="Bold" Margin="0,0,10,0"/>
+                                FontSize="16" FontWeight="Bold" Margin="0,0,10,0"
+                                FontFamily="{StaticResource radjani_semibold}"
+                                Foreground="{StaticResource NeonPink}">
+                                    <Label.Effect>
+                                        <DropShadowEffect BlurRadius="4" Color="#FFFF1493" ShadowDepth="0" Opacity="0.7"/>
+                                    </Label.Effect>
+                                </Label>
                                 <Label x:Name="player3ScoreLabel" Content="Score: 0" 
-                                FontSize="16"/>
+                                FontSize="16" FontFamily="{StaticResource radjani_medium}"
+                                Foreground="{StaticResource TextWhite}"/>
                             </StackPanel>
                             <StackPanel Grid.Row="1" Grid.Column="0" 
                             Orientation="Horizontal" 
                             VerticalAlignment="Center" Margin="20,0,0,0">
                                 <Label x:Name="player2NameLabel" Content="Player 2" 
-                                FontSize="16" FontWeight="Bold" Margin="0,0,10,0"/>
+                                FontSize="16" FontWeight="Bold" Margin="0,0,10,0"
+                                FontFamily="{StaticResource radjani_semibold}"
+                                Foreground="{StaticResource NeonBlueGradient}">
+                                    <Label.Effect>
+                                        <DropShadowEffect BlurRadius="4" Color="#FF00CCFF" ShadowDepth="0" Opacity="0.7"/>
+                                    </Label.Effect>
+                                </Label>
                                 <Label x:Name="player2ScoreLabel" Content="Score: 0" 
-                                FontSize="16"/>
+                                FontSize="16" FontFamily="{StaticResource radjani_medium}"
+                                Foreground="{StaticResource TextWhite}"/>
                             </StackPanel>
                             <StackPanel Grid.Row="1" Grid.Column="1" 
                             Orientation="Horizontal" 
                             VerticalAlignment="Center"
                             HorizontalAlignment="Left" Margin="252,0,0,0" Width="177">
                                 <Label x:Name="player4NameLabel" Content="Player 4" 
-                                FontSize="16" FontWeight="Bold" Margin="0,0,10,0"/>
+                                FontSize="16" FontWeight="Bold" Margin="0,0,10,0"
+                                FontFamily="{StaticResource radjani_semibold}"
+                                Foreground="{StaticResource NeonRedGradient}">
+                                    <Label.Effect>
+                                        <DropShadowEffect BlurRadius="4" Color="#FFFF0040" ShadowDepth="0" Opacity="0.7"/>
+                                    </Label.Effect>
+                                </Label>
                                 <Label x:Name="player4ScoreLabel" Content="Score: 0" 
-                                FontSize="16"/>
+                                FontSize="16" FontFamily="{StaticResource radjani_medium}"
+                                Foreground="{StaticResource TextWhite}"/>
                             </StackPanel>
                         </Grid>
                     </Border>
+
                     <Grid Grid.Row="1" x:Name="GameArea">
-                        <Grid.Background>
-                            <ImageBrush ImageSource="/Images/hannya.jpg"/>
-                        </Grid.Background>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
                             <RowDefinition Height="4*"/>
@@ -124,10 +243,11 @@
                             <ColumnDefinition Width="7*"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
+
                         <Grid x:Name="Player3HandGrid" Grid.Row="0" Grid.Column="1" 
-                        Background="#FFFFFDC7" Margin="5">
+                        Background="{StaticResource PlayerAreaBackground}" Margin="5">
                             <Grid.Effect>
-                                <DropShadowEffect Opacity="0.5"/>
+                                <DropShadowEffect Opacity="0.8" BlurRadius="10" Color="#FF4A9EFF"/>
                             </Grid.Effect>
                             <ScrollViewer HorizontalScrollBarVisibility="Auto" 
                             VerticalScrollBarVisibility="Disabled">
@@ -136,24 +256,26 @@
                                 HorizontalAlignment="Center" 
                                 VerticalAlignment="Center"/>
                             </ScrollViewer>
-                            <Border BorderBrush="#FFCCCCCC" BorderThickness="1"/>
+                            <Border BorderBrush="{StaticResource BorderGlow}" BorderThickness="2"/>
                         </Grid>
+
                         <Grid x:Name="Player4HandGrid" Grid.Row="1" Grid.Column="0" 
-                        Background="#FFFFFDC7" Margin="5">
+                        Background="{StaticResource PlayerAreaBackground}" Margin="5">
                             <Grid.Effect>
-                                <DropShadowEffect Opacity="0.5"/>
+                                <DropShadowEffect Opacity="0.8" BlurRadius="10" Color="#FF4A9EFF"/>
                             </Grid.Effect>
                             <ScrollViewer VerticalScrollBarVisibility="Auto" 
                             HorizontalScrollBarVisibility="Disabled">
                                 <StackPanel
                     VerticalAlignment="Center" Orientation="Vertical" x:Name="Player4CardStackPanel" HorizontalAlignment="Center"/>
                             </ScrollViewer>
-                            <Border BorderBrush="#FFCCCCCC" BorderThickness="1"/>
+                            <Border BorderBrush="{StaticResource BorderGlow}" BorderThickness="2"/>
                         </Grid>
+
                         <Grid x:Name="Player2HandGrid" Grid.Row="1" Grid.Column="2" 
-                        Background="#FFFFFDC7" Margin="5">
+                        Background="{StaticResource PlayerAreaBackground}" Margin="5">
                             <Grid.Effect>
-                                <DropShadowEffect Opacity="0.5"/>
+                                <DropShadowEffect Opacity="0.8" BlurRadius="10" Color="#FF4A9EFF"/>
                             </Grid.Effect>
                             <ScrollViewer VerticalScrollBarVisibility="Auto" 
                             HorizontalScrollBarVisibility="Disabled">
@@ -162,12 +284,13 @@
                                 HorizontalAlignment="Center" 
                                 VerticalAlignment="Center"/>
                             </ScrollViewer>
-                            <Border BorderBrush="#FFCCCCCC" BorderThickness="1"/>
+                            <Border BorderBrush="{StaticResource BorderGlow}" BorderThickness="2"/>
                         </Grid>
+
                         <Grid x:Name="Player1HandGrid" Grid.Row="2" Grid.Column="1" 
-                        Background="#FFFFFDC7" Margin="5">
+                        Background="{StaticResource PlayerAreaBackground}" Margin="5">
                             <Grid.Effect>
-                                <DropShadowEffect Opacity="0.5"/>
+                                <DropShadowEffect Opacity="0.8" BlurRadius="10" Color="#FF4A9EFF"/>
                             </Grid.Effect>
                             <ScrollViewer HorizontalScrollBarVisibility="Auto" 
                             VerticalScrollBarVisibility="Disabled">
@@ -176,21 +299,28 @@
                                 HorizontalAlignment="Center" 
                                 VerticalAlignment="Center"/>
                             </ScrollViewer>
-                            <Border BorderBrush="#FFCCCCCC" BorderThickness="1"/>
+                            <Border BorderBrush="{StaticResource BorderGlow}" BorderThickness="2"/>
                         </Grid>
 
                         <Grid x:Name="ContentGrid" Grid.Row="1" Grid.Column="1" 
-                        Background="#FFBCFF86" Margin="5">
+                        Background="{StaticResource GameAreaBackground}" Margin="5">
                             <Grid.Effect>
-                                <DropShadowEffect Opacity="0.5"/>
+                                <DropShadowEffect Opacity="1" BlurRadius="15" Color="#FF2C5364"/>
                             </Grid.Effect>
 
+                            <Image x:Name="kiryu" Source="/Images/Wallpaper/kiryumajima.jpg" Stretch="Fill" Opacity="0.2">
+                                <Image.Effect>
+                                    <DropShadowEffect BlurRadius="20" Color="#FFFFFF00" ShadowDepth="0" Opacity="0.3"/>
+                                </Image.Effect>
+                            </Image>
 
-                            <Image x:Name="kiryu" Source="/img/kiryu.png" Stretch="Fill" Opacity="0.1"/>
-
-
-                            <Label Content="Like a Domino" HorizontalAlignment="Center" VerticalAlignment="Top" FontFamily="{StaticResource dragonfish}" FontSize="58" Height="90" Width="399" Foreground="#FFFF4747" Margin="10,170,0,0" Opacity="0.5"/>
-
+                            <Label Content="Like a Domino" HorizontalAlignment="Center" VerticalAlignment="Top" 
+                                   FontFamily="{StaticResource dragonfish}" FontSize="58" Height="90" Width="399" 
+                                   Foreground="{StaticResource NeonRedGradient}" Margin="10,170,0,0" Opacity="0.7">
+                                <Label.Effect>
+                                    <DropShadowEffect Opacity="1" BlurRadius="20" Color="#FFFF0040" ShadowDepth="0"/>
+                                </Label.Effect>
+                            </Label>
 
                             <StackPanel x:Name="LayerBottomStackPanel" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,29"/>
                             <StackPanel x:Name="LayerTopStackPanel" Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,29,185,0" RenderTransformOrigin="0.5,0.5">
@@ -203,6 +333,7 @@
                                     </TransformGroup>
                                 </StackPanel.RenderTransform>
                             </StackPanel>
+
                             <Grid x:Name="LayerRightWrapper"
 								  HorizontalAlignment="Center"
 								  VerticalAlignment="Center"
@@ -234,38 +365,66 @@
                             </Grid>
 
                             <Button x:Name="PlaceLeftButton" 
-							   HorizontalAlignment="Left" 
-							   VerticalAlignment="Center"
-							   Margin="30,0,0,0"
-							   Content="◀ Place Left" 
-							   Click="PlaceLeftButton_Click"
-							   Width="100" 
-							   Height="40"
-							   FontSize="14"
-							   Background="#FFE6F3FF"
-							   BorderBrush="#FF4A90E2"/>
+                                    Content="◀ Place Left" 
+                                    Click="PlaceLeftButton_Click"
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Center"
+                                    Margin="30,0,0,0"
+                                    Width="100" 
+                                    Height="40"
+                                    FontSize="14"
+                                    FontFamily="{StaticResource radjani_semibold}"
+                                    Background="{StaticResource NeonPurpleGradient}"
+                                    Foreground="White"
+                                    BorderBrush="{StaticResource NeonYellow}"
+                                    BorderThickness="2">
+                                <Button.Effect>
+                                    <DropShadowEffect BlurRadius="10" Color="#FF00CCFF" ShadowDepth="0" Opacity="0.8"/>
+                                </Button.Effect>
+                            </Button>
 
                             <Button x:Name="PlaceRightButton" 
-								Content="Place Right ▶" 
-								Click="PlaceRightButton_Click"
-								Width="100" 
-								Height="40"
-								FontSize="14"
-								Background="#FFE6F3FF"
-								BorderBrush="#FF4A90E2"
-								HorizontalAlignment="Left" 
-								VerticalAlignment="Center"
-								Margin="558,0,0,0"/>
-                            <Ellipse x:Name="MiddleEllipse" Width="10" Height="10" 
-									 Fill="#FF666666" 
-									 HorizontalAlignment="Center" 
-									 VerticalAlignment="Center"
-									 Opacity="0.3"/>
+                                    Content="Place Right ▶" 
+                                    Click="PlaceRightButton_Click"
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Center"
+                                    Margin="558,0,0,0"
+                                    Width="100" 
+                                    Height="40"
+                                    FontSize="14"
+                                    FontFamily="{StaticResource radjani_semibold}"
+                                    Background="{StaticResource NeonPurpleGradient}"
+                                    Foreground="White"
+                                    BorderBrush="{StaticResource NeonYellow}"
+                                    BorderThickness="2">
+                                <Button.Effect>
+                                    <DropShadowEffect BlurRadius="10" Color="#FF00CCFF" ShadowDepth="0" Opacity="0.8"/>
+                                </Button.Effect>
+                            </Button>
 
-                            <Border BorderBrush="#FFCCCCCC" BorderThickness="1"/>
+                            <Ellipse x:Name="MiddleEllipse" 
+                                     Width="10" 
+                                     Height="10" 
+                                     Fill="{StaticResource NeonYellow}" 
+                                     HorizontalAlignment="Center" 
+                                     VerticalAlignment="Center"
+                                     Opacity="0.8">
+                                <Ellipse.Effect>
+                                    <DropShadowEffect BlurRadius="5" Color="#FFFFFF00" ShadowDepth="0" Opacity="1"/>
+                                </Ellipse.Effect>
+                            </Ellipse>
+
+                            <Border BorderBrush="{StaticResource BorderGlow}" BorderThickness="2"/>
                         </Grid>
-                        <Label x:Name="player1NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="5,75,0,0" Grid.Row="2" VerticalAlignment="Top" Grid.Column="1" Opacity="0.75" Visibility="Hidden"/>
-                        <Label x:Name="player2NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="62,388,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="2" Opacity="0.75" RenderTransformOrigin="0.5,0.5" Visibility="Hidden">
+
+                        <Label x:Name="player1NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="7,76,0,0" Grid.Row="2" VerticalAlignment="Top" Grid.Column="1"
+                               Foreground="{StaticResource NeonYellow}" FontFamily="{StaticResource radjani_semibold}">
+                            <Label.Effect>
+                                <DropShadowEffect BlurRadius="3" Color="#FFFFFF00" ShadowDepth="0" Opacity="0.7"/>
+                            </Label.Effect>
+                        </Label>
+                        <Label x:Name="player2NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="63,386,0,0" Grid.Row="1" VerticalAlignment="Top" Grid.Column="2" RenderTransformOrigin="0.5,0.5"
+                               Foreground="{StaticResource NeonBlueGradient}" FontFamily="{StaticResource radjani_semibold}">
                             <Label.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -274,8 +433,12 @@
                                     <TranslateTransform/>
                                 </TransformGroup>
                             </Label.RenderTransform>
+                            <Label.Effect>
+                                <DropShadowEffect BlurRadius="3" Color="#FF00CCFF" ShadowDepth="0" Opacity="0.7"/>
+                            </Label.Effect>
                         </Label>
-                        <Label x:Name="player3NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="5,0,0,0" VerticalAlignment="Top" Grid.Column="1" Opacity="0.75" RenderTransformOrigin="0.5,0.5" Visibility="Hidden">
+                        <Label x:Name="player3NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="7,7,0,0" VerticalAlignment="Top" Grid.Column="1" RenderTransformOrigin="0.5,0.5"
+                               Foreground="#FF72FF41" FontFamily="{StaticResource radjani_semibold}">
                             <Label.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -284,8 +447,12 @@
                                     <TranslateTransform/>
                                 </TransformGroup>
                             </Label.RenderTransform>
+                            <Label.Effect>
+                                <DropShadowEffect BlurRadius="3" Color="#FFFF1493" ShadowDepth="0" Opacity="0.7"/>
+                            </Label.Effect>
                         </Label>
-                        <Label x:Name="player4NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="0,12,0,0" VerticalAlignment="Top" Opacity="0.75" RenderTransformOrigin="0.5,0.5" Grid.Row="1" Visibility="Hidden">
+                        <Label x:Name="player4NameLabel2" Content="Label" HorizontalAlignment="Left" Margin="0,14,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" Grid.Row="1"
+                               Foreground="{StaticResource NeonRedGradient}" FontFamily="{StaticResource radjani_semibold}">
                             <Label.RenderTransform>
                                 <TransformGroup>
                                     <ScaleTransform/>
@@ -294,8 +461,22 @@
                                     <TranslateTransform/>
                                 </TransformGroup>
                             </Label.RenderTransform>
+                            <Label.Effect>
+                                <DropShadowEffect BlurRadius="3" Color="#FFFF0040" ShadowDepth="0" Opacity="0.7"/>
+                            </Label.Effect>
                         </Label>
                     </Grid>
+                    
+                    <Border HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,590,5,0" CornerRadius="3" BorderThickness="1" Grid.Row="1">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="8" Color="#FF00CCFF" ShadowDepth="0" Opacity="0.6"/>
+                        </Border.Effect>
+                        <Label Content="🔊" FontSize="20" MouseLeftButtonUp="AudioSettings_Click" Foreground="{StaticResource NeonBlueGradient}" Padding="8,4,8,4" Cursor="Hand" MouseEnter="AudioSettingsButton_MouseEnter">
+                            <Label.Effect>
+                                <DropShadowEffect BlurRadius="3" Color="#FF00CCFF" ShadowDepth="0" Opacity="0.8"/>
+                            </Label.Effect>
+                        </Label>
+                    </Border>
                 </Grid>
             </Border>
         </Viewbox>

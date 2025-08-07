@@ -1,4 +1,5 @@
 ﻿using DominoWPF.Classes;
+using Microsoft.VisualBasic.Devices;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,11 +20,23 @@ namespace DominoWPF
     {
         public bool closeMainWindow = true;
         AudioManager _audio = null;
+        VoiceManager _voiceManager = null;
+        AudioSettingsWindow _audioSettingsWindow = null;
+
         public StartupWindow(AudioManager audio)
         {
             _audio = audio;
             InitializeComponent();
+            ChangeWindowSize();
             InitPlayerNumber();
+
+            _voiceManager = new VoiceManager(_audio);
+        }
+
+        private void ChangeWindowSize()
+        {
+            this.Width += 16;
+            this.Height += 25;
         }
 
         public void InitPlayerNumber()
@@ -130,6 +143,43 @@ namespace DominoWPF
             _audio.PlaySfx("Sounds/select.wav");
         }
 
+        private void AudioSettings_Click(object sender, MouseButtonEventArgs e)
+        {
+            _audio.PlaySfx("Sounds/select.wav");
+
+            if (_audioSettingsWindow == null || !_audioSettingsWindow.IsLoaded)
+            {
+                _audioSettingsWindow = new AudioSettingsWindow(_audio, _voiceManager);
+                _audioSettingsWindow.SetPosition(this);
+
+                _audioSettingsWindow.Closed += AudioSettingsWindow_Closed;
+
+                _audioSettingsWindow.Show();
+            }
+            else
+            {
+                _audioSettingsWindow.Activate();
+                _audioSettingsWindow.Focus();
+            }
+        }
+
+        private void AudioSettingsWindow_Closed(object sender, EventArgs e)
+        {
+            if (_audioSettingsWindow != null)
+            {
+                _audio.SetBgmVolume(_audioSettingsWindow.GetBgmVolume());
+                _audio.SetSfxVolume(_audioSettingsWindow.GetSfxVolume());
+                _audio.SetVoiceVolume(_audioSettingsWindow.GetVoiceVolume());
+
+                _audioSettingsWindow = null;
+            }
+        }
+
+        private void AudioSettingsButton_MouseEnter(object sender, MouseEventArgs e)
+        {
+            _audio.PlaySfx("Sounds/hover.wav");
+        }
+
         private void Label_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             int selectedPlayers = playerNumberComboBox.SelectedIndex + 2;
@@ -149,10 +199,18 @@ namespace DominoWPF
                 return;
             }
 
-            _audio.PlaySfx("Sounds/select.wav");
+            _audio.PlaySfx("Sounds/menu_exit.wav");
+
+            _audioSettingsWindow?.Close();
 
             this.DialogResult = true;
             this.Close();
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            _audioSettingsWindow?.Close();
+            base.OnClosed(e);
         }
     }
 }

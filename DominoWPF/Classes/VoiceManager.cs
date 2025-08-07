@@ -46,7 +46,6 @@ namespace DominoWPF.Classes
                     continue;
                 }
 
-
                 if (!int.TryParse(folderName.Replace("player", ""), out int folderPlayerNumber))
                 {
                     //MessageBox.Show($"[VoiceManager] Invalid player folder '{folderName}'.");
@@ -76,7 +75,7 @@ namespace DominoWPF.Classes
             }
         }
 
-        public void PlayRandom(int playerIndex, string voiceType)
+        public void PlayRandom(int playerIndex, string voiceType, float volume = -1f)
         {
             if (_voiceLines.TryGetValue(playerIndex, out var voiceTypeDict))
             {
@@ -85,7 +84,8 @@ namespace DominoWPF.Classes
                     var randomFile = voiceFiles[_rng.Next(voiceFiles.Count)];
                     //MessageBox.Show($"[VoiceManager] Playing random voice line: {randomFile}");
 
-                    _audio.PlayVoice(randomFile);
+                    // Use the AudioManager's voice volume if no specific volume is provided
+                    _audio.PlayVoice(randomFile, volume);
                 }
                 //else
                 //{
@@ -96,6 +96,23 @@ namespace DominoWPF.Classes
             //{
             //    MessageBox.Show($"[VoiceManager] No voice lines found for player index {playerIndex}.");
             //}
+        }
+
+        public bool HasVoiceLines(int playerIndex, string voiceType)
+        {
+            return _voiceLines.TryGetValue(playerIndex, out var voiceTypeDict) &&
+                   voiceTypeDict.TryGetValue(voiceType, out var voiceFiles) &&
+                   voiceFiles.Count > 0;
+        }
+
+        public int GetVoiceLineCount(int playerIndex, string voiceType)
+        {
+            if (_voiceLines.TryGetValue(playerIndex, out var voiceTypeDict) &&
+                voiceTypeDict.TryGetValue(voiceType, out var voiceFiles))
+            {
+                return voiceFiles.Count;
+            }
+            return 0;
         }
     }
 }

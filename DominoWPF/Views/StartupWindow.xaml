@@ -12,52 +12,322 @@
         <FontFamily x:Key="rgg_symbols" >/fonts/#RGGStudioSymbols</FontFamily>
         <FontFamily x:Key="radjani_medium" >/fonts/#Rajdhani Medium</FontFamily>
         <FontFamily x:Key="radjani_semibold" >/fonts/#Rajdhani SemiBold</FontFamily>
-        <Style TargetType="Button">
-            <Setter Property="FocusVisualStyle" Value="{x:Null}"/>
-            <Setter Property="IsTabStop" Value="False"/>
+
+        <Style TargetType="ComboBoxItem">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="MinHeight" Value="25"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBoxItem">
+                        <Border x:Name="Border" 
+                        Background="#FF1A1A2A"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                      VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#FF5700B1"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="Border" Property="Background" Value="#FF410061"/>
+                                <Setter Property="Foreground" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ComboBoxButtonStyle" TargetType="Button">
+            <Setter Property="IsTabStop" Value="True"/>
+            <Setter Property="Focusable" Value="True"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                        BorderBrush="{TemplateBinding BorderBrush}" 
+                        BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <LinearGradientBrush x:Key="YakuzaBackground" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF0A0A0A" Offset="0"/>
+            <GradientStop Color="#FF1A1A2E" Offset="0.5"/>
+            <GradientStop Color="#FF16213E" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="NeonRedGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FFFF0040" Offset="0"/>
+            <GradientStop Color="#FFCC0033" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="NeonBlueGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF00CCFF" Offset="0"/>
+            <GradientStop Color="#FF0080CC" Offset="1"/>
+        </LinearGradientBrush>
+
+        <LinearGradientBrush x:Key="DarkControlBackground" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#FF2A2A3A" Offset="0"/>
+            <GradientStop Color="#FF1A1A2A" Offset="1"/>
+        </LinearGradientBrush>
+
+        <SolidColorBrush x:Key="NeonYellow" Color="#FFFFFF00"/>
+        <SolidColorBrush x:Key="NeonPink" Color="#FFFF1493"/>
+        <SolidColorBrush x:Key="TextWhite" Color="#FFF0F0F0"/>
+        <SolidColorBrush x:Key="BorderGlow" Color="#FF4A9EFF"/>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Foreground" Value="{StaticResource TextWhite}"/>
+            <Setter Property="Background" Value="{StaticResource DarkControlBackground}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderGlow}"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="Padding" Value="6,2"/>
+            <Setter Property="IsTabStop" Value="True"/>
+            <Setter Property="Focusable" Value="True"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="5" Color="#FF4A9EFF" ShadowDepth="0" Opacity="0.4"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ComboBox">
+                        <Grid>
+                            <ToggleButton x:Name="ToggleButton"
+                                  Grid.Column="2"
+                                  Focusable="False"
+                                  IsChecked="{Binding Path=IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                                  ClickMode="Press"
+                                  Background="{TemplateBinding Background}"
+                                  BorderBrush="{TemplateBinding BorderBrush}"
+                                  BorderThickness="{TemplateBinding BorderThickness}">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border x:Name="MainBorder"
+                                        Background="{TemplateBinding Background}"
+                                        BorderBrush="{TemplateBinding BorderBrush}"
+                                        BorderThickness="{TemplateBinding BorderThickness}"
+                                        CornerRadius="3">
+                                            <Grid>
+                                                <ContentPresenter Margin="8,2,30,2"
+                                                          VerticalAlignment="Center"
+                                                          HorizontalAlignment="Left"
+                                                          Content="{Binding Path=SelectionBoxItem, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                                                          ContentTemplate="{Binding Path=SelectionBoxItemTemplate, RelativeSource={RelativeSource AncestorType=ComboBox}}"
+                                                          ContentTemplateSelector="{Binding Path=ItemTemplateSelector, RelativeSource={RelativeSource AncestorType=ComboBox}}"/>
+                                                <Path HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0"
+                                              Data="M 0 0 L 4 4 L 8 0 Z"
+                                              Fill="{StaticResource TextWhite}" Width="8" Height="4"/>
+                                            </Grid>
+                                        </Border>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+
+                            <ContentPresenter x:Name="ContentSite"
+                                      IsHitTestVisible="False"
+                                      Content="{TemplateBinding SelectionBoxItem}"
+                                      ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                                      ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                                      Margin="3,3,23,3"
+                                      VerticalAlignment="Center"
+                                      HorizontalAlignment="Left"/>
+
+                            <TextBox x:Name="PART_EditableTextBox"
+                             Style="{x:Null}"
+                             HorizontalAlignment="Left"
+                             VerticalAlignment="Center"
+                             Margin="3,3,23,3"
+                             Focusable="True"
+                             Background="Transparent"
+                             Visibility="Hidden"
+                             IsReadOnly="{TemplateBinding IsReadOnly}"/>
+
+                            <Popup Name="PART_Popup"
+                           Placement="Bottom"
+                           IsOpen="{TemplateBinding IsDropDownOpen}"
+                           AllowsTransparency="True"
+                           Focusable="False"
+                           PopupAnimation="Slide">
+                                <Grid MinWidth="{TemplateBinding ActualWidth}" MaxHeight="200" Background="{StaticResource DarkControlBackground}">
+                                    <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Background="{StaticResource DarkControlBackground}"
+                                    CornerRadius="2">
+                                        <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True" VerticalScrollBarVisibility="Auto">
+                                            <ItemsPresenter />
+                                        </ScrollViewer>
+                                    </Border>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="{StaticResource DarkControlBackground}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextWhite}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderGlow}"/>
+            <Setter Property="BorderThickness" Value="2"/>
+            <Setter Property="CaretBrush" Value="{StaticResource NeonYellow}"/>
+            <Setter Property="SelectionBrush" Value="{StaticResource NeonPink}"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="5" Color="#FF4A9EFF" ShadowDepth="0" Opacity="0.3"/>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
-    <Grid x:Name="MainGrid">
-        <Label Content="a" HorizontalAlignment="Left" Margin="35.7,-2,0,0" VerticalAlignment="Top" FontFamily="{StaticResource rgg_symbols}" FontSize="52">
+
+    <Grid x:Name="MainGrid" Background="{StaticResource YakuzaBackground}">
+        <Rectangle Fill="#FF000000" Opacity="0.3">
+            <Rectangle.OpacityMask>
+                <ImageBrush ImageSource="/images/noise_pattern.png" TileMode="Tile" Viewport="0,0,0.1,0.1"/>
+            </Rectangle.OpacityMask>
+        </Rectangle>
+
+        <Rectangle HorizontalAlignment="Left" Width="3" Fill="{StaticResource NeonRedGradient}" Margin="10,0,0,0">
+            <Rectangle.Effect>
+                <DropShadowEffect BlurRadius="8" Color="#FFFF0040" ShadowDepth="0" Opacity="0.8"/>
+            </Rectangle.Effect>
+        </Rectangle>
+        <Rectangle HorizontalAlignment="Right" Width="3" Fill="{StaticResource NeonBlueGradient}" Margin="0,0,10,0">
+            <Rectangle.Effect>
+                <DropShadowEffect BlurRadius="8" Color="#FF00CCFF" ShadowDepth="0" Opacity="0.8"/>
+            </Rectangle.Effect>
+        </Rectangle>
+
+        <Label Content="a" HorizontalAlignment="Left" Margin="45,9,0,0" VerticalAlignment="Top" FontFamily="{StaticResource rgg_symbols}" FontSize="52" Foreground="{StaticResource NeonYellow}">
             <Label.Effect>
-                <DropShadowEffect Opacity="0.5" Direction="315"/>
+                <DropShadowEffect Opacity="0.8" Direction="315" BlurRadius="10" Color="#FFFFFF00"/>
             </Label.Effect>
         </Label>
-        <Label Content="a" HorizontalAlignment="Left" Margin="36.9,0.1,0,0" VerticalAlignment="Top" FontFamily="{StaticResource rgg_symbols}" FontSize="48" Foreground="#FFFFFBFB"/>
-        <Label Content="b" HorizontalAlignment="Left" Margin="146,382,0,0" VerticalAlignment="Top" FontFamily="{StaticResource rgg_symbols}" FontSize="72" Foreground="#FFE22323"/>
+        <Label Content="a" HorizontalAlignment="Left" Margin="46,11,0,0" VerticalAlignment="Top" FontFamily="{StaticResource rgg_symbols}" FontSize="48" Foreground="#FFFFFBFB">
+            <Label.Effect>
+                <DropShadowEffect BlurRadius="5" Color="#FFFFFF00" ShadowDepth="0" Opacity="0.6"/>
+            </Label.Effect>
+        </Label>
+        <Label Content="b" HorizontalAlignment="Left" Margin="146,389,0,0" VerticalAlignment="Top" FontFamily="{StaticResource rgg_symbols}" FontSize="72" Foreground="{StaticResource NeonRedGradient}">
+            <Label.Effect>
+                <DropShadowEffect BlurRadius="12" Color="#FFFF0040" ShadowDepth="0" Opacity="0.9"/>
+            </Label.Effect>
+        </Label>
 
-        <ComboBox x:Name="playerNumberComboBox" HorizontalAlignment="Left" Margin="173,102,0,0" VerticalAlignment="Top" Width="167" SelectedIndex="0" SelectionChanged="playerNumberComboBox_SelectionChanged" MouseEnter="playerNumberComboBox_MouseEnter">
-            <ComboBox.Background>
-                <LinearGradientBrush EndPoint="0,1">
-                    <GradientStop Color="#FFF0F0F0"/>
-                    <GradientStop Color="#FFE5E5E5" Offset="1"/>
-                </LinearGradientBrush>
-            </ComboBox.Background>
-        </ComboBox>
-        <Label Content="Select How Many Player:" HorizontalAlignment="Left" Margin="29,102,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.84,-0.111" FontFamily="{StaticResource radjani_semibold}"/>
-        <Label x:Name="player1Label" Content="Player 1 Name: " HorizontalAlignment="Left" Margin="32,178,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}"/>
-        <Label x:Name="player2Label" Content="Player 2 Name: " HorizontalAlignment="Left" Margin="32,210,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}"/>
-        <Label x:Name="player3Label" Content="Player 3 Name: " HorizontalAlignment="Left" Margin="31,240,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}"/>
-        <Label x:Name="player4Label" Content="Player 4 Name: " HorizontalAlignment="Left" Margin="31,272,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}"/>
+        <ComboBox x:Name="playerNumberComboBox" HorizontalAlignment="Left" Margin="173,102,0,0" VerticalAlignment="Top" Width="167" SelectedIndex="0" SelectionChanged="playerNumberComboBox_SelectionChanged" MouseEnter="playerNumberComboBox_MouseEnter"/>
+
+        <Label Content="Select How Many Player:" HorizontalAlignment="Left" Margin="29,102,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.84,-0.111" FontFamily="{StaticResource radjani_semibold}" Foreground="{StaticResource TextWhite}">
+            <Label.Effect>
+                <DropShadowEffect BlurRadius="3" Color="#FF4A9EFF" ShadowDepth="0" Opacity="0.5"/>
+            </Label.Effect>
+        </Label>
+
+        <Label x:Name="player1Label" Content="Player 1 Name: " HorizontalAlignment="Left" Margin="32,178,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}" Foreground="{StaticResource TextWhite}"/>
+        <Label x:Name="player2Label" Content="Player 2 Name: " HorizontalAlignment="Left" Margin="32,210,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}" Foreground="{StaticResource TextWhite}"/>
+        <Label x:Name="player3Label" Content="Player 3 Name: " HorizontalAlignment="Left" Margin="31,240,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}" Foreground="{StaticResource TextWhite}"/>
+        <Label x:Name="player4Label" Content="Player 4 Name: " HorizontalAlignment="Left" Margin="31,272,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}" Foreground="{StaticResource TextWhite}"/>
+
         <TextBox x:Name="player1TextBox" HorizontalAlignment="Left" Margin="127,178,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213" Height="22" MouseEnter="player1TextBox_MouseEnter" GotFocus="player1TextBox_GotFocus"/>
         <TextBox x:Name="player2TextBox" HorizontalAlignment="Left" Margin="127,210,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213" Height="22" MouseEnter="player2TextBox_MouseEnter" GotFocus="player2TextBox_GotFocus"/>
         <TextBox x:Name="player3TextBox" HorizontalAlignment="Left" Margin="127,240,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213" Height="22" MouseEnter="player3TextBox_MouseEnter" GotFocus="player3TextBox_GotFocus"/>
         <TextBox x:Name="player4TextBox" HorizontalAlignment="Left" Margin="127,272,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="213" Height="22" MouseEnter="player4TextBox_MouseEnter" GotFocus="player4TextBox_GotFocus"/>
-        <Label Content="Like a Domino" HorizontalAlignment="Center" Margin="0,10,0,0" VerticalAlignment="Top" FontSize="36" MouseEnter="Label_MouseEnter" FontFamily="{StaticResource dragonfish}" Foreground="#FFE00101">
+
+        <Label Content="Like a Domino" HorizontalAlignment="Left" Margin="76,21,0,0" VerticalAlignment="Top" FontSize="36" MouseEnter="Label_MouseEnter" FontFamily="{StaticResource dragonfish}" Foreground="{StaticResource NeonRedGradient}">
             <Label.Effect>
-                <DropShadowEffect Opacity="0.5"/>
+                <DropShadowEffect Opacity="0.9" BlurRadius="15" Color="#FFFF0040" ShadowDepth="0"/>
             </Label.Effect>
         </Label>
-        <Label Content="WPF Edition" HorizontalAlignment="Left" Margin="238,47,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}" Opacity="0.8"/>
-        <Label Content="Fill in the Names" HorizontalAlignment="Left" Margin="135,138,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}" FontSize="14"/>
-        <Separator HorizontalAlignment="Left" Margin="34,148,0,0" VerticalAlignment="Top" Height="4" Width="98"/>
-        <Separator HorizontalAlignment="Left" Margin="242,148,0,0" VerticalAlignment="Top" Height="4" Width="98"/>
-        <Label Content="How Many Points?" HorizontalAlignment="Left" Margin="131,314,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}" FontSize="14"/>
-        <Separator HorizontalAlignment="Left" Margin="34,324,0,0" VerticalAlignment="Top" Height="4" Width="93"/>
-        <Separator HorizontalAlignment="Left" Margin="247,324,0,0" VerticalAlignment="Top" Height="4" Width="93"/>
-        <Label x:Name="maxScoreLabel" Content="Max Score:" HorizontalAlignment="Left" Margin="31,352,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}"/>
-        <TextBox x:Name="maxScoreTextBox" HorizontalAlignment="Left" Margin="102,352,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="238" Height="22" MouseEnter="maxScoreTextBox_MouseEnter" GotFocus="maxScoreTextBox_GotFocus"/>
-        <Label Content="PLAY!" HorizontalAlignment="Left" Margin="165,406,0,0" VerticalAlignment="Top" FontFamily="{StaticResource edosz}" FontSize="24" MouseLeftButtonUp="Label_MouseLeftButtonUp"/>
 
+        <Label Content="WPF Edition" HorizontalAlignment="Left" Margin="247,59,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}" Opacity="0.9" Foreground="{StaticResource NeonBlueGradient}">
+            <Label.Effect>
+                <DropShadowEffect BlurRadius="5" Color="#FF00CCFF" ShadowDepth="0" Opacity="0.6"/>
+            </Label.Effect>
+        </Label>
+
+        <Label Content="Fill in the Names" HorizontalAlignment="Left" Margin="135,138,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}" FontSize="14" Foreground="{StaticResource NeonYellow}">
+            <Label.Effect>
+                <DropShadowEffect BlurRadius="4" Color="#FFFFFF00" ShadowDepth="0" Opacity="0.7"/>
+            </Label.Effect>
+        </Label>
+
+        <Rectangle HorizontalAlignment="Left" Margin="34,148,0,0" VerticalAlignment="Top" Height="2" Width="98" Fill="{StaticResource NeonBlueGradient}">
+            <Rectangle.Effect>
+                <DropShadowEffect BlurRadius="6" Color="#FF00CCFF" ShadowDepth="0" Opacity="0.8"/>
+            </Rectangle.Effect>
+        </Rectangle>
+        <Rectangle HorizontalAlignment="Left" Margin="242,148,0,0" VerticalAlignment="Top" Height="2" Width="98" Fill="{StaticResource NeonBlueGradient}">
+            <Rectangle.Effect>
+                <DropShadowEffect BlurRadius="6" Color="#FF00CCFF" ShadowDepth="0" Opacity="0.8"/>
+            </Rectangle.Effect>
+        </Rectangle>
+
+        <Label Content="How Many Points?" HorizontalAlignment="Left" Margin="131,314,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}" FontSize="14" Foreground="{StaticResource NeonYellow}">
+            <Label.Effect>
+                <DropShadowEffect BlurRadius="4" Color="#FFFFFF00" ShadowDepth="0" Opacity="0.7"/>
+            </Label.Effect>
+        </Label>
+
+        <Rectangle HorizontalAlignment="Left" Margin="34,324,0,0" VerticalAlignment="Top" Height="2" Width="93" Fill="{StaticResource NeonBlueGradient}">
+            <Rectangle.Effect>
+                <DropShadowEffect BlurRadius="6" Color="#FF00CCFF" ShadowDepth="0" Opacity="0.8"/>
+            </Rectangle.Effect>
+        </Rectangle>
+        <Rectangle HorizontalAlignment="Left" Margin="247,324,0,0" VerticalAlignment="Top" Height="2" Width="93" Fill="{StaticResource NeonBlueGradient}">
+            <Rectangle.Effect>
+                <DropShadowEffect BlurRadius="6" Color="#FF00CCFF" ShadowDepth="0" Opacity="0.8"/>
+            </Rectangle.Effect>
+        </Rectangle>
+
+        <Label x:Name="maxScoreLabel" Content="Max Score:" HorizontalAlignment="Left" Margin="31,352,0,0" VerticalAlignment="Top" FontFamily="{StaticResource radjani_semibold}" Foreground="{StaticResource TextWhite}"/>
+        <TextBox x:Name="maxScoreTextBox" HorizontalAlignment="Left" Margin="102,352,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="238" Height="22" MouseEnter="maxScoreTextBox_MouseEnter" GotFocus="maxScoreTextBox_GotFocus"/>
+
+        <Border HorizontalAlignment="Left" Margin="146,410,0,0" VerticalAlignment="Top" CornerRadius="5" BorderThickness="2">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="15" Color="#FFFF0040" ShadowDepth="0" Opacity="1"/>
+            </Border.Effect>
+            <Label Content="PLAY!" FontFamily="{StaticResource edosz}" FontSize="24" MouseLeftButtonUp="Label_MouseLeftButtonUp" Foreground="White" Padding="20,5,20,5" Cursor="Hand">
+                <Label.Effect>
+                    <DropShadowEffect BlurRadius="3" Color="#FFFFFF00" ShadowDepth="0" Opacity="0.8"/>
+                </Label.Effect>
+            </Label>
+        </Border>
+
+        <Ellipse HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Height="100" Margin="-50,-50,0,0" Fill="{StaticResource NeonPink}" Opacity="0.1">
+            <Ellipse.Effect>
+                <BlurEffect Radius="20"/>
+            </Ellipse.Effect>
+        </Ellipse>
+
+        <Ellipse HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="120" Height="120" Margin="0,0,-60,-60" Fill="{StaticResource NeonBlueGradient}" Opacity="0.1">
+            <Ellipse.Effect>
+                <BlurEffect Radius="25"/>
+            </Ellipse.Effect>
+        </Ellipse>
+        <Border HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,15,15,0" CornerRadius="3" BorderThickness="1">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="8" Color="#FF00CCFF" ShadowDepth="0" Opacity="0.6"/>
+            </Border.Effect>
+            <Label Content="🔊" FontSize="20" MouseLeftButtonUp="AudioSettings_Click" Foreground="{StaticResource NeonBlueGradient}" Padding="8,4,8,4" Cursor="Hand" MouseEnter="AudioSettingsButton_MouseEnter">
+                <Label.Effect>
+                    <DropShadowEffect BlurRadius="3" Color="#FF00CCFF" ShadowDepth="0" Opacity="0.8"/>
+                </Label.Effect>
+            </Label>
+        </Border>
     </Grid>
 </Window>
