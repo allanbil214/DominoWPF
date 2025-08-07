@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>Images\icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -113,6 +114,7 @@
     <Resource Include="Images\table.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
+    <Content Include="Images\icon.ico" />
     <Content Include="Images\Wallpaper\kiryumajima.jpg">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
