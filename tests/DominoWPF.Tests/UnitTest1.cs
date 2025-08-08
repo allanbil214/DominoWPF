@@ -8,7 +8,7 @@ namespace DominoWPF.Tests;
 public class Tests
 {
     private GameController _gameController;
-    private List<IPlayer> _players = [];
+    private List<IPlayer> _players;
 
     [SetUp]
     public void Setup()
@@ -20,10 +20,6 @@ public class Tests
             _players.Add(new Player($"Player {i}"));
         }
         _gameController = new GameController(_players);
-
-        _gameController.InitDeck();
-        _gameController.ShuffleDeck();
-        _gameController.InitHand();
     }
 
     [Test]
