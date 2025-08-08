@@ -113,7 +113,6 @@ public class Tests
     [Test]
     public void DetermineStartingPlayer_DeterminingStartingPlayer_ReturnPlayerIndex()
     {
-
         var actual = _gameController.DetermineStartingPlayer();
 
         Assert.That(actual, Is.InstanceOf<Player>());
@@ -143,7 +142,6 @@ public class Tests
     [Test]
     public void FindPlayableCard_FindPlayableCard_ReturnBool()
     {
-        bool expected = true;
         var playerHand = _gameController.GetPlayerHand(_players[0]);
 
         bool actual = _gameController.FindPlayableCard(_gameController.GetDiscardTile(), playerHand[0]);
@@ -154,7 +152,6 @@ public class Tests
     [Test]
     public void PlayCard_PlayTheCard_ReturnBool() 
     {
-        bool expected = true;
         var playerHand = _gameController.GetPlayerHand(_players[0]);
 
         bool actual = _gameController.PlayCard(_players[0], playerHand[0], "right");
@@ -165,7 +162,6 @@ public class Tests
     [Test]
     public void PlaceCard_PutCardToDiscardTile_ReturnBool()
     {
-        bool expected = true;
         var playerHand = _gameController.GetPlayerHand(_players[0]);
 
         bool actual = _gameController.PlaceCard(playerHand[0], "right");
@@ -176,7 +172,6 @@ public class Tests
     [Test]
     public void RemoveCard_RemoveCardFromHand_ReturnBool()
     {
-        bool expected = true;
         var playerHand = _gameController.GetPlayerHand(_players[0]);
 
         bool actual = _gameController.RemoveCard(playerHand[0]);
