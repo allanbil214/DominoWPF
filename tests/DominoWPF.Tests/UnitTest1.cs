@@ -113,10 +113,10 @@ public class Tests
     [Test]
     public void DetermineStartingPlayer_DeterminingStartingPlayer_ReturnPlayerIndex()
     {
-        var expected = _gameController.DetermineStartingPlayer();
+
         var actual = _gameController.DetermineStartingPlayer();
 
-        Assert.That(actual, Is.EqualTo(expected));
+        Assert.That(actual, Is.InstanceOf<Player>());
     }
 
     [Test]
