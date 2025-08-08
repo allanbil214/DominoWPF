@@ -20,6 +20,46 @@ public class Tests
             _players.Add(new Player($"Player {i}"));
         }
         _gameController = new GameController(_players);
+
+        _gameController.InitDeck();
+        _gameController.ShuffleDeck();
+        _gameController.InitHand();
+    }
+
+    [Test]
+    public void GetCurrentPlayerIndex_GettingCurrentPlayerIndex_ReturnCurrentPlayerIndex()
+    {
+        int expected = 0;
+
+        int actual = _gameController.GetCurrentPlayerIndex();
+
+        Assert.That(actual, Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void GetCurrentPlayer_GettingCurrentPlayer_ReturnCurrentPlayer()
+    {
+        var expected = (Player)_players[0];
+
+        var actual = _gameController.GetCurrentPlayer();
+
+        Assert.That(actual, Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void GetPlayerHand_GettingPlayerHand_ReturnListCard()
+    {
+        var actual = _gameController.GetPlayerHand(_players[0]);
+
+        Assert.That(actual, Is.InstanceOf<List<ICard>>());
+    }
+
+    [Test]
+    public void GetDiscardTile_GettingDiscardTile_ReturnDiscardTile()
+    {
+        var actual = _gameController.GetDiscardTile();
+
+        Assert.That(actual, Is.InstanceOf<IDiscardTile>());
     }
 
     [Test]
@@ -55,10 +95,6 @@ public class Tests
     [Test]
     public void CalculateScore_CalculateAllPlayersScore_ReturnCorrectTotalScore()
     {
-        _gameController.InitDeck();
-        _gameController.ShuffleDeck();
-        _gameController.InitHand();
-
         int expectedScore = 0;
         for (int i = 1; i < _players.Count; i++)
         {
@@ -72,6 +108,80 @@ public class Tests
         int actualScore = _gameController.CalculateScore();
 
         Assert.That(actualScore, Is.EqualTo(expectedScore));
+    }
+
+    [Test]
+    public void DetermineStartingPlayer_DeterminingStartingPlayer_ReturnPlayerIndex()
+    {
+        var expected = _gameController.DetermineStartingPlayer();
+        var actual = _gameController.DetermineStartingPlayer();
+
+        Assert.That(actual, Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void NextTurn_ChangeTurnToNextPlayer_ReturnChangedPlayedIndex()
+    {
+        _gameController.NextTurn();
+        int expectedd = 1;
+
+        int actual = _gameController.GetCurrentPlayerIndex();
+
+        Assert.That(actual, Is.EqualTo(expectedd));
+    }
+
+    [Test]
+    public void HasPlayableCard_CardAreAvailable_ReturnBool()
+    {
+        bool expectedd = true;
+
+        bool actual = _gameController.HasPlayableCard(_gameController.GetDiscardTile());
+
+        Assert.That(actual, Is.EqualTo(expectedd));
+    }
+
+    [Test]
+    public void FindPlayableCard_FindPlayableCard_ReturnBool()
+    {
+        bool expected = true;
+        var playerHand = _gameController.GetPlayerHand(_players[0]);
+
+        bool actual = _gameController.FindPlayableCard(_gameController.GetDiscardTile(), playerHand[0]);
+
+        Assert.That(actual, Is.True);
+    }
+
+    [Test]
+    public void PlayCard_PlayTheCard_ReturnBool() 
+    {
+        bool expected = true;
+        var playerHand = _gameController.GetPlayerHand(_players[0]);
+
+        bool actual = _gameController.PlayCard(_players[0], playerHand[0], "right");
+
+        Assert.That(actual, Is.True);
+    }
+
+    [Test]
+    public void PlaceCard_PutCardToDiscardTile_ReturnBool()
+    {
+        bool expected = true;
+        var playerHand = _gameController.GetPlayerHand(_players[0]);
+
+        bool actual = _gameController.PlaceCard(playerHand[0], "right");
+
+        Assert.That(actual, Is.True);
+    }
+
+    [Test]
+    public void RemoveCard_RemoveCardFromHand_ReturnBool()
+    {
+        bool expected = true;
+        var playerHand = _gameController.GetPlayerHand(_players[0]);
+
+        bool actual = _gameController.RemoveCard(playerHand[0]);
+
+        Assert.That(actual, Is.True);
     }
 
     [TearDown]
